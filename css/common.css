@@ -1,0 +1,86 @@
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC","Microsoft Yahei", Arial, Helvetica, sans-serif;
+    line-height: 1.5;
+    color: #1a1a1a;
+    -webkit-tap-highlight-color: rgba(26,26,26,0);
+    text-align: center;
+}
+
+input, button, textarea {
+    box-sizing: border-box;
+    outline: none;
+    border: 1px solid rgba(170,170,170,0.5);
+    border-radius: 3px;
+}
+
+button {
+    cursor: pointer;
+}
+
+#login-page .logo-container {
+    width: 400px;
+    height: 150px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#login-container {
+    width: 970px;
+    height: 250px;
+    margin: 0 auto;
+    margin-top: 50px;
+    border: 1px solid rgba(170,170,170,0.3);
+    border-radius: 3px;
+}
+
+#login-container p {
+    letter-spacing: 1px;
+    font-size: 0.75rem;
+}
+
+#login-container h6 {
+    font-size: 1rem;
+    margin: 16px auto;
+    margin-top: 60px;
+    letter-spacing: 2px;
+}
+
+#login-container form {
+    margin: 0 auto;
+    margin-top: 46px;
+    display: flex;
+    width: 769px;
+    height: 50px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#login-container input,
+#login-container button {
+    height: 50px;
+}
+
+#login-container input {
+    width: 292px;
+    padding: 18px;
+    background: transparent;
+    font-size: 0.875rem;
+    color: #1a1a1a;
+}
+
+#login-container input:focus::placeholder {
+    color: #ccc;
+}
+
+#login-container button {
+    background-color: #fff;
+    font-size: 0.75rem;
+    width: 125px;
+    font-weight: 700;
+}
