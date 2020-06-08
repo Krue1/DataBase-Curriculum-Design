@@ -1,45 +1,54 @@
 .login-signup {
-    height: 720px;
-    background-image: url(../img/background.png);
+  height: 720px;
+  background-image: url(../img/background.png);
 }
 
 .login-signup .logo-container {
-    width: 400px;
-    height: 150px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 400px;
+  height: 150px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .login-signup-container {
-    width: 400px;
-    height: 450px;
-    margin: 0 auto;
-    border: 1px solid rgba(170,170,170,0.5);
-    border-radius: 10px;
-    background-color: #fff;
+  width: 400px;
+  height: 450px;
+  margin: 0 auto;
+  border: 1px solid rgba(170, 170, 170, 0.5);
+  border-radius: 10px;
+  background-color: #fff;
 }
 
 .login-signup-container h6 {
-    font-size: 1rem;
-    margin: 16px auto;
-    padding-top: 40px;
-    letter-spacing: 2px;
+  font-size: 1rem;
+  margin: 16px auto;
+  padding-top: 40px;
+  letter-spacing: 2px;
 }
 
 .login-signup-container form {
-    margin: 0 auto;
-    display: flex;
-    width: 400px;
-    height: 300px;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
+  margin: 0 auto;
+  display: flex;
+  width: 400px;
+  height: 330px;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .login-signup-container input,
 .login-signup-container button {
-    width: 300px;
-    height: 50px;
+  width: 300px;
+  height: 50px;
+}
+
+#login-page p {
+  margin: 0;
+  margin-top: -30px;
+  color: #aaa;
+  font-size: 0.875rem;
+  align-self: flex-start;
+  margin-left: 55px;
 }
