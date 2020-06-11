@@ -1,0 +1,167 @@
+#homepage {
+  height: 1200px;
+  background-color: #eee;
+}
+
+.App-main {
+  position: relative;
+  width: 1000px;
+  height: 132px;
+  margin: 0 auto;
+}
+
+#profileHeader-userCover {
+  width: 100%;
+  height: 134px;
+  margin-top: 10px;
+  border-radius: 3px;
+  background-color: #999;
+}
+
+#profileHeader-content {
+  position: relative;
+  width: 100%;
+  height: 134px;
+  background-color: #fff;
+  border-radius: 3px;
+}
+
+#profileHeader-content > div {
+  position: relative;
+  top: -66px;
+  width: 200px;
+}
+
+#profileHeader-content > div > img {
+  border: 4px solid #fff;
+  border-radius: 10px;
+  width: 160px;
+  height: 160px;
+}
+
+#profileHeader-content > h1 {
+  position: absolute;
+  top: 10px;
+  left: 220px;
+  font-size: 26px;
+  font-weight: 600;
+  color: #999;
+}
+
+#profileHeader-content > p {
+  position: absolute;
+  top: 60px;
+  left: 220px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+#profileHeader-content > .button-container {
+  width: 400px;
+  position: absolute;
+  top: 70px;
+  right: 30px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+#profileHeader-content > .button-container > button {
+  margin-left: 25px;
+}
+
+#profileMain {
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.el-tabs__nav-scroll {
+  margin: 0 auto;
+  padding-left: 16px;
+}
+
+#profileMain1 {
+  width: 70%;
+  background-color: #fff;
+}
+
+#profileMain2 {
+  width: 28%;
+  height: 100%;
+  margin-left: 2%;
+  background-color: #fff;
+}
+
+#profileMain1 .List-Header {
+  margin: 0 20px;
+  margin-top: -15px;
+  border-bottom: 1px solid #eee;
+  height: 49px;
+  display: flex;
+  align-items: center;
+}
+
+#profileMain1 h4 {
+  text-align: left;
+}
+
+.box-card-child {
+  display: flex;
+  align-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.box-card-child span {
+  line-height: 1.2;
+  margin-left: 12px;
+}
+
+.NumberBoard .el-button-group {
+  width: 100%;
+  height: 70px;
+  margin-top: 10px;
+}
+
+.NumberBoard .el-button-group .el-button {
+  width: 50%;
+  height: 100%;
+}
+
+.NumberBoard .NumberBoard-itemValue {
+  display: inline-block;
+  font-size: 18px;
+  color: #1a1a1a;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.Footer {
+  padding: 10px 0 10px 5px;
+  font-size: 13px;
+  line-height: 2;
+  color: #8590a6;
+  text-align: left;
+}
+
+.Footer-item {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.Footer-dot:after {
+  margin: 0 5px;
+  content: "\B7";
+}
+
+.OrgCreateButton {
+  border: none;
+  padding: 0;
+}
