@@ -12,4 +12,4 @@
 
 ## 备忘录
 
-- [备忘 01](https://krue1.github.io/DataBase-Curriculum-Design/memo/memo01.md)
+- [备忘 01](https://github.com/Krue1/DataBase-Curriculum-Design/blob/master/memo/memo01.md)
