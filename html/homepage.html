@@ -139,7 +139,7 @@
             </div>
             <div class="NumberBoard">
               <el-button-group>
-                <el-button plain="true">
+                <el-button plain>
                   <div class="NumberBoard-itemInner">
                     <div class="NumberBoard-itemName">
                       关注了
@@ -149,7 +149,7 @@
                     </strong>
                   </div>
                 </el-button>
-                <el-button plain="true">
+                <el-button plain>
                   <div class="NumberBoard-itemInner">
                     <div class="NumberBoard-itemName">
                       关注者
@@ -203,42 +203,5 @@
 
   <!-- 引入组件库 -->
   <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
-  <script>
-    //import userInfo from "../js/login.js";
-    const vm = new Vue({
-      el: "#homepage",
-      data() {
-        return {
-          userAvatarURL: "../img/avatar.jpg",
-          activeName: "activity",
-          username: "user01",
-          userIndustry: "建筑业",
-          isMe: true,
-          voteNum: 133,
-          questionNum: 22,
-          follows: 122,
-          followers: 99,
-        };
-
-        /*
-        return {
-          userAvatarURL: userInfo.avatar,
-          activeName: "activity",
-          username: userInfo.nickname,
-          userIndustry: userInfo.profession,
-          isMe: true,
-          voteNum: 133,
-          questionNum: 22,
-          follows: userInfo.followingsCount,
-          followers: userInfo.followersCount,
-        };
-        */
-      },
-      methods: {
-        handleClick(tab, event) {
-          console.log(tab, event);
-        },
-      },
-    });
-  </script>
+  <script src="../js/homepage.js"></script>
 </html>
