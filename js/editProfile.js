@@ -22,7 +22,7 @@ const vm = new Vue({
       isShowHabitation: true,
       oldHabitation: "",
 
-      Profession: "",
+      profession: "",
       isShowProfession: true,
       oldProfession: "",
 
@@ -30,7 +30,7 @@ const vm = new Vue({
       isShowEducation: true,
       oldEducation: "",
 
-      Introduction: "",
+      introduction: "",
       isShowIntroduction: true,
       oldIntroduction: "",
     };
@@ -64,7 +64,7 @@ const vm = new Vue({
       console.log(tab, event);
     },
     returnHomepage() {
-      window.location.href("homepage.html");
+      window.location.href = "homepage.html";
     },
 
     editUsername() {

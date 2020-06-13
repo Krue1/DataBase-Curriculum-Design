@@ -14,24 +14,6 @@ function checkPassword() {
 account.addEventListener("blur", checkAccount);
 password.addEventListener("blur", checkPassword);
 
-// function initInfo(userId) {
-//   $.ajax({
-//     type: "GET",
-//     dataType: "json",
-//     url: "http://47.100.62.222:80/user/" + userId,
-//     success: function (result) {
-//       if (result.code == 00000) {
-//         let userInfo = result.data;
-//         export default userInfo;
-//         alert("ok");
-//         window.location.href = "homepage.html";
-//       } else if (result.code == 10501) {
-//         alert("userId非法！");
-//       }
-//     },
-//   });
-// }
-
 $("#login-form").on("submit", function (e) {
   e.preventDefault();
   let userName = account.value;
@@ -63,8 +45,8 @@ $("#login-form").on("submit", function (e) {
           success: function (result) {
             if (result.code == 00000) {
               alert("登录成功");
+              window.localStorage.setItem("userId", result.data.id);
               window.location.href = "homepage.html";
-              //initInfo(result.data.id);
             } else if (result.code == 10101) {
               alert("用户名或密码不符合要求");
             } else if (result.code == 10201) {

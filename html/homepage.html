@@ -1,207 +1,170 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <!-- 若安装了chrome frame则使用chrome内核渲染，否则使用IE的最高版本 -->
-    <meta
-      http-equiv="X-UA-Compatible"
-      content="IE=edge,chrome=1"
-      charset="UTF-8"
-    />
-    <title>个人主页 - 知裕</title>
-    <link href="../css/common.css" rel="stylesheet" type="text/css" />
-    <link href="../css/homepage.css" rel="stylesheet" type="text/css" />
-    <link href="../css/header.css" rel="stylesheet" type="text/css" />
-    <!-- 引入样式 -->
-    <!-- <link
+
+<head>
+  <!-- 若安装了chrome frame则使用chrome内核渲染，否则使用IE的最高版本 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" charset="UTF-8" />
+  <title>个人主页 - 知裕</title>
+  <link href="../css/common.css" rel="stylesheet" type="text/css" />
+  <link href="../css/homepage.css" rel="stylesheet" type="text/css" />
+  <link href="../css/header.css" rel="stylesheet" type="text/css" />
+  <!-- 引入样式 -->
+  <!-- <link
       rel="stylesheet"
       href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css"
     /> -->
-    <link rel="stylesheet" href="../css/index.css" />
-    <link rel="icon" type="image/x-icon" href="../img/icon.ico" />
-    <script src="../js/vue.js"></script>
-  </head>
+  <link rel="stylesheet" href="../css/index.css" />
+  <link rel="icon" type="image/x-icon" href="../img/icon.ico" />
+  <script src="../js/vue.js"></script>
+</head>
 
-  <body>
-    <div id="homepage">
-      <header role="banner" class="AppHeader">
-        <div class="AppHeader-inner">
-          <a href="#"><img src="../img/logo.png" /></a>
-          <ul role="navigation" class="AppHeader-tabs">
-            <li><a href="#">首页</a></li>
-            <li><a href="#">发现</a></li>
-            <li><a href="#">等你来答</a></li>
-            <li>
-              <el-input
-                v-model="input"
-                placeholder="搜索你的问题"
-                size="small"
-                class="inlist-block"
-              ></el-input>
-            </li>
-            <li>
-              <el-button type="primary" class="inlist-block" size="small">
-                提问
-              </el-button>
-            </li>
-          </ul>
-          <a href="#" class="AppHeader-inner-avatar">
+<body>
+  <div id="homepage">
+    <header role="banner" class="AppHeader">
+      <div class="AppHeader-inner">
+        <a href="#"><img src="../img/logo.png" /></a>
+        <ul role="navigation" class="AppHeader-tabs">
+          <li><a href="#">首页</a></li>
+          <li><a href="#">发现</a></li>
+          <li><a href="#">等你来答</a></li>
+          <li>
+            <el-input v-model="questionAsked" placeholder="搜索你的问题" size="small" class="inlist-block"></el-input>
+          </li>
+          <li>
+            <el-button type="primary" class="inlist-block" size="small">
+              提问
+            </el-button>
+          </li>
+        </ul>
+        <a href="#" class="AppHeader-inner-avatar">
+          <img :src="userAvatarURL" />
+        </a>
+      </div>
+    </header>
+    <main role="main" class="App-main">
+      <div id="profileHeader">
+        <div id="profileHeader-userCover"></div>
+        <div id="profileHeader-content">
+          <div class="userAvatar">
             <img :src="userAvatarURL" />
-          </a>
-        </div>
-      </header>
-      <main role="main" class="App-main">
-        <div id="profileHeader">
-          <div id="profileHeader-userCover"></div>
-          <div id="profileHeader-content">
-            <div class="userAvatar">
-              <img :src="userAvatarURL" />
-            </div>
-            <h1>{{username}}</h1>
-            <p>所在行业 &nbsp;&nbsp;&nbsp;{{userIndustry}}</p>
-            <div class="button-container" v-if="isMe">
-              <el-button type="primary">编辑个人资料</el-button>
-            </div>
-            <div class="button-container" v-if="!isMe">
-              <el-button type="primary">关注</el-button>
-              <el-button type="primary">私信</el-button>
-            </div>
+          </div>
+          <h1>{{username}}</h1>
+          <p>所在行业 &nbsp;&nbsp;&nbsp;{{userIndustry}}</p>
+          <div class="button-container" v-if="isMe">
+            <el-button type="primary" @click="editProfile">编辑个人资料</el-button>
+          </div>
+          <div class="button-container" v-if="!isMe">
+            <el-button type="primary">关注</el-button>
+            <el-button type="primary">私信</el-button>
           </div>
         </div>
-        <div id="profileMain">
-          <div id="profileMain1">
-            <div id="profileMain1-header">
-              <el-tabs v-model="activeName" @tab-click="handleClick">
-                <el-tab-pane label="动态" name="activity">
-                  <div class="List-Header">
-                    <h4 class="List-HeaderText">{{username}}的动态</h4>
-                  </div>
-                </el-tab-pane>
-                <el-tab-pane label="回答" name="answer">
-                  <div class="List-Header">
-                    <h4 class="List-HeaderText">{{username}}的回答</h4>
-                  </div>
-                </el-tab-pane>
-                <el-tab-pane label="视频" name="video">
-                  <div class="List-Header">
-                    <h4 class="List-HeaderText">{{username}}的视频</h4>
-                  </div>
-                </el-tab-pane>
-                <el-tab-pane label="提问" name="question">
-                  <div class="List-Header">
-                    <h4 class="List-HeaderText">{{username}}的提问</h4>
-                  </div>
-                </el-tab-pane>
-              </el-tabs>
-            </div>
-            <div id="profileMain1-main"></div>
-          </div>
-          <div id="profileMain2">
-            <div>
-              <el-card class="box-card">
-                <div slot="header" class="clearfix" style="text-align: left;">
-                  <span>个人成就</span>
+      </div>
+      <div id="profileMain">
+        <div id="profileMain1">
+          <div id="profileMain1-header">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+              <el-tab-pane label="动态" name="activity">
+                <div class="List-Header">
+                  <h4 class="List-HeaderText">{{username}}的动态</h4>
                 </div>
-                <div class="box-card-child">
-                  <svg
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    width="1.2em"
-                    height="1.2em"
-                  >
-                    <path
-                      d="M14.445 9h5.387s2.997.154 1.95 3.669c-.168.51-2.346 6.911-2.346 6.911s-.763
+              </el-tab-pane>
+              <el-tab-pane label="回答" name="answer">
+                <div class="List-Header">
+                  <h4 class="List-HeaderText">{{username}}的回答</h4>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="视频" name="video">
+                <div class="List-Header">
+                  <h4 class="List-HeaderText">{{username}}的视频</h4>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="提问" name="question">
+                <div class="List-Header">
+                  <h4 class="List-HeaderText">{{username}}的提问</h4>
+                </div>
+              </el-tab-pane>
+            </el-tabs>
+          </div>
+          <div id="profileMain1-main"></div>
+        </div>
+        <div id="profileMain2">
+          <div>
+            <el-card class="box-card">
+              <div slot="header" class="clearfix" style="text-align: left;">
+                <span>个人成就</span>
+              </div>
+              <div class="box-card-child">
+                <svg fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em">
+                  <path d="M14.445 9h5.387s2.997.154 1.95 3.669c-.168.51-2.346 6.911-2.346 6.911s-.763
                     1.416-2.86 1.416H8.989c-1.498 0-2.005-.896-1.989-2v-7.998c0-.987.336-2.032 1.114-2.639
                     4.45-3.773 3.436-4.597 4.45-5.83.985-1.13 3.2-.5 3.037 2.362C15.201 7.397 14.445 9
                     14.445 9zM3 9h2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V10a1 1 0 0 1 1-1z"
-                      fill-rule="evenodd"
-                    ></path>
-                  </svg>
-                  <span>获得{{voteNum}}次赞同</span>
-                </div>
-                <div class="box-card-child">
-                  <svg
-                    class="Zi Zi--EditCircle"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                    width="1.2em"
-                    height="1.2em"
-                  >
-                    <path
-                      d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10
+                    fill-rule="evenodd"></path>
+                </svg>
+                <span>获得{{voteNum}}次赞同</span>
+              </div>
+              <div class="box-card-child">
+                <svg class="Zi Zi--EditCircle" fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em">
+                  <path
+                    d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10
                         10zm4.043-15.524a.745.745 0 0 0-1.053.017l-6.857 7.071 2.237 2.17 6.857-7.071a.743.743 0
                         0 0-.016-1.052l-1.168-1.135zm-9.028 9.476l-.348 1.381 1.37-.39 1.274-.36-1.973-1.916-.323 1.285z"
-                      fill-rule="evenodd"
-                    ></path>
-                  </svg>
-                  <span>提出{{questionNum}}个问题</span>
-                </div>
-              </el-card>
-            </div>
-            <div class="NumberBoard">
-              <el-button-group>
-                <el-button plain>
-                  <div class="NumberBoard-itemInner">
-                    <div class="NumberBoard-itemName">
-                      关注了
-                    </div>
-                    <strong class="NumberBoard-itemValue">
-                      {{follows}}
-                    </strong>
-                  </div>
-                </el-button>
-                <el-button plain>
-                  <div class="NumberBoard-itemInner">
-                    <div class="NumberBoard-itemName">
-                      关注者
-                    </div>
-                    <strong div class="NumberBoard-itemValue">
-                      {{followers}}
-                    </strong>
-                  </div>
-                </el-button>
-              </el-button-group>
-            </div>
-
-            <footer class="Footer">
-              <a class="Footer-item">刘看水</a><span class="Footer-dot"></span
-              ><a class="Footer-item">流星花园</a
-              ><span class="Footer-dot"></span
-              ><a class="Footer-item">知裕协议</a
-              ><span class="Footer-dot"></span
-              ><a class="Footer-item">知裕隐私保护指引</a><br /><a
-                class="Footer-item"
-                >应用</a
-              ><span class="Footer-dot"></span><a class="Footer-item">工作</a
-              ><span class="Footer-dot"></span
-              ><button type="button" class="Button OrgCreateButton">
-                申请开通知裕机构号</button
-              ><br /><a class="Footer-item">侵权举报</a
-              ><span class="Footer-dot"></span
-              ><a class="Footer-item">网上有害信息举报专区</a><br /><a
-                class="Footer-item"
-                >粤 ABC 证 123456 号</a
-              ><br /><a class="Footer-item">粤 ABC 备 123456 号 - 1</a><br /><a
-                class="Footer-item"
-                ><img
-                  src="https://pic3.zhimg.com/80/v2-d0289dc0a46fc5b15b3363ffa78cf6c7.png"
-                />粤流星花园 12345678901 号</a
-              ><br /><span class="Footer-item"
-                >互联网药品信息服务资格证书<br />（粤）- 非经营性 - 2017 -
-                0067</span
-              ><span class="Footer-item">违法和不良信息举报：123-4567890</span
-              ><br /><a class="Footer-item">信息举报专区</a><br /><a
-                class="Footer-item"
-                >证照中心</a
-              ><br /><a class="Footer-item">联系我们</a
-              ><span> © 2020 知裕</span>
-            </footer>
+                    fill-rule="evenodd"></path>
+                </svg>
+                <span>提出{{questionNum}}个问题</span>
+              </div>
+            </el-card>
           </div>
-        </div>
-      </main>
-    </div>
-  </body>
+          <div class="NumberBoard">
+            <el-button-group>
+              <el-button plain>
+                <div class="NumberBoard-itemInner">
+                  <div class="NumberBoard-itemName">
+                    关注了
+                  </div>
+                  <strong class="NumberBoard-itemValue">
+                    {{follows}}
+                  </strong>
+                </div>
+              </el-button>
+              <el-button plain>
+                <div class="NumberBoard-itemInner">
+                  <div class="NumberBoard-itemName">
+                    关注者
+                  </div>
+                  <strong div class="NumberBoard-itemValue">
+                    {{followers}}
+                  </strong>
+                </div>
+              </el-button>
+            </el-button-group>
+          </div>
 
-  <!-- 引入组件库 -->
-  <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
-  <script src="../js/homepage.js"></script>
+          <footer class="Footer">
+            <a class="Footer-item">刘看水</a><span class="Footer-dot"></span><a class="Footer-item">流星花园</a><span
+              class="Footer-dot"></span><a class="Footer-item">知裕协议</a><span class="Footer-dot"></span><a
+              class="Footer-item">知裕隐私保护指引</a><br /><a class="Footer-item">应用</a><span class="Footer-dot"></span><a
+              class="Footer-item">工作</a><span class="Footer-dot"></span><button type="button"
+              class="Button OrgCreateButton">
+              申请开通知裕机构号</button><br /><a class="Footer-item">侵权举报</a><span class="Footer-dot"></span><a
+              class="Footer-item">网上有害信息举报专区</a><br /><a class="Footer-item">粤 ABC 证 123456 号</a><br /><a
+              class="Footer-item">粤 ABC 备 123456 号 - 1</a><br /><a class="Footer-item"><img
+                src="https://pic3.zhimg.com/80/v2-d0289dc0a46fc5b15b3363ffa78cf6c7.png" />粤流星花园 12345678901
+              号</a><br /><span class="Footer-item">互联网药品信息服务资格证书<br />（粤）- 非经营性 - 2017 -
+              0067</span><span class="Footer-item">违法和不良信息举报：123-4567890</span><br /><a
+              class="Footer-item">信息举报专区</a><br /><a class="Footer-item">证照中心</a><br /><a
+              class="Footer-item">联系我们</a><span> © 2020 知裕</span>
+          </footer>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="../js/initInfo.js"></script>
+<script src="../js/homepage.js"></script>
+
 </html>
