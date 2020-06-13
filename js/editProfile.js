@@ -4,7 +4,7 @@ const vm = new Vue({
     return {
       userAvatarURL: "../img/avatar.jpg",
       activeName: "activity",
-      input: "",
+      questionAsked: "",
 
       username: "user01",
       isShowUsername: true,
