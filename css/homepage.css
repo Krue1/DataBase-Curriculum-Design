@@ -73,7 +73,7 @@
 
 #profileMain {
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
@@ -86,14 +86,17 @@
 
 #profileMain1 {
   width: 70%;
+  height: 100%;
   background-color: #fff;
+  overflow: hidden;
 }
 
 #profileMain2 {
   width: 28%;
   height: 100%;
   margin-left: 2%;
-  background-color: #fff;
+  /* background-color: #fff; */
+  background-color: #eee;
 }
 
 #profileMain1 .List-Header {
@@ -164,4 +167,41 @@
 .OrgCreateButton {
   border: none;
   padding: 0;
+}
+
+.list-item-follow {
+  position: relative;
+  padding: 16px 20px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  border: 1px solid #f0f0f0;
+}
+
+.list-item-follow img {
+  width: 60px;
+  height: 60px;
+  border: 0px solid white;
+  border-radius: 3px;
+}
+
+.list-item-follow .list-item-follow-middle {
+  margin-left: 16px;
+  flex: 1 1;
+}
+
+.list-item-follow .list-item-follow-middle h2 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.list-item-follow .list-item-follow-middle h3 {
+  font-size: 15px;
+  color: #646464;
+}
+
+.list-item-follow .list-item-follow-middle p {
+  color: #8590a6;
+  font-size: 14px;
 }

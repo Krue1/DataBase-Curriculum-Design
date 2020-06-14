@@ -1,3 +1,6 @@
+let token = localStorage.getItem("token");
+let userId = window.localStorage.getItem("userId");
+let userInfo = initInfo(userId);
 const vm = new Vue({
   el: "#editProfile",
   data() {
@@ -6,31 +9,32 @@ const vm = new Vue({
       activeName: "activity",
       questionAsked: "",
 
-      username: "user01",
+      username: userInfo.nickname,
       isShowUsername: true,
       oldUsername: "",
 
-      gender: "未知",
+      gender:
+        userInfo.gender == 1 ? "男" : userInfo.gender == 0 ? "女" : "未知",
       isShowGender: true,
       oldGender: "",
 
-      brief: "",
+      brief: userInfo.brief,
       isShowBrief: true,
       oldBrief: "",
 
-      habitation: "",
+      habitation: userInfo.habitation,
       isShowHabitation: true,
       oldHabitation: "",
 
-      profession: "",
+      profession: userInfo.profession,
       isShowProfession: true,
       oldProfession: "",
 
-      education: "",
+      education: userInfo.education,
       isShowEducation: true,
       oldEducation: "",
 
-      introduction: "",
+      introduction: userInfo.introduction,
       isShowIntroduction: true,
       oldIntroduction: "",
     };
@@ -76,6 +80,31 @@ const vm = new Vue({
       this.isShowUsername = true;
     },
     saveUsername() {
+      $.ajax({
+        type: "POST",
+        async: false,
+        url: "http://47.100.62.222:80/me/info",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        data: {
+          field: "nickname",
+          value: vm.username,
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            userInfo = result.data;
+          } else if (result.code == 10101) {
+            vm.username = vm.oldUsername;
+            alert("字段或修改值非法");
+          }
+        },
+        error: function () {
+          alert("错误");
+          vm.username = vm.oldUsername;
+        },
+      });
       this.isShowUsername = true;
     },
 
@@ -88,6 +117,31 @@ const vm = new Vue({
       this.isShowGender = true;
     },
     saveGender() {
+      $.ajax({
+        type: "POST",
+        async: false,
+        url: "http://47.100.62.222:80/me/info",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        data: {
+          field: "gender",
+          value: vm.gender == "男" ? 1 : 0,
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            userInfo = result.data;
+          } else if (result.code == 10101) {
+            vm.gender = vm.oldGender;
+            alert("字段或修改值非法");
+          }
+        },
+        error: function () {
+          alert("错误");
+          vm.gender = vm.oldGender;
+        },
+      });
       this.isShowGender = true;
     },
 
@@ -100,6 +154,31 @@ const vm = new Vue({
       this.isShowBrief = true;
     },
     saveBrief() {
+      $.ajax({
+        type: "POST",
+        async: false,
+        url: "http://47.100.62.222:80/me/info",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        data: {
+          field: "brief",
+          value: vm.brief,
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            userInfo = result.data;
+          } else if (result.code == 10101) {
+            alert("字段或修改值非法");
+            vm.brief = vm.oldBrief;
+          }
+        },
+        error: function () {
+          alert("错误");
+          vm.brief = vm.oldBrief;
+        },
+      });
       this.isShowBrief = true;
     },
 
@@ -112,6 +191,31 @@ const vm = new Vue({
       this.isShowHabitation = true;
     },
     saveHabitation() {
+      $.ajax({
+        type: "POST",
+        async: false,
+        url: "http://47.100.62.222:80/me/info",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        data: {
+          field: "habitation",
+          value: vm.habitation,
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            userInfo = result.data;
+          } else if (result.code == 10101) {
+            vm.habitation = vm.oldHabitation;
+            alert("字段或修改值非法");
+          }
+        },
+        error: function () {
+          alert("错误");
+          vm.habitation = vm.oldHabitation;
+        },
+      });
       this.isShowHabitation = true;
     },
 
@@ -124,6 +228,31 @@ const vm = new Vue({
       this.isShowProfession = true;
     },
     saveProfession() {
+      $.ajax({
+        type: "POST",
+        async: false,
+        url: "http://47.100.62.222:80/me/info",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        data: {
+          field: "profession",
+          value: vm.profession,
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            userInfo = result.data;
+          } else if (result.code == 10101) {
+            vm.profession = vm.oldProfession;
+            alert("字段或修改值非法");
+          }
+        },
+        error: function () {
+          alert("错误");
+          vm.profession = vm.oldProfession;
+        },
+      });
       this.isShowProfession = true;
     },
 
@@ -136,6 +265,31 @@ const vm = new Vue({
       this.isShowEducation = true;
     },
     saveEducation() {
+      $.ajax({
+        type: "POST",
+        async: false,
+        url: "http://47.100.62.222:80/me/info",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        data: {
+          field: "education",
+          value: vm.education,
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            userInfo = result.data;
+          } else if (result.code == 10101) {
+            vm.education = vm.oldEducation;
+            alert("字段或修改值非法");
+          }
+        },
+        error: function () {
+          alert("错误");
+          vm.education = vm.oldEducation;
+        },
+      });
       this.isShowEducation = true;
     },
 
@@ -148,7 +302,43 @@ const vm = new Vue({
       this.isShowIntroduction = true;
     },
     saveIntroduction() {
+      $.ajax({
+        type: "POST",
+        async: false,
+        url: "http://47.100.62.222:80/me/info",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        data: {
+          field: "introduction",
+          value: vm.introduction,
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            userInfo = result.data;
+          } else if (result.code == 10101) {
+            vm.introduction = vm.oldIntroduction;
+            alert("字段或修改值非法");
+          }
+        },
+        error: function () {
+          alert("错误");
+          vm.introduction = vm.oldIntroduction;
+        },
+      });
       this.isShowIntroduction = true;
     },
+  },
+  computed: {
+    // genderShowed() {
+    //   if (userInfo.gender === -1) {
+    //     return "未知";
+    //   } else if (userInfo.gender === 0) {
+    //     return "女";
+    //   } else if (userInfo.gender === 1) {
+    //     return "男";
+    //   }
+    // },
   },
 });

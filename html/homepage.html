@@ -83,9 +83,25 @@
                   <h4 class="List-HeaderText">{{username}}的提问</h4>
                 </div>
               </el-tab-pane>
+              <el-tab-pane label="关注" name="follow">
+                <div class="List-Header">
+                  <h4 class="List-HeaderText">{{username}}的关注</h4>
+                </div>
+              </el-tab-pane>
+              <el-tab-pane label="粉丝" name="fan">
+                <div class="List-Header">
+                  <h4 class="List-HeaderText">{{username}}的粉丝</h4>
+                </div>
+              </el-tab-pane>
             </el-tabs>
           </div>
-          <div id="profileMain1-main"></div>
+          <div id="profileMain1-main">
+            <list-item-follow v-for="item in followings" :item="item" v-show="activeName==='follow'"
+              :key="item.nickname">
+            </list-item-follow>
+            <list-item-follow v-for="item in fans" :item="item" v-show="activeName==='fan'">
+            </list-item-follow>
+          </div>
         </div>
         <div id="profileMain2">
           <div>
@@ -117,7 +133,7 @@
           </div>
           <div class="NumberBoard">
             <el-button-group>
-              <el-button plain>
+              <el-button plain @click="seeFollow">
                 <div class="NumberBoard-itemInner">
                   <div class="NumberBoard-itemName">
                     关注了
@@ -127,7 +143,7 @@
                   </strong>
                 </div>
               </el-button>
-              <el-button plain>
+              <el-button plain @click="seeFan">
                 <div class="NumberBoard-itemInner">
                   <div class="NumberBoard-itemName">
                     关注者
@@ -161,6 +177,28 @@
   </div>
 </body>
 
+
+<template id="list-item-follow">
+  <div class="list-item-follow">
+    <div class="list-item-follow-left">
+      <div>
+        <img :src="item.avatar">
+      </div>
+    </div>
+    <div class="list-item-follow-middle">
+      <h2>{{item.nickname}}</h2>
+      <h3>{{item.brief}}</h3>
+      <p>{{item.answersCount}} 回答 · {{item.followersCount}} 关注者 </p>
+    </div>
+    <div class="list-item-follow-right">
+      <el-button type="primary" v-if="!item.isFollowing" @click="follow(item)">关注</el-button>
+      <el-button type="info" v-if="item.isFollowing" @click="cancleFollow(item)" onmouseover="this.innerText='取消关注'"
+        onmouseout="this.innerText='已关注'">
+        已关注
+      </el-button>
+    </div>
+  </div>
+</template>
 <!-- 引入组件库 -->
 <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
