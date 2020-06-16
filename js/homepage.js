@@ -20,7 +20,7 @@ const vm = new Vue({
     */
 
     return {
-      userAvatarURL: userInfo.avatar,
+      userAvatarURL: this.$baseurl + userInfo.avatar,
       activeName: "activity",
       username: userInfo.nickname,
       userIndustry: userInfo.profession,

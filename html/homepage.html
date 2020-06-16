@@ -36,6 +36,14 @@
             </el-button>
           </li>
         </ul>
+        <!-- <el-dropdown trigger="click">
+          <a href="#" class="AppHeader-inner-avatar">
+            <img :src="userAvatarURL" />
+          </a>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown> -->
         <a href="#" class="AppHeader-inner-avatar">
           <img :src="userAvatarURL" />
         </a>
@@ -120,7 +128,7 @@
                 <span>获得{{voteNum}}次赞同</span>
               </div>
               <div class="box-card-child">
-                <svg class="Zi Zi--EditCircle" fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em">
+                <svg fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em">
                   <path
                     d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10
                         10zm4.043-15.524a.745.745 0 0 0-1.053.017l-6.857 7.071 2.237 2.17 6.857-7.071a.743.743 0
@@ -182,7 +190,7 @@
   <div class="list-item-follow">
     <div class="list-item-follow-left">
       <div>
-        <img :src="item.avatar">
+        <img :src="baseurl+'item.avatar'">
       </div>
     </div>
     <div class="list-item-follow-middle">
@@ -199,9 +207,30 @@
     </div>
   </div>
 </template>
+
+<template id="list-item-question">
+  <div class="list-item-question">
+    <div class="list-item-question-top">
+      <h2>{{item.title}}</h2>
+    </div>
+    <div class="list-item-question-middle">
+      <div>
+        <img :src="item.avatar">
+        <h4>{{item.nickname}}</h2>
+      </div>
+      <div>
+        <p>{{item.content}}</p>
+      </div>
+    </div>
+    <div class="list-item-question-bottom">
+      <el-button type="primary" v-if="!item.isFollowing" @click="vote(item)">赞同</el-button>
+    </div>
+  </div>
+</template>
 <!-- 引入组件库 -->
 <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="../js/common.js"></script>
 <script src="../js/initInfo.js"></script>
 <script src="../js/homepage.js"></script>
 

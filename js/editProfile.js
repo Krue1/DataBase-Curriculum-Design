@@ -5,7 +5,7 @@ const vm = new Vue({
   el: "#editProfile",
   data() {
     return {
-      userAvatarURL: "../img/avatar.jpg",
+      userAvatarURL: userInfo.avatar,
       activeName: "activity",
       questionAsked: "",
 
@@ -342,3 +342,5 @@ const vm = new Vue({
     // },
   },
 });
+
+console.log(vm.userAvatarURL);
