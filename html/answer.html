@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <!-- 若安装了chrome frame则使用chrome内核渲染，否则使用IE的最高版本 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" charset="UTF-8" />
+  <title>写回答 - 知裕</title>
+  <link href="../css/common.css" rel="stylesheet" type="text/css" />
+  <link href="../css/header.css" rel="stylesheet" type="text/css" />
+  <link href="../css/answer.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="../editor.md-master/css/editormd.css" />
+  <link rel="stylesheet" href="../css/index.css" />
+  <link rel="icon" type="image/x-icon" href="../img/icon.ico" />
+  <script src="../js/vue.js"></script>
+</head>
+
+<body>
+  <div id="answer">
+    <header role="banner" class="AppHeader">
+      <div class="AppHeader-inner">
+        <a href="#"><img src="../img/logo.png" /></a>
+        <ul role="navigation" class="AppHeader-tabs">
+          <li><a href="#">首页</a></li>
+          <li><a href="#">发现</a></li>
+          <li><a href="#">等你来答</a></li>
+          <li>
+            <el-input v-model="questionAsked" placeholder="搜索你的问题" size="small" class="inlist-block"></el-input>
+          </li>
+          <li>
+            <el-button type="primary" class="inlist-block" size="small" @click="isShowAsk = true">
+              提问
+            </el-button>
+          </li>
+        </ul>
+        <a href="#" class="AppHeader-inner-avatar">
+          <img :src="userAvatarURL" />
+        </a>
+      </div>
+    </header>
+    <div class="QuestionHeader">
+      <div class="QuestionHeader-content">
+        <h1>{{question}}</h1>
+        <p>{{description}}</p>
+      </div>
+      <div class="QuestionHeader-footer">
+        <el-button>取 消</el-button>
+        <el-button type="primary">确 定</el-button>
+      </div>
+    </div>
+
+    <main role="main" class="App-main">
+      <div class="Answer-add">
+        <!-- <div id="editor"></div>
+        <div style="padding: 10px;">
+          <el-button type="primary" style="float: right; margin-right: 20px;">确 定</el-button>
+        </div> -->
+        <div id="layout" class="editor">
+          <div id="test-editormd">
+            <textarea class="editormd-markdown-textarea" name="test-editormd-markdown-doc" id="content"></textarea>
+            <!-- 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 -->
+            <textarea class="editormd-html-textarea" name="editormd-html-textarea" id="htmlContent"></textarea>
+          </div>
+        </div>
+        <div>
+          <button id="submitButton">提交</button>
+        </div>
+        <div id="test">
+          <div id="test-editormd-view">
+          </div>
+        </div>
+      </div>
+      <aside>
+      </aside>
+    </main>
+    <footer class="Footer">
+      <a class="Footer-item">刘看水</a><span class="Footer-dot"></span><a class="Footer-item">流星花园</a><span
+        class="Footer-dot"></span><a class="Footer-item">知裕协议</a><span class="Footer-dot"></span><a
+        class="Footer-item">知裕隐私保护指引</a><br /><a class="Footer-item">应用</a><span class="Footer-dot"></span><a
+        class="Footer-item">工作</a><span class="Footer-dot"></span><button type="button" class="Button OrgCreateButton">
+        申请开通知裕机构号</button><br /><a class="Footer-item">侵权举报</a><span class="Footer-dot"></span><a
+        class="Footer-item">网上有害信息举报专区</a><br /><a class="Footer-item">粤 ABC 证 123456 号</a><br /><a
+        class="Footer-item">粤 ABC 备 123456 号 - 1</a><br /><a class="Footer-item"><img
+          src="https://pic3.zhimg.com/80/v2-d0289dc0a46fc5b15b3363ffa78cf6c7.png" />粤流星花园 12345678901
+        号</a><br /><span class="Footer-item">互联网药品信息服务资格证书<br />（粤）- 非经营性 - 2017 -
+        0067</span><span class="Footer-item">违法和不良信息举报：123-4567890</span><br /><a class="Footer-item">信息举报专区</a><br /><a
+        class="Footer-item">证照中心</a><br /><a class="Footer-item">联系我们</a><span> © 2020 知裕</span>
+    </footer>
+
+    <el-dialog title="提问" :visible.sync="isShowAsk">
+      <el-form :model="form">
+        <el-form-item label="问题" :label-width="formLabelWidth">
+          <el-input v-model="form.question" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="描述" :label-width="formLabelWidth">
+          <el-input type="textarea" :rows="3" v-model="form.description" resize="none" autocomplete="off">
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="isShowAsk = false">取 消</el-button>
+        <el-button type="primary" @click="isShowAsk = false">确 定</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</body>
+
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://apps.bdimg.com/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script src="../wangEditor-3.1.1/release/wangEditor.min.js"></script>
+<script src="http://passport.cnblogs.com/scripts/jsencrypt.min.js"></script>
+<script src="../editor.md-master/lib/marked.min.js"> </script>
+<script src="../editor.md-master/lib/prettify.min.js"></script>
+<script src="../editor.md-master/lib/raphael.min.js"></script>
+<script src="../editor.md-master/lib/underscore.min.js"></script>
+<script src="../editor.md-master/lib/sequence-diagram.min.js"></script>
+<script src="../editor.md-master/lib/flowchart.min.js"></script>
+<script src="../editor.md-master/lib/jquery.flowchart.min.js"></script>
+<script src="../editor.md-master/editormd.min.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/initInfo.js"></script>
+<script src="../js/answer.js"></script>
+
+</html>

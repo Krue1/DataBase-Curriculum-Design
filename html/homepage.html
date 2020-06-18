@@ -9,10 +9,7 @@
   <link href="../css/homepage.css" rel="stylesheet" type="text/css" />
   <link href="../css/header.css" rel="stylesheet" type="text/css" />
   <!-- 引入样式 -->
-  <!-- <link
-      rel="stylesheet"
-      href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css"
-    /> -->
+  <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.2/lib/theme-chalk/index.css" /> -->
   <link rel="stylesheet" href="../css/index.css" />
   <link rel="icon" type="image/x-icon" href="../img/icon.ico" />
   <script src="../js/vue.js"></script>
@@ -31,13 +28,13 @@
             <el-input v-model="questionAsked" placeholder="搜索你的问题" size="small" class="inlist-block"></el-input>
           </li>
           <li>
-            <el-button type="primary" class="inlist-block" size="small">
+            <el-button type="primary" class="inlist-block" size="small" @click="isShowAsk = true">
               提问
             </el-button>
           </li>
         </ul>
-        <!-- <el-dropdown trigger="click">
-          <a href="#" class="AppHeader-inner-avatar">
+        <!-- <el-dropdown trigger="click" class="AppHeader-inner-avatar">
+          <a href="#">
             <img :src="userAvatarURL" />
           </a>
           <el-dropdown-menu slot="dropdown">
@@ -182,6 +179,22 @@
         </div>
       </div>
     </main>
+
+    <el-dialog title="提问" :visible.sync="isShowAsk">
+      <el-form :model="form">
+        <el-form-item label="问题" :label-width="formLabelWidth">
+          <el-input v-model="form.question" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="描述" :label-width="formLabelWidth">
+          <el-input type="textarea" :rows="3" v-model="form.description" resize="none" autocomplete="off">
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="isShowAsk = false">取 消</el-button>
+        <el-button type="primary" @click="isShowAsk = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </body>
 
@@ -190,7 +203,7 @@
   <div class="list-item-follow">
     <div class="list-item-follow-left">
       <div>
-        <img :src="baseurl+'item.avatar'">
+        <img :src="this.$baseurl+'item.avatar'">
       </div>
     </div>
     <div class="list-item-follow-middle">

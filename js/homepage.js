@@ -30,6 +30,12 @@ const vm = new Vue({
       follows: userInfo.followingsCount,
       followers: userInfo.followersCount,
       questionAsked: "",
+      isShowAsk: false,
+      form: {
+        question: "",
+        description: "",
+      },
+      formLabelWidth: "120px",
     };
   },
   methods: {
@@ -119,7 +125,7 @@ const vm = new Vue({
         },
         success: function (result) {
           if (result.code == 00000) {
-            followings = result.data.followers;
+            followings = result.data.followings;
             console.log(followings);
           } else if (result.code == 10501) {
             alert("userId非法！");

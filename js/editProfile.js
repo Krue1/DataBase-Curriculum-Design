@@ -5,9 +5,15 @@ const vm = new Vue({
   el: "#editProfile",
   data() {
     return {
-      userAvatarURL: userInfo.avatar,
+      userAvatarURL: this.$baseurl + userInfo.avatar,
       activeName: "activity",
       questionAsked: "",
+      isShowAsk: false,
+      form: {
+        question: "",
+        description: "",
+      },
+      formLabelWidth: "120px",
 
       username: userInfo.nickname,
       isShowUsername: true,
