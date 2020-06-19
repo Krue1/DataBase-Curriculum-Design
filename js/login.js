@@ -46,6 +46,7 @@ $("#login-form").on("submit", function (e) {
             if (result.code == 00000) {
               alert("登录成功");
               window.localStorage.setItem("myUserId", result.data.id);
+              window.localStorage.setItem("userId", result.data.id);
               window.localStorage.setItem("token", result.data.token);
               window.location.href = "homepage.html";
             } else if (result.code == 10101) {
