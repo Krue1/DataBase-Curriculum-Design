@@ -64,14 +64,32 @@
   width: 60%;
 }
 
-.AppHeader-inner-avatar {
+/* .AppHeader-inner-avatar {
   position: absolute;
   right: 20px;
-}
+} */
 
 .AppHeader-inner-avatar img {
   width: 30px;
   height: 30px;
   border: 1px solid #fff;
   border-radius: 2px;
+}
+
+.el-dropdown {
+  position: relative;
+  left: 275px;
+  overflow: hidden;
+}
+
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+
+.demonstration {
+  display: block;
+  color: #8492a6;
+  font-size: 14px;
+  margin-bottom: 20px;
 }

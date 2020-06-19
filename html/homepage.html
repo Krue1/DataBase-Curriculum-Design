@@ -31,10 +31,19 @@
             </el-button>
           </li>
         </ul>
-        <a href="../html/homepage.html" class="AppHeader-inner-avatar"
+        <el-dropdown @command="handleCommand">
+          <div class="el-dropdown-link AppHeader-inner-avatar">
+            <img :src="myUserAvatarURL" />
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="a">我的主页</el-dropdown-item>
+            <el-dropdown-item command="b">退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <!-- <a href="../html/homepage.html" class="AppHeader-inner-avatar"
           onclick="window.localStorage.setItem('userId', myUserId);">
           <img :src="myUserAvatarURL" />
-        </a>
+        </a> -->
       </div>
     </header>
     <main role="main" class="App-main">
