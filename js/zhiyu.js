@@ -24,6 +24,15 @@ const vm = new Vue({
     handleClick(tab, event) {
       //console.log(tab, event);
     },
+    handleCommand(command) {
+      if (command === "a") {
+        window.localStorage.setItem("userId", myUserId);
+        window.location.href = "../html/homepage.html";
+      } else if (command === "b") {
+        window.localStorage.clear();
+        window.location.href = "../html/login.html";
+      }
+    },
     seeFollow() {
       this.activeName = "follow";
     },

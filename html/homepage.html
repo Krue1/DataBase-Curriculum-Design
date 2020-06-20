@@ -40,10 +40,6 @@
             <el-dropdown-item command="b">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <!-- <a href="../html/homepage.html" class="AppHeader-inner-avatar"
-          onclick="window.localStorage.setItem('userId', myUserId);">
-          <img :src="myUserAvatarURL" />
-        </a> -->
       </div>
     </header>
     <main role="main" class="App-main">
@@ -83,12 +79,7 @@
                   <h4 class="List-HeaderText">{{username}}的回答</h4>
                 </div>
               </el-tab-pane>
-              <el-tab-pane label="视频" name="video">
-                <div class="List-Header">
-                  <h4 class="List-HeaderText">{{username}}的视频</h4>
-                </div>
-              </el-tab-pane>
-              <el-tab-pane label="提问" name="question">
+              <el-tab-pane label="提问" name="ask">
                 <div class="List-Header">
                   <h4 class="List-HeaderText">{{username}}的提问</h4>
                 </div>
@@ -106,6 +97,10 @@
             </el-tabs>
           </div>
           <div id="profileMain1-main">
+            <list-item-answer v-for="item in answers" :item="item" v-show="activeName==='answer'">
+            </list-item-answer>
+            <list-item-ask v-for="item in asks" :item="item" v-show="activeName==='ask'">
+            </list-item-ask>
             <list-item-follow v-for="item in followings" :item="item" v-show="activeName==='follow'"
               :key="item.nickname">
             </list-item-follow>
@@ -229,22 +224,37 @@
   </div>
 </template>
 
-<template id="list-item-question">
-  <div class="list-item-question">
-    <div class="list-item-question-top">
-      <h2>{{item.title}}</h2>
+<template id="list-item-answer">
+  <div class="list-item-answer">
+    <div class="list-item-answer-top">
+      <h2 class="list-item-title">{{item.title}}</h2>
     </div>
-    <div class="list-item-question-middle">
+    <div class="list-item-answer-middle">
       <div>
         <img :src="item.avatar">
-        <h4>{{item.nickname}}</h2>
+        <div>
+          <h4>{{item.nickname}}</h4>
+          <p>{{item.brief}}</p>
+        </div>
       </div>
       <div>
         <p>{{item.content}}</p>
       </div>
     </div>
-    <div class="list-item-question-bottom">
+    <div class="list-item-answer-bottom">
       <el-button type="primary" v-if="!item.isFollowing" @click="vote(item)">赞同</el-button>
+    </div>
+  </div>
+</template>
+
+<template id="list-item-ask">
+  <div class="list-item-ask list-item">
+    <div class="list-item-ask-top">
+      <h2 class="list-item-title">{{item.title}}</h2>
+    </div>
+    <div class="list-item-ask-bottom">
+      <span>{{item.time}} ·</span>
+      <span>&nbsp;{{item.answersCount}} 个回答</span>
     </div>
   </div>
 </template>

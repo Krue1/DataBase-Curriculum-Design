@@ -7,21 +7,6 @@ console.log(userInfo);
 const vm = new Vue({
   el: "#homepage",
   data() {
-    /*
-    return {
-      userAvatarURL: "../img/avatar.jpg",
-      activeName: "activity",
-      username: "user01",
-      userIndustry: "建筑业",
-      isMe: true,
-      voteNum: 133,
-      questionNum: 22,
-      follows: 122,
-      followers: 99,
-      input: "",
-    };
-    */
-
     return {
       userAvatarURL: this.$baseurl + userInfo.avatar,
       myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
@@ -46,6 +31,15 @@ const vm = new Vue({
   methods: {
     handleClick(tab, event) {
       //console.log(tab, event);
+    },
+    handleCommand(command) {
+      if (command === "a") {
+        window.localStorage.setItem("userId", myUserId);
+        window.location.href = "../html/homepage.html";
+      } else if (command === "b") {
+        window.localStorage.clear();
+        window.location.href = "../html/login.html";
+      }
     },
     editProfile() {
       window.location.href = "editProfile.html";
@@ -91,6 +85,28 @@ const vm = new Vue({
       });
     },
     submitQuestion() {
+      $.ajax({
+        type: "POST",
+        url: "http://47.100.62.222:80/question/add",
+        contentType: "application/json",
+        data: JSON.stringify({
+          title: vm.form.question,
+          description: vm.form.description,
+        }),
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            alert("提交问题成功");
+          } else if (result.code == 10501) {
+            alert("用户id非法");
+          } else if (result.code == 10601) {
+            alert("插入数据失败");
+          }
+        },
+      });
       isShowAsk = false;
     },
   },
@@ -140,6 +156,22 @@ const vm = new Vue({
           window.localStorage.setItem("userId", item.id);
         },
       },
+    },
+    "list-item-ask": {
+      props: ["item"],
+      template: "#list-item-ask",
+      data() {
+        return {};
+      },
+      methods: {},
+    },
+    "list-item-answer": {
+      props: ["item"],
+      template: "#list-item-answer",
+      data() {
+        return {};
+      },
+      methods: {},
     },
   },
   computed: {
@@ -214,6 +246,70 @@ const vm = new Vue({
         },
       });
       return fans;
+    },
+    asks() {
+      let asks = [
+        {
+          title: "如何看待知裕？",
+          time: "2020-06-20",
+          answersCount: "3",
+        },
+      ];
+      // $.ajax({
+      //   type: "GET",
+      //   async: false,
+      //   url: "http://47.100.62.222:80/user/" + userId + "/followers",
+      //   headers: {
+      //     //请求头
+      //     Authorization: token, //登录获取的token (String)
+      //   },
+      //   data: {
+      //     offset: 0,
+      //     limit: 5,
+      //   },
+      //   success: function (result) {
+      //     if (result.code == 00000) {
+      //       asks = result.data.followers;
+      //       console.log(asks);
+      //     } else if (result.code == 10501) {
+      //       alert("userId非法！");
+      //     }
+      //   },
+      // });
+      return asks;
+    },
+    answers() {
+      let answers = [
+        {
+          title: "如何看待知裕？",
+          nickname: "BB",
+          brief: "专业搬砖",
+          content: "rrrrrdd发发发发",
+          avatar: "../img/avatar.jpg",
+        },
+      ];
+      // $.ajax({
+      //   type: "GET",
+      //   async: false,
+      //   url: "http://47.100.62.222:80/user/" + userId + "/followers",
+      //   headers: {
+      //     //请求头
+      //     Authorization: token, //登录获取的token (String)
+      //   },
+      //   data: {
+      //     offset: 0,
+      //     limit: 5,
+      //   },
+      //   success: function (result) {
+      //     if (result.code == 00000) {
+      //       answers = result.data.followers;
+      //       console.log(answers);
+      //     } else if (result.code == 10501) {
+      //       alert("userId非法！");
+      //     }
+      //   },
+      // });
+      return answers;
     },
   },
 });

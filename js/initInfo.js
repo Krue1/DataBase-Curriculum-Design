@@ -1,3 +1,4 @@
+//token = localStorage.getItem("token");
 function initInfo(userId) {
   let userInfo = {};
   $.ajax({
@@ -5,6 +6,10 @@ function initInfo(userId) {
     dataType: "json",
     async: false,
     url: "http://47.100.62.222:80/user/" + userId,
+    headers: {
+      //请求头
+      Authorization: token, //登录获取的token (String)
+    },
     success: function (result) {
       if (result.code == 00000) {
         userInfo = result.data;

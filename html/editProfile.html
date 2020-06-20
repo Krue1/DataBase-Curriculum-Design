@@ -18,9 +18,9 @@
   <div id="editProfile">
     <header role="banner" class="AppHeader">
       <div class="AppHeader-inner">
-        <a href="#"><img src="../img/logo.png" /></a>
+        <a href="zhiyu.html"><img src="../img/logo.png" /></a>
         <ul role="navigation" class="AppHeader-tabs">
-          <li><a href="#">首页</a></li>
+          <li><a href="zhiyu.html">首页</a></li>
           <li><a href="#">发现</a></li>
           <li><a href="#">等你来答</a></li>
           <li>
@@ -32,10 +32,19 @@
             </el-button>
           </li>
         </ul>
-        <a href="../html/homepage.html" class="AppHeader-inner-avatar"
-          onclick="window.localStorage.setItem('userId', window.localStorage.getItem('myUserId'));">
-          <img :src="userAvatarURL" />
-        </a>
+        <el-dropdown @command="handleCommand">
+          <div class="el-dropdown-link AppHeader-inner-avatar">
+            <img :src="myUserAvatarURL" />
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="a">我的主页</el-dropdown-item>
+            <el-dropdown-item command="b">退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <!-- <a href="../html/homepage.html" class="AppHeader-inner-avatar"
+          onclick="window.localStorage.setItem('userId', myUserId);">
+          <img :src="myUserAvatarURL" />
+        </a> -->
       </div>
     </header>
     <main role="main" class="App-main">

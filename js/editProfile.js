@@ -1,11 +1,14 @@
 let token = localStorage.getItem("token");
 let userId = window.localStorage.getItem("userId");
 let userInfo = initInfo(userId);
+let myUserId = window.localStorage.getItem("myUserId");
+let myUserInfo = initInfo(myUserId);
 const vm = new Vue({
   el: "#editProfile",
   data() {
     return {
       userAvatarURL: this.$baseurl + userInfo.avatar,
+      myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
       activeName: "activity",
       questionAsked: "",
       isShowAsk: false,
@@ -44,19 +47,6 @@ const vm = new Vue({
       isShowIntroduction: true,
       oldIntroduction: "",
     };
-    /*
-      return {
-        userAvatarURL: userInfo.avatar,
-        activeName: "activity",
-        username: userInfo.nickname,
-        userIndustry: userInfo.profession,
-        isMe: true,
-        voteNum: 133,
-        questionNum: 22,
-        follows: userInfo.followingsCount,
-        followers: userInfo.followersCount,
-      };
-    */
   },
   components: {
     "edit-button": {
@@ -76,7 +66,15 @@ const vm = new Vue({
     returnHomepage() {
       window.location.href = "homepage.html";
     },
-
+    handleCommand(command) {
+      if (command === "a") {
+        window.localStorage.setItem("userId", myUserId);
+        window.location.href = "../html/homepage.html";
+      } else if (command === "b") {
+        window.localStorage.clear();
+        window.location.href = "../html/login.html";
+      }
+    },
     editUsername() {
       this.oldUsername = this.username;
       this.isShowUsername = false;
