@@ -87,7 +87,8 @@ const vm = new Vue({
     submitQuestion() {
       $.ajax({
         type: "POST",
-        url: "http://47.100.62.222:80/question/add",
+        // url: "http://47.100.62.222:80/question/add",
+        url: "http://127.0.0.1/question/add",
         contentType: "application/json",
         data: JSON.stringify({
           title: vm.form.question,
@@ -192,6 +193,7 @@ const vm = new Vue({
         type: "GET",
         async: false,
         url: "http://47.100.62.222:80/user/" + userId + "/followings",
+        // url: "http://127.0.0.1/user/" + userId + "/followings",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -286,6 +288,17 @@ const vm = new Vue({
           brief: "专业搬砖",
           content: "rrrrrdd发发发发",
           avatar: "../img/avatar.jpg",
+          voteNum: 44,
+          commentNum: 2,
+        },
+        {
+          title: "如何看待知裕？",
+          nickname: "BB",
+          brief: "专业搬砖",
+          content: "rrrrrdd发发发发",
+          avatar: "../img/avatar.jpg",
+          voteNum: 44,
+          commentNum: 2,
         },
       ];
       // $.ajax({

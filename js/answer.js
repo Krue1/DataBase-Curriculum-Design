@@ -1,6 +1,8 @@
 let token = localStorage.getItem("token");
 let userId = window.localStorage.getItem("userId");
 let userInfo = initInfo(userId);
+let myUserId = window.localStorage.getItem("myUserId");
+let myUserInfo = initInfo(myUserId);
 
 let testEditor;
 let testEditormdView;
@@ -78,6 +80,7 @@ const vm = new Vue({
   data() {
     return {
       userAvatarURL: this.$baseurl + userInfo.avatar,
+      myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
       activeName: "activity",
       questionAsked: "",
       isShowAsk: false,
@@ -89,5 +92,41 @@ const vm = new Vue({
       },
       formLabelWidth: "120px",
     };
+  },
+  methods: {
+    handleCommand(command) {
+      if (command === "a") {
+        window.localStorage.setItem("userId", myUserId);
+        window.location.href = "../html/homepage.html";
+      } else if (command === "b") {
+        window.localStorage.clear();
+        window.location.href = "../html/login.html";
+      }
+    },
+    submitQuestion() {
+      $.ajax({
+        type: "POST",
+        url: "http://47.100.62.222:80/question/add",
+        contentType: "application/json",
+        data: JSON.stringify({
+          title: vm.form.question,
+          description: vm.form.description,
+        }),
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            alert("提交问题成功");
+          } else if (result.code == 10501) {
+            alert("用户id非法");
+          } else if (result.code == 10601) {
+            alert("插入数据失败");
+          }
+        },
+      });
+      isShowAsk = false;
+    },
   },
 });

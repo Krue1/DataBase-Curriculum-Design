@@ -4,18 +4,17 @@
 <head>
   <!-- 若安装了chrome frame则使用chrome内核渲染，否则使用IE的最高版本 -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" charset="UTF-8" />
-  <title>写回答 - 知裕</title>
+  <title>个人主页 - 知裕</title>
   <link href="../css/common.css" rel="stylesheet" type="text/css" />
+  <link href="../css/zhiyu.css" rel="stylesheet" type="text/css" />
   <link href="../css/header.css" rel="stylesheet" type="text/css" />
-  <link href="../css/answer.css" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" href="../editor.md-master/css/editormd.css" />
   <link rel="stylesheet" href="../css/index.css" />
   <link rel="icon" type="image/x-icon" href="../img/icon.ico" />
   <script src="../js/vue.js"></script>
 </head>
 
 <body>
-  <div id="answer">
+  <div id="question">
     <header role="banner" class="AppHeader">
       <div class="AppHeader-inner">
         <a href="zhiyu.html"><img src="../img/logo.png" /></a>
@@ -44,39 +43,18 @@
       </div>
     </header>
     <main role="main" class="App-main">
-      <div class="QuestionHeader">
-        <div class="QuestionHeader-content">
-          <h1>{{question}}</h1>
-          <p>{{description}}</p>
-        </div>
-        <div class="QuestionHeader-footer">
-          <el-button>取 消</el-button>
-          <el-button type="primary">确 定</el-button>
-        </div>
-      </div>
-
-      <div class="AnswerMain">
-        <div class="Answer-add">
-          <div id="layout" class="editor">
-            <div id="test-editormd">
-              <textarea class="editormd-markdown-textarea" name="test-editormd-markdown-doc" id="content"></textarea>
-              <!-- 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 -->
-              <textarea class="editormd-html-textarea" name="editormd-html-textarea" id="htmlContent"></textarea>
-            </div>
+      <div id="zhiyuMain">
+        <div id="zhiyuMain1">
+          <div id="zhiyuMain1-header">
           </div>
-          <div>
-            <button id="submitButton">提交</button>
+          <div id="zhiyuMain1-main">
           </div>
-          <!-- <div id="test">
-            <div id="test-editormd-view">
-            </div>
-          </div> -->
         </div>
-        <aside class="Aside">
+        <div id="zhiyuMain2">
           <div>
             <el-card class="box-card">
               <div slot="header" class="clearfix" style="text-align: left;">
-                <span>相关问题</span>
+                <span>个人成就</span>
               </div>
               <div class="box-card-child">
                 <svg fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em">
@@ -86,7 +64,7 @@
                     14.445 9zM3 9h2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V10a1 1 0 0 1 1-1z"
                     fill-rule="evenodd"></path>
                 </svg>
-                <span>获得22次赞同</span>
+                <span>获得{{voteNum}}次赞同</span>
               </div>
               <div class="box-card-child">
                 <svg fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em">
@@ -96,28 +74,26 @@
                         0 0-.016-1.052l-1.168-1.135zm-9.028 9.476l-.348 1.381 1.37-.39 1.274-.36-1.973-1.916-.323 1.285z"
                     fill-rule="evenodd"></path>
                 </svg>
-                <span>提出3个问题</span>
+                <span>提出{{questionNum}}个问题</span>
               </div>
             </el-card>
           </div>
-          <div class="footer">
-            <a class="Aside-item">刘看水</a><span class="Aside-dot"></span><a class="Aside-item">流星花园</a><span
-              class="Aside-dot"></span><a class="Aside-item">知裕协议</a><span class="Aside-dot"></span><a
-              class="Aside-item">知裕隐私保护指引</a><br /><a class="Aside-item">应用</a><span class="Aside-dot"></span><a
-              class="Aside-item">工作</a><span class="Aside-dot"></span><button type="button"
+          <footer class="Footer">
+            <a class="Footer-item">刘看水</a><span class="Footer-dot"></span><a class="Footer-item">流星花园</a><span
+              class="Footer-dot"></span><a class="Footer-item">知裕协议</a><span class="Footer-dot"></span><a
+              class="Footer-item">知裕隐私保护指引</a><br /><a class="Footer-item">应用</a><span class="Footer-dot"></span><a
+              class="Footer-item">工作</a><span class="Footer-dot"></span><button type="button"
               class="Button OrgCreateButton">
-              申请开通知裕机构号</button><br /><a class="Aside-item">侵权举报</a><span class="Aside-dot"></span><a
-              class="Aside-item">网上有害信息举报专区</a><br /><a class="Aside-item">粤 ABC 证 123456 号</a><br /><a
-              class="Aside-item">粤
-              ABC 备 123456 号 - 1</a><br /><a class="Aside-item"><img
+              申请开通知裕机构号</button><br /><a class="Footer-item">侵权举报</a><span class="Footer-dot"></span><a
+              class="Footer-item">网上有害信息举报专区</a><br /><a class="Footer-item">粤 ABC 证 123456 号</a><br /><a
+              class="Footer-item">粤 ABC 备 123456 号 - 1</a><br /><a class="Footer-item"><img
                 src="https://pic3.zhimg.com/80/v2-d0289dc0a46fc5b15b3363ffa78cf6c7.png" />粤流星花园 12345678901
-              号</a><br /><span class="Aside-item">互联网药品信息服务资格证书<br />（粤）- 非经营性 - 2017 -
-              0067</span><span class="Aside-item">违法和不良信息举报：123-4567890</span><br /><a
-              class="Aside-item">信息举报专区</a><br /><a class="Aside-item">证照中心</a><br /><a
-              class="Aside-item">联系我们</a><span>
-              © 2020 知裕</span>
-          </div>
-        </aside>
+              号</a><br /><span class="Footer-item">互联网药品信息服务资格证书<br />（粤）- 非经营性 - 2017 -
+              0067</span><span class="Footer-item">违法和不良信息举报：123-4567890</span><br /><a
+              class="Footer-item">信息举报专区</a><br /><a class="Footer-item">证照中心</a><br /><a
+              class="Footer-item">联系我们</a><span> © 2020 知裕</span>
+          </footer>
+        </div>
       </div>
     </main>
 
@@ -139,22 +115,48 @@
   </div>
 </body>
 
+
+
+<template id="list-item-recommend">
+  <section class="list-item-recommend">
+    <div class="list-item-recommend-content">
+      <div class="list-item-recommend-top">
+        <h2>{{item.title}}</h2>
+      </div>
+      <div class="list-item-recommend-middle">
+        <div>
+          <p>{{item.description}}</p>
+        </div>
+      </div>
+      <div class="list-item-recommend-bottom">
+        <el-button type="primary" v-if="!item.isFollowing" @click="vote(item)" size="medium" class="Vote-Button">
+          <span style="display: inline-flex; align-items: center;">​<svg style="margin-right: 5px;" fill="currentColor"
+              viewBox="0 0 24 24" width="10" height="10">
+              <path
+                d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z"
+                fill-rule="evenodd"></path>
+            </svg></span>
+          赞同 {{item.voteNum}}
+        </el-button>
+        <el-button type="text" style="color: #8590a6;">
+          <span style="display: inline-flex; align-items: center;">​<svg style="margin-right: 1px;" fill="currentColor"
+              viewBox="0 0 24 24" width="1.2em" height="1.2em">
+              <path
+                d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z"
+                fill-rule="evenodd"></path>
+            </svg></span>
+          {{item.commentNum}}条评论
+        </el-button>
+      </div>
+    </div>
+  </section>
+</template>
+
 <!-- 引入组件库 -->
 <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://apps.bdimg.com/libs/jquery/3.5.1/jquery.min.js">
-</script>
-<script src="http://passport.cnblogs.com/scripts/jsencrypt.min.js"></script>
-<script src="../editor.md-master/lib/marked.min.js"> </script>
-<script src="../editor.md-master/lib/prettify.min.js"></script>
-<script src="../editor.md-master/lib/raphael.min.js"></script>
-<script src="../editor.md-master/lib/underscore.min.js"></script>
-<script src="../editor.md-master/lib/sequence-diagram.min.js"></script>
-<script src="../editor.md-master/lib/flowchart.min.js"></script>
-<script src="../editor.md-master/lib/jquery.flowchart.min.js"></script>
-<script src="../editor.md-master/editormd.min.js"></script>
 <script src="../js/common.js"></script>
 <script src="../js/initInfo.js"></script>
-<script src="../js/answer.js"></script>
+<script src="../js/question.js"></script>
 
 </html>

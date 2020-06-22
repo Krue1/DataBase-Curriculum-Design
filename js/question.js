@@ -2,7 +2,7 @@ let token = localStorage.getItem("token");
 let myUserId = window.localStorage.getItem("myUserId");
 let myUserInfo = initInfo(myUserId);
 const vm = new Vue({
-  el: "#zhiyu",
+  el: "#question",
   data() {
     return {
       myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
@@ -97,13 +97,6 @@ const vm = new Vue({
         return {};
       },
     },
-    "list-item-recommend": {
-      props: ["item"],
-      template: "#list-item-recommend",
-      data() {
-        return {};
-      },
-    },
   },
   computed: {
     followings() {
@@ -183,23 +176,17 @@ const vm = new Vue({
         {
           id: 1,
           title: "如何看待知乎",
-          nickname: "汪汪汪",
           description:
             "知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎",
           likeNumber: 11,
           datetime: "2020-06-14",
-          commentNum: 45,
-          isLike: true,
         },
         {
           id: 2,
           title: "如何看待知乎?",
-          nickname: "搬砖工",
           description: "知裕知乎知裕知乎",
-          likeNumber: 14,
+          likeNumber: 11,
           datetime: "2020-06-14",
-          commentNum: 22,
-          isLike: false,
         },
       ];
       // $.ajax({
@@ -243,20 +230,18 @@ const vm = new Vue({
           datetime: "2020-06-14",
         },
       ];
-      $.ajax({
-        type: "GET",
-        async: false,
-        url: "http://47.100.62.222:80/hot",
-        // url: "http://127.0.0.1/hot",
-        success: function (result) {
-          if (result.code == 00000) {
-            hots = result.data;
-            console.log(hots);
-          } else {
-            alert("非法！");
-          }
-        },
-      });
+      // $.ajax({
+      //   type: "GET",
+      //   url: "http://47.100.62.222:80/hot",
+      //   success: function (result) {
+      //     if (result.code == 00000) {
+      //       hots = result.data;
+      //       console.log(hots);
+      //     } else {
+      //       alert("非法！");
+      //     }
+      //   },
+      // });
       return hots;
     },
   },

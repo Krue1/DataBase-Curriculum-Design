@@ -74,6 +74,9 @@
             </el-tabs>
           </div>
           <div id="zhiyuMain1-main">
+            <list-item-recommend v-for="item in recommends" :item="item" v-show="activeName==='recommend'"
+              :key="item.title">
+            </list-item-recommend>
             <list-item-hot v-for="(item,index) in hots" :item="item" :index="index" v-show="activeName==='hot'"
               :key="item.title">
             </list-item-hot>
@@ -176,6 +179,50 @@
   </div>
 </template>
 
+<template id="list-item-recommend">
+  <section class="list-item-recommend">
+    <div class="list-item-recommend-content">
+      <div class="list-item-recommend-top">
+        <h2>{{item.title}}</h2>
+      </div>
+      <div class="list-item-recommend-middle">
+        <div>
+          <p>{{item.nickname}}: {{item.description}}</p>
+        </div>
+      </div>
+      <div class="list-item-recommend-bottom">
+        <el-button type="primary" v-if="item.isLike" @click="vote(item)" size="medium" class="Vote-Button">
+          <span style="display: inline-flex; align-items: center;">​<svg style="margin-right: 5px;" fill="currentColor"
+              viewBox="0 0 24 24" width="10" height="10">
+              <path
+                d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z"
+                fill-rule="evenodd"></path>
+            </svg></span>
+          已赞同 {{item.likeNumber}}
+        </el-button>
+        <el-button type="primary" v-if="!item.isLike" @click="vote(item)" size="medium" class="Vote-Button" plain>
+          <span style="display: inline-flex; align-items: center;">​<svg style="margin-right: 5px;" fill="currentColor"
+              viewBox="0 0 24 24" width="10" height="10">
+              <path
+                d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z"
+                fill-rule="evenodd"></path>
+            </svg></span>
+          赞同 {{item.likeNumber}}
+        </el-button>
+        <el-button type="text" style="color: #8590a6;">
+          <span style="display: inline-flex; align-items: center;">​<svg style="margin-right: 1px;" fill="currentColor"
+              viewBox="0 0 24 24" width="1.2em" height="1.2em">
+              <path
+                d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z"
+                fill-rule="evenodd"></path>
+            </svg></span>
+          {{item.commentNum}}条评论
+        </el-button>
+      </div>
+    </div>
+  </section>
+</template>
+
 <template id="list-item-hot">
   <section class="list-item-hot">
     <div class="list-item-hot-index">
@@ -202,7 +249,7 @@
             d="M14.553 20.78c.862-.651 1.39-1.792 1.583-3.421.298-2.511-.656-4.904-2.863-7.179.209 2.291.209 3.73 0 4.314-.41 1.143-1.123 1.983-1.91 2.03-1.35.079-2.305-.512-2.863-1.774-.676 1.25-.782 2.556-.318 3.915.31.906.94 1.684 1.89 2.333C7.144 20.131 5 17.336 5 14.022c0-2.144.898-4.072 2.325-5.4.062 2.072.682 3.598 2.13 4.822-.67-1.112-.734-2.11-.734-3.517 0-3.253 2.067-6.007 4.913-6.927a7.35 7.35 0 0 0 2.157 4.918C17.722 9.214 19 11.463 19 14.022c0 3.073-1.844 5.7-4.447 6.758z"
             fill-rule="evenodd"></path>
         </svg>
-        <span>{{item.voteNum}}热度</span>
+        <span>{{item.likeNumber}}热度</span>
       </div>
     </div>
   </section>

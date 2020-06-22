@@ -237,12 +237,29 @@
   font-size: 14px;
 }
 
+.list-item-answer-middle > div:nth-child(2) {
+  font-size: 14px;
+  color: #8590a6;
+}
+
 .list-item-answer img {
   width: 42px;
   height: 42px;
   border: 0px solid white;
   border-radius: 3px;
   margin-right: 20px;
+}
+
+.list-item-content {
+}
+
+.list-item-answer-bottom {
+  margin-top: 5px;
+}
+
+.el-button--medium.Vote-Button {
+  padding: 10px 12px;
+  margin-right: 14px;
 }
 
 .list-item {
