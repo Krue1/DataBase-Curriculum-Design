@@ -1,57 +1,54 @@
 let token = localStorage.getItem("token");
 let myUserId = window.localStorage.getItem("myUserId");
 let myUserInfo = initInfo(myUserId);
+let questionId = window.localStorage.getItem("questionId");
+let questionInfo = null;
+// $.ajax({
+//   type: "GET",
+//   dataType: "json",
+//   async: false,
+//   url: "http://47.100.62.222:80/question/" + questionId,
+//   // url: "http://localhost/question/" + 1,
+//   headers: {
+//     //请求头
+//     Authorization: token, //登录获取的token (String)
+//   },
+//   success: function (result) {
+//     if (result.code == 00000) {
+//       questionInfo = result.data;
+//     } else if (result.code == 10501) {
+//       alert("questionId非法！");
+//     }
+//   },
+// });
+
 const vm = new Vue({
   el: "#question",
   data() {
     return {
       myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
-      activeName: "recommend",
-      voteNum: 133,
-      questionNum: 22,
-      follows: myUserInfo.followingsCount,
-      followers: myUserInfo.followersCount,
       questionAsked: "",
       isShowAsk: false,
+      question: "dddd",
+      description: "333333",
       form: {
         question: "",
         description: "",
       },
       formLabelWidth: "120px",
+      // answerNum: questionInfo.answerNum,
+      answerNum: 2,
     };
   },
-  methods: {
-    handleClick(tab, event) {
-      //console.log(tab, event);
-    },
-    handleCommand(command) {
-      if (command === "a") {
-        window.localStorage.setItem("userId", myUserId);
-        window.location.href = "../html/homepage.html";
-      } else if (command === "b") {
-        window.localStorage.clear();
-        window.location.href = "../html/login.html";
-      }
-    },
-    seeFollow() {
-      this.activeName = "follow";
-    },
-    seeFan() {
-      this.activeName = "fan";
-    },
-    submitQuestion() {
-      isShowAsk = false;
-    },
-  },
   components: {
-    "list-item-follow": {
+    "list-item-answer": {
       props: ["item"],
-      template: "#list-item-follow",
+      template: "#list-item-answer",
       data() {
         return {};
       },
       methods: {
-        follow(item) {
+        like(item) {
           $.ajax({
             type: "POST",
             url: "http://47.100.62.222:80/user/" + item.id + "/followers",
@@ -61,16 +58,16 @@ const vm = new Vue({
             },
             success: function (result) {
               if (result.code == 00000) {
-                alert("关注成功");
+                alert("点赞成功");
               } else if (result.code == 10501) {
-                alert("用户id非法");
+                alert("回答id非法");
               }
             },
           });
         },
-        cancleFollow(item) {
+        dislike(item) {
           $.ajax({
-            type: "DELETE",
+            type: "POST",
             url: "http://47.100.62.222:80/user/" + item.id + "/followers",
             headers: {
               //请求头
@@ -78,121 +75,105 @@ const vm = new Vue({
             },
             success: function (result) {
               if (result.code == 00000) {
-                alert("取消关注成功");
+                alert("取消点赞成功");
               } else if (result.code == 10501) {
-                alert("用户id非法");
+                alert("回答id非法");
               }
             },
           });
         },
-        toUserHomepage(item) {
-          window.localStorage.setItem("userId", item.id);
-        },
-      },
-    },
-    "list-item-hot": {
-      props: ["item", "index"],
-      template: "#list-item-hot",
-      data() {
-        return {};
       },
     },
   },
+  methods: {
+    handleCommand(command) {
+      if (command === "a") {
+        window.localStorage.setItem("userId", myUserId);
+        window.location.href = "../html/homepage.html";
+      } else if (command === "b") {
+        window.localStorage.clear();
+        window.location.href = "../html/login.html";
+      }
+    },
+    submitQuestion() {
+      $.ajax({
+        type: "POST",
+        url: "http://47.100.62.222:80/question/add",
+        contentType: "application/json",
+        data: JSON.stringify({
+          title: vm.form.question,
+          description: vm.form.description,
+        }),
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            alert("提交问题成功");
+          } else if (result.code == 10501) {
+            alert("用户id非法");
+          } else if (result.code == 10601) {
+            alert("插入数据失败");
+          }
+        },
+      });
+      isShowAsk = false;
+    },
+    toAnswer() {
+      window.location.href = "../html/answer.html";
+    },
+    likeQuestion() {
+      questionId = 2;
+      $.ajax({
+        type: "POST",
+        // url: "http://47.100.62.222:80/question/like",
+        url: "http://127.0.0.1/question/like",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(questionId),
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            alert("点赞成功");
+          } else if (result.code == 10501) {
+            alert("用户id非法");
+          }
+        },
+      });
+    },
+  },
   computed: {
-    followings() {
-      let followings = [
+    answers() {
+      let answers = [
         {
-          id: 22,
-          nickname: "dd",
-          brief: "ss",
-          answersCount: 2,
-          followersCount: 3,
+          title: "如何看待知裕？",
+          nickname: "BB",
+          brief: "专业搬砖",
+          content: "rrrrrdd发发发发",
           avatar: "../img/avatar.jpg",
-          isFollowing: true,
-          isFollowed: true,
+          likeNumber: 44,
+          commentNum: 2,
+          isLike: true,
         },
-      ];
-      $.ajax({
-        type: "GET",
-        async: false,
-        url: "http://47.100.62.222:80/user/" + myUserId + "/followings",
-        headers: {
-          //请求头
-          Authorization: token, //登录获取的token (String)
-        },
-        data: {
-          offset: 0,
-          limit: 5,
-        },
-        success: function (result) {
-          if (result.code == 00000) {
-            followings = result.data.followings;
-            console.log(followings);
-          } else if (result.code == 10501) {
-            alert("userId非法！");
-          }
-        },
-      });
-      return followings;
-    },
-    fans() {
-      let fans = [
         {
-          id: 22,
-          nickname: "dd",
-          brief: "ss",
-          answersCount: 2,
-          followersCount: 3,
+          title: "如何看待知裕？",
+          nickname: "BB",
+          brief: "专业搬砖",
+          content: "rrrrrdd发发发发",
           avatar: "../img/avatar.jpg",
-          isFollowing: true,
-          isFollowed: true,
-        },
-      ];
-      $.ajax({
-        type: "GET",
-        async: false,
-        url: "http://47.100.62.222:80/user/" + myUserId + "/followers",
-        headers: {
-          //请求头
-          Authorization: token, //登录获取的token (String)
-        },
-        data: {
-          offset: 0,
-          limit: 5,
-        },
-        success: function (result) {
-          if (result.code == 00000) {
-            fans = result.data.followers;
-            console.log(fans);
-          } else if (result.code == 10501) {
-            alert("userId非法！");
-          }
-        },
-      });
-      return fans;
-    },
-    recommends() {
-      let recommends = [
-        {
-          id: 1,
-          title: "如何看待知乎",
-          description:
-            "知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎",
-          likeNumber: 11,
-          datetime: "2020-06-14",
-        },
-        {
-          id: 2,
-          title: "如何看待知乎?",
-          description: "知裕知乎知裕知乎",
-          likeNumber: 11,
-          datetime: "2020-06-14",
+          likeNumber: 44,
+          commentNum: 2,
+          isLike: false,
         },
       ];
       // $.ajax({
       //   type: "GET",
       //   async: false,
-      //   url: "http://47.100.62.222:80/user/" + myUserId + "/followers",
+      //   url: "http://47.100.62.222:80/user/" + userId + "/followers",
       //   headers: {
       //     //请求头
       //     Authorization: token, //登录获取的token (String)
@@ -203,85 +184,14 @@ const vm = new Vue({
       //   },
       //   success: function (result) {
       //     if (result.code == 00000) {
-      //       fans = result.data.followers;
-      //       console.log(fans);
+      //       answers = result.data.followers;
+      //       console.log(answers);
       //     } else if (result.code == 10501) {
       //       alert("userId非法！");
       //     }
       //   },
       // });
-      return recommends;
-    },
-    hots() {
-      let hots = [
-        {
-          id: 1,
-          title: "如何看待知乎",
-          description:
-            "知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎",
-          likeNumber: 11,
-          datetime: "2020-06-14",
-        },
-        {
-          id: 2,
-          title: "如何看待知乎?",
-          description: "知裕知乎知裕知乎",
-          likeNumber: 11,
-          datetime: "2020-06-14",
-        },
-      ];
-      // $.ajax({
-      //   type: "GET",
-      //   url: "http://47.100.62.222:80/hot",
-      //   success: function (result) {
-      //     if (result.code == 00000) {
-      //       hots = result.data;
-      //       console.log(hots);
-      //     } else {
-      //       alert("非法！");
-      //     }
-      //   },
-      // });
-      return hots;
+      return answers;
     },
   },
 });
-
-//测试用
-function follow(id) {
-  $.ajax({
-    type: "POST",
-    url: "http://47.100.62.222:80/user/" + id + "/followers",
-    headers: {
-      //请求头
-      Authorization: token, //登录获取的token (String)
-    },
-    success: function (result) {
-      if (result.code == 00000) {
-        alert("关注成功");
-      } else if (result.code == 10501) {
-        alert("用户id非法");
-      }
-    },
-  });
-}
-
-function cancleFollow(id) {
-  $.ajax({
-    type: "DELETE",
-    url: "http://47.100.62.222:80/user/" + id + "/followers",
-    headers: {
-      //请求头
-      Authorization: token, //登录获取的token (String)
-    },
-    success: function (result) {
-      if (result.code == 00000) {
-        alert("取消关注成功");
-      } else if (result.code == 10501) {
-        alert("用户id非法");
-      }
-    },
-  });
-}
-
-//follow(18);

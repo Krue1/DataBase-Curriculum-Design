@@ -50,40 +50,6 @@ const vm = new Vue({
     seeFan() {
       this.activeName = "fan";
     },
-    follow() {
-      $.ajax({
-        type: "POST",
-        url: "http://47.100.62.222:80/user/" + userId + "/followers",
-        headers: {
-          //请求头
-          Authorization: token, //登录获取的token (String)
-        },
-        success: function (result) {
-          if (result.code == 00000) {
-            alert("关注成功");
-          } else if (result.code == 10501) {
-            alert("用户id非法");
-          }
-        },
-      });
-    },
-    cancleFollow() {
-      $.ajax({
-        type: "DELETE",
-        url: "http://47.100.62.222:80/user/" + userId + "/followers",
-        headers: {
-          //请求头
-          Authorization: token, //登录获取的token (String)
-        },
-        success: function (result) {
-          if (result.code == 00000) {
-            alert("取消关注成功");
-          } else if (result.code == 10501) {
-            alert("用户id非法");
-          }
-        },
-      });
-    },
     submitQuestion() {
       $.ajax({
         type: "POST",
@@ -110,6 +76,42 @@ const vm = new Vue({
       });
       isShowAsk = false;
     },
+    follow() {
+      $.ajax({
+        type: "POST",
+        url: "http://47.100.62.222:80/user/" + userId + "/followers",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            alert("关注成功");
+            window.location.reload();
+          } else if (result.code == 10501) {
+            alert("用户id非法");
+          }
+        },
+      });
+    },
+    cancleFollow() {
+      $.ajax({
+        type: "DELETE",
+        url: "http://47.100.62.222:80/user/" + userId + "/followers",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            alert("取消关注成功");
+            window.location.reload();
+          } else if (result.code == 10501) {
+            alert("用户id非法");
+          }
+        },
+      });
+    },
   },
   components: {
     "list-item-follow": {
@@ -130,6 +132,7 @@ const vm = new Vue({
             success: function (result) {
               if (result.code == 00000) {
                 alert("关注成功");
+                window.location.reload();
               } else if (result.code == 10501) {
                 alert("用户id非法");
               }
@@ -147,6 +150,7 @@ const vm = new Vue({
             success: function (result) {
               if (result.code == 00000) {
                 alert("取消关注成功");
+                window.location.reload();
               } else if (result.code == 10501) {
                 alert("用户id非法");
               }
@@ -240,8 +244,8 @@ const vm = new Vue({
         },
         success: function (result) {
           if (result.code == 00000) {
-            fans = result.data.followers;
             console.log(fans);
+            fans = result.data.followers;
           } else if (result.code == 10501) {
             alert("userId非法！");
           }
@@ -364,4 +368,31 @@ function cancleFollow(id) {
   });
 }
 
+// function likeQuestion(id) {
+//   $.ajax({
+//     type: "POST",
+//     // url: "http://47.100.62.222:80/question/like",
+//     url: "http://127.0.0.1/question/like",
+//     dataType: "json",
+//     contentType: "application/json",
+//     data: JSON.stringify({
+//       questionId: id,
+//     }),
+//     // data: {
+//     //   questionId: id,
+//     // },
+//     headers: {
+//       //请求头
+//       Authorization: token, //登录获取的token (String)
+//     },
+//     success: function (result) {
+//       if (result.code == 00000) {
+//         alert("点赞成功");
+//       } else if (result.code == 10501) {
+//         alert("用户id非法");
+//       }
+//     },
+//   });
+// }
+// likeQuestion(3);
 //follow(18);

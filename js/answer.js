@@ -103,6 +103,31 @@ const vm = new Vue({
         window.location.href = "../html/login.html";
       }
     },
+    toAnswer() {
+      // window.location.href = "../html/answer.html";
+      console.log("page to answer");
+    },
+    likeQuestion() {
+      questionId = 2;
+      $.ajax({
+        type: "POST",
+        // url: "http://47.100.62.222:80/question/like",
+        url: "http://127.0.0.1/question/like",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(questionId),
+        headers: {
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            alert("点赞成功");
+          } else if (result.code == 10501) {
+            alert("用户id非法");
+          }
+        },
+      });
+    },
     submitQuestion() {
       $.ajax({
         type: "POST",
