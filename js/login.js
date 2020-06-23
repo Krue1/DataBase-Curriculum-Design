@@ -48,7 +48,7 @@ $("#login-form").on("submit", function (e) {
               window.localStorage.setItem("myUserId", result.data.id);
               window.localStorage.setItem("userId", result.data.id);
               window.localStorage.setItem("token", result.data.token);
-              window.location.href = "homepage.html";
+              window.location.href = "zhiyu.html";
             } else if (result.code == 10101) {
               alert("用户名或密码不符合要求");
             } else if (result.code == 10201) {

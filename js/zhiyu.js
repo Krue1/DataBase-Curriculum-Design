@@ -40,6 +40,33 @@ const vm = new Vue({
       this.activeName = "fan";
     },
     submitQuestion() {
+      $.ajax({
+        type: "POST",
+        // url: "http://47.100.62.222:80/question/add",
+        url: "http://127.0.0.1/question/add",
+        contentType: "application/json",
+        data: JSON.stringify({
+          title: vm.form.question,
+          description: vm.form.description,
+        }),
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            alert("提交问题成功");
+            vm.form.question = "";
+            vm.form.description = "";
+            vm.isShowAsk = false;
+            window.location.reload();
+          } else if (result.code == 10501) {
+            alert("用户id非法");
+          } else if (result.code == 10601) {
+            alert("插入数据失败");
+          }
+        },
+      });
       isShowAsk = false;
     },
   },
@@ -246,11 +273,11 @@ const vm = new Vue({
       $.ajax({
         type: "GET",
         async: false,
-        url: "http://47.100.62.222:80/hot",
-        // url: "http://127.0.0.1/hot",
+        // url: "http://47.100.62.222:80/hot",
+        url: "http://127.0.0.1/hot",
         success: function (result) {
           if (result.code == 00000) {
-            hots = result.data;
+            hots = result.data.hotQuestionList;
             console.log(hots);
           } else {
             alert("非法！");
@@ -261,42 +288,3 @@ const vm = new Vue({
     },
   },
 });
-
-//测试用
-function follow(id) {
-  $.ajax({
-    type: "POST",
-    url: "http://47.100.62.222:80/user/" + id + "/followers",
-    headers: {
-      //请求头
-      Authorization: token, //登录获取的token (String)
-    },
-    success: function (result) {
-      if (result.code == 00000) {
-        alert("关注成功");
-      } else if (result.code == 10501) {
-        alert("用户id非法");
-      }
-    },
-  });
-}
-
-function cancleFollow(id) {
-  $.ajax({
-    type: "DELETE",
-    url: "http://47.100.62.222:80/user/" + id + "/followers",
-    headers: {
-      //请求头
-      Authorization: token, //登录获取的token (String)
-    },
-    success: function (result) {
-      if (result.code == 00000) {
-        alert("取消关注成功");
-      } else if (result.code == 10501) {
-        alert("用户id非法");
-      }
-    },
-  });
-}
-
-//follow(18);

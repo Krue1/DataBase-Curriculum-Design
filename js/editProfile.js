@@ -336,7 +336,8 @@ const vm = new Vue({
     submitQuestion() {
       $.ajax({
         type: "POST",
-        url: "http://47.100.62.222:80/question/add",
+        // url: "http://47.100.62.222:80/question/add",
+        url: "http://127.0.0.1/question/add",
         contentType: "application/json",
         data: JSON.stringify({
           title: vm.form.question,
@@ -349,6 +350,9 @@ const vm = new Vue({
         success: function (result) {
           if (result.code == 00000) {
             alert("提交问题成功");
+            vm.form.question = "";
+            vm.form.description = "";
+            vm.isShowAsk = false;
           } else if (result.code == 10501) {
             alert("用户id非法");
           } else if (result.code == 10601) {

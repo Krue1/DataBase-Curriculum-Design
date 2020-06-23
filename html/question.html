@@ -83,26 +83,7 @@
               <div slot="header" class="clearfix" style="text-align: left;">
                 <span>相关问题</span>
               </div>
-              <div class="box-card-child">
-                <svg fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em">
-                  <path d="M14.445 9h5.387s2.997.154 1.95 3.669c-.168.51-2.346 6.911-2.346 6.911s-.763
-                    1.416-2.86 1.416H8.989c-1.498 0-2.005-.896-1.989-2v-7.998c0-.987.336-2.032 1.114-2.639
-                    4.45-3.773 3.436-4.597 4.45-5.83.985-1.13 3.2-.5 3.037 2.362C15.201 7.397 14.445 9
-                    14.445 9zM3 9h2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V10a1 1 0 0 1 1-1z"
-                    fill-rule="evenodd"></path>
-                </svg>
-                <span>获得22次赞同</span>
-              </div>
-              <div class="box-card-child">
-                <svg fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em">
-                  <path
-                    d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10
-                        10zm4.043-15.524a.745.745 0 0 0-1.053.017l-6.857 7.071 2.237 2.17 6.857-7.071a.743.743 0
-                        0 0-.016-1.052l-1.168-1.135zm-9.028 9.476l-.348 1.381 1.37-.39 1.274-.36-1.973-1.916-.323 1.285z"
-                    fill-rule="evenodd"></path>
-                </svg>
-                <span>提出3个问题</span>
-              </div>
+              <hot-question v-for="item in hots" :item="item"></hot-question>
             </el-card>
           </div>
           <div class="footer">
@@ -143,6 +124,12 @@
     </el-dialog>
   </div>
 </body>
+
+<template id="hot-question">
+  <div class="hot-question">
+    <a @click="toQuestion(item.id)" href="../html/question.html">{{item.title}}</a>
+  </div>
+</template>
 
 <template id="list-item-answer">
   <div class="list-item-answer">

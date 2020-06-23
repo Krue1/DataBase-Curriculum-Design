@@ -26,7 +26,58 @@ const vm = new Vue({
       },
       formLabelWidth: "120px",
       following: userInfo.followings,
+      PageSize: 1,
+      fanCurrentPage: 1,
+      fans: [],
+      followCurrentPage: 1,
+      followings: [],
     };
+  },
+  mounted: function () {
+    let _self = this;
+    $.ajax({
+      type: "GET",
+      async: false,
+      url: "http://47.100.62.222:80/user/" + userId + "/followers",
+      // url: "http://localhost/user/" + userId + "/followers",
+      headers: {
+        //请求头
+        Authorization: token, //登录获取的token (String)
+      },
+      data: {
+        offset: 0,
+        limit: this.PageSize,
+      },
+      success: function (result) {
+        if (result.code == 00000) {
+          _self.fans = result.data.followers;
+        } else if (result.code == 10501) {
+          alert("userId非法！");
+        }
+      },
+    });
+    // this.fans = this.getFan(this.fanCurrentPage, this.PageSize);
+    $.ajax({
+      type: "GET",
+      async: false,
+      url: "http://47.100.62.222:80/user/" + userId + "/followings",
+      // url: "http://127.0.0.1/user/" + userId + "/followings",
+      headers: {
+        //请求头
+        Authorization: token, //登录获取的token (String)
+      },
+      data: {
+        offset: 0,
+        limit: this.PageSize,
+      },
+      success: function (result) {
+        if (result.code == 00000) {
+          _self.followings = result.data.followers;
+        } else if (result.code == 10501) {
+          alert("userId非法！");
+        }
+      },
+    });
   },
   methods: {
     handleClick(tab, event) {
@@ -67,6 +118,9 @@ const vm = new Vue({
         success: function (result) {
           if (result.code == 00000) {
             alert("提交问题成功");
+            vm.form.question = "";
+            vm.form.description = "";
+            vm.isShowAsk = false;
           } else if (result.code == 10501) {
             alert("用户id非法");
           } else if (result.code == 10601) {
@@ -111,6 +165,84 @@ const vm = new Vue({
           }
         },
       });
+    },
+    getFan(currentPage, pageSize) {
+      fans = [
+        {
+          id: 22,
+          nickname: "dd",
+          brief: "ss",
+          answersCount: 2,
+          followersCount: 3,
+          avatar: "../img/avatar.jpg",
+          isFollowing: true,
+          isFollowed: true,
+        },
+      ];
+      $.ajax({
+        type: "GET",
+        async: false,
+        url: "http://47.100.62.222:80/user/" + userId + "/followers",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        data: {
+          offset: (currentPage - 1) * pageSize,
+          limit: pageSize,
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            vm.fans = result.data.followers;
+          } else if (result.code == 10501) {
+            alert("userId非法！");
+          }
+        },
+      });
+      return fans;
+    },
+    fanHandleCurrentChange(val) {
+      this.fanCurrentPage = val;
+      fans = this.getFan(val, this.PageSize);
+    },
+    getFollowings(currentPage, pageSize) {
+      followings = [
+        {
+          id: 22,
+          nickname: "dd",
+          brief: "ss",
+          answersCount: 2,
+          followersCount: 3,
+          avatar: "../img/avatar.jpg",
+          isFollowing: true,
+          isFollowed: true,
+        },
+      ];
+      $.ajax({
+        type: "GET",
+        async: false,
+        url: "http://47.100.62.222:80/user/" + userId + "/followers",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        data: {
+          offset: (currentPage - 1) * pageSize,
+          limit: pageSize,
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            vm.followings = result.data.followers;
+          } else if (result.code == 10501) {
+            alert("userId非法！");
+          }
+        },
+      });
+      return followings;
+    },
+    followHandleCurrentChange(val) {
+      this.followCurrentPage = val;
+      followings = this.getFollowings(val, this.PageSize);
     },
   },
   components: {
@@ -180,79 +312,79 @@ const vm = new Vue({
     },
   },
   computed: {
-    followings() {
-      let followings = [
-        {
-          id: 22,
-          nickname: "dd",
-          brief: "ss",
-          answersCount: 2,
-          followersCount: 3,
-          avatar: "../img/avatar.jpg",
-          isFollowing: true,
-          isFollowed: true,
-        },
-      ];
-      $.ajax({
-        type: "GET",
-        async: false,
-        url: "http://47.100.62.222:80/user/" + userId + "/followings",
-        // url: "http://127.0.0.1/user/" + userId + "/followings",
-        headers: {
-          //请求头
-          Authorization: token, //登录获取的token (String)
-        },
-        data: {
-          offset: 0,
-          limit: 5,
-        },
-        success: function (result) {
-          if (result.code == 00000) {
-            followings = result.data.followings;
-            console.log(followings);
-          } else if (result.code == 10501) {
-            alert("userId非法！");
-          }
-        },
-      });
-      return followings;
-    },
-    fans() {
-      let fans = [
-        {
-          id: 22,
-          nickname: "dd",
-          brief: "ss",
-          answersCount: 2,
-          followersCount: 3,
-          avatar: "../img/avatar.jpg",
-          isFollowing: true,
-          isFollowed: true,
-        },
-      ];
-      $.ajax({
-        type: "GET",
-        async: false,
-        url: "http://47.100.62.222:80/user/" + userId + "/followers",
-        headers: {
-          //请求头
-          Authorization: token, //登录获取的token (String)
-        },
-        data: {
-          offset: 0,
-          limit: 5,
-        },
-        success: function (result) {
-          if (result.code == 00000) {
-            console.log(fans);
-            fans = result.data.followers;
-          } else if (result.code == 10501) {
-            alert("userId非法！");
-          }
-        },
-      });
-      return fans;
-    },
+    // followings() {
+    //   let followings = [
+    //     {
+    //       id: 22,
+    //       nickname: "dd",
+    //       brief: "ss",
+    //       answersCount: 2,
+    //       followersCount: 3,
+    //       avatar: "../img/avatar.jpg",
+    //       isFollowing: true,
+    //       isFollowed: true,
+    //     },
+    //   ];
+    //   $.ajax({
+    //     type: "GET",
+    //     async: false,
+    //     url: "http://47.100.62.222:80/user/" + userId + "/followings",
+    //     // url: "http://127.0.0.1/user/" + userId + "/followings",
+    //     headers: {
+    //       //请求头
+    //       Authorization: token, //登录获取的token (String)
+    //     },
+    //     data: {
+    //       offset: 0,
+    //       limit: 5,
+    //     },
+    //     success: function (result) {
+    //       if (result.code == 00000) {
+    //         followings = result.data.followings;
+    //         console.log(followings);
+    //       } else if (result.code == 10501) {
+    //         alert("userId非法！");
+    //       }
+    //     },
+    //   });
+    //   return followings;
+    // },
+    // fans() {
+    //   let fans = [
+    //     {
+    //       id: 22,
+    //       nickname: "dd",
+    //       brief: "ss",
+    //       answersCount: 2,
+    //       followersCount: 3,
+    //       avatar: "../img/avatar.jpg",
+    //       isFollowing: true,
+    //       isFollowed: true,
+    //     },
+    //   ];
+    //   $.ajax({
+    //     type: "GET",
+    //     async: false,
+    //     url: "http://47.100.62.222:80/user/" + userId + "/followers",
+    //     headers: {
+    //       //请求头
+    //       Authorization: token, //登录获取的token (String)
+    //     },
+    //     data: {
+    //       offset: 0,
+    //       limit: 5,
+    //     },
+    //     success: function (result) {
+    //       if (result.code == 00000) {
+    //         console.log(fans);
+    //         fans = result.data.followers;
+    //       } else if (result.code == 10501) {
+    //         alert("userId非法！");
+    //       }
+    //     },
+    //   });
+    //   return fans;
+    // },
     asks() {
       let asks = [
         {
@@ -368,31 +500,4 @@ function cancleFollow(id) {
   });
 }
 
-// function likeQuestion(id) {
-//   $.ajax({
-//     type: "POST",
-//     // url: "http://47.100.62.222:80/question/like",
-//     url: "http://127.0.0.1/question/like",
-//     dataType: "json",
-//     contentType: "application/json",
-//     data: JSON.stringify({
-//       questionId: id,
-//     }),
-//     // data: {
-//     //   questionId: id,
-//     // },
-//     headers: {
-//       //请求头
-//       Authorization: token, //登录获取的token (String)
-//     },
-//     success: function (result) {
-//       if (result.code == 00000) {
-//         alert("点赞成功");
-//       } else if (result.code == 10501) {
-//         alert("用户id非法");
-//       }
-//     },
-//   });
-// }
-// likeQuestion(3);
-//follow(18);
+// follow(10);

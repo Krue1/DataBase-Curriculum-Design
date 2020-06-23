@@ -104,8 +104,18 @@
             <list-item-follow v-for="item in followings" :item="item" v-show="activeName==='follow'"
               :key="item.nickname">
             </list-item-follow>
+            <div class="follow-ListPage" v-show="activeName==='follow'">
+              <el-pagination @current-change="followHandleCurrentChange" :current-page="followCurrentPage"
+                :page-size="PageSize" layout="prev, pager, next" :total="follows">
+              </el-pagination>
+            </div>
             <list-item-follow v-for="item in fans" :item="item" v-show="activeName==='fan'">
             </list-item-follow>
+            <div class="fan-ListPage" v-show="activeName==='fan'">
+              <el-pagination @current-change="fanHandleCurrentChange" :current-page="fanCurrentPage"
+                :page-size="PageSize" layout="prev, pager, next" :total="followers">
+              </el-pagination>
+            </div>
           </div>
         </div>
         <div id="profileMain2">

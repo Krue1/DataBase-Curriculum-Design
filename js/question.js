@@ -2,7 +2,13 @@ let token = localStorage.getItem("token");
 let myUserId = window.localStorage.getItem("myUserId");
 let myUserInfo = initInfo(myUserId);
 let questionId = window.localStorage.getItem("questionId");
-let questionInfo = null;
+let questionInfo = {
+  id: 11,
+  title: "如何看待zhiyu_5678其人？",
+  description: "如何看待zhiyu_5678其人，何许人也",
+  datetime: "2020-06-23 15:39:19",
+  likeNumber: 0,
+};
 // $.ajax({
 //   type: "GET",
 //   dataType: "json",
@@ -29,8 +35,8 @@ const vm = new Vue({
       myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
       questionAsked: "",
       isShowAsk: false,
-      question: "dddd",
-      description: "333333",
+      question: questionInfo.title,
+      description: questionInfo.description,
       form: {
         question: "",
         description: "",
@@ -84,6 +90,18 @@ const vm = new Vue({
         },
       },
     },
+    "hot-question": {
+      props: ["item"],
+      template: "#hot-question",
+      data() {
+        return {};
+      },
+      methods: {
+        toQuestion() {
+          window.localStorage.setItem("questionId", item.id);
+        },
+      },
+    },
   },
   methods: {
     handleCommand(command) {
@@ -98,7 +116,8 @@ const vm = new Vue({
     submitQuestion() {
       $.ajax({
         type: "POST",
-        url: "http://47.100.62.222:80/question/add",
+        // url: "http://47.100.62.222:80/question/add",
+        url: "http://127.0.0.1/question/add",
         contentType: "application/json",
         data: JSON.stringify({
           title: vm.form.question,
@@ -111,6 +130,10 @@ const vm = new Vue({
         success: function (result) {
           if (result.code == 00000) {
             alert("提交问题成功");
+            vm.form.question = "";
+            vm.form.description = "";
+            vm.isShowAsk = false;
+            window.location.reload();
           } else if (result.code == 10501) {
             alert("用户id非法");
           } else if (result.code == 10601) {
@@ -192,6 +215,33 @@ const vm = new Vue({
       //   },
       // });
       return answers;
+    },
+    hots() {
+      let hots = [
+        {
+          id: 1,
+          title: "如何看待知乎",
+          description:
+            "知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎",
+          likeNumber: 11,
+          datetime: "2020-06-14",
+        },
+      ];
+      $.ajax({
+        type: "GET",
+        async: false,
+        // url: "http://47.100.62.222:80/hot",
+        url: "http://127.0.0.1/hot",
+        success: function (result) {
+          if (result.code == 00000) {
+            hots = result.data.hotQuestionList;
+            hots = hots.slice(0, 5);
+          } else {
+            alert("非法！");
+          }
+        },
+      });
+      return hots;
     },
   },
 });

@@ -10,7 +10,7 @@ main {
 
 .QuestionHeader {
   position: relative;
-  min-width: 1032px;
+  /* min-width: 1032px; */
   overflow: hidden;
   background: #fff;
   -webkit-box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
@@ -22,7 +22,7 @@ main {
   display: flex;
   justify-content: space-between;
   position: relative;
-  width: 1000px;
+  width: 1024px;
   height: 100%;
   margin: 0 auto;
   margin-top: 10px;
@@ -63,6 +63,20 @@ main {
   height: 100%;
   margin-left: 2%;
   background-color: #eee;
+}
+
+.hot-question:not(:first-child) {
+  margin-top: 10px;
+}
+
+.hot-question a {
+  word-break: break-word;
+  display: inline;
+  color: #175199;
+}
+
+.hot-question a:hover {
+  border-bottom: 1px solid #175199;
 }
 
 .footer {
