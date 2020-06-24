@@ -31,7 +31,34 @@
             </el-button>
           </li>
         </ul>
-        <el-dropdown @command="handleCommand">
+        <div class="dmDiv">
+          <el-dropdown trigger="click">
+            <button class="dmButton" aria-haspopup="true" aria-expanded="false" aria-owns="dmButton-content"
+              type="button">
+              <el-badge :value="uncheckedNums" class="item" :hidden="uncheckedNums===0">
+                <span style="display: inline-flex; align-items: center;">​
+                  <svg fill="currentColor" viewBox="0 0 24 24" width="22" height="22">
+                    <path d="M11 2c5.571 0 9 4.335 9 8 0 6-6.475 9.764-11.481 8.022-.315-.07-.379-.124-.78.078-1.455.54-2.413.921-3.525
+                1.122-.483.087-.916-.25-.588-.581 0 0 .677-.417.842-1.904.064-.351-.14-.879-.454-1.171A8.833 8.833
+                0 0 1 2 10c0-3.87 3.394-8 9-8zm10.14 9.628c.758.988.86 2.009.86 3.15 0 1.195-.619 3.11-1.368
+                3.938-.209.23-.354.467-.308.722.12 1.073.614 1.501.614
+                1.501.237.239-.188.562-.537.5-.803-.146-1.495-.42-2.546-.811-.29-.146-.336-.106-.563-.057-2.043.711-4.398.475-6.083-.927
+                 5.965-.524 8.727-3.03 9.93-8.016z" fill-rule="evenodd">
+                    </path>
+                  </svg>
+                </span>
+              </el-badge>
+            </button>
+            <el-dropdown-menu slot="dropdown" class="dm-menu" style="padding: 0">
+              <div class="dm-header" role="tablist">
+                <button type="button" class="dm-header-button">我的私信</button>
+              </div>
+              <list-item-dm v-for="item in dmList" :item="item" :my_username="myUsername" :key="item.nickname">
+              </list-item-dm>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+        <el-dropdown trigger="click" @command="handleCommand">
           <div class="el-dropdown-link AppHeader-inner-avatar">
             <img :src="myUserAvatarURL" />
           </div>
@@ -172,6 +199,11 @@
           </div>
 
           <footer class="Footer">
+            <div>
+              <el-button type="text" plain :disabled="isMe" @click="defriend">屏蔽用户</el-button>
+              <span class="Footer-dot"></span>
+              <el-button type="text" plain :disabled="isMe" @click="cancleDefriend">取消屏蔽用户</el-button>
+            </div>
             <a class="Footer-item">刘看水</a><span class="Footer-dot"></span><a class="Footer-item">流星花园</a><span
               class="Footer-dot"></span><a class="Footer-item">知裕协议</a><span class="Footer-dot"></span><a
               class="Footer-item">知裕隐私保护指引</a><br /><a class="Footer-item">应用</a><span class="Footer-dot"></span><a
@@ -205,7 +237,21 @@
         <el-button type="primary" @click="submitQuestion">确 定</el-button>
       </div>
     </el-dialog>
+
   </div>
+  <!-- <template id="list-item-dm">
+    <div class="list-item-dm" @click="openDmDialog(item.senderId)">
+      <div class="list-item-dm-left">
+        <div>
+          <img :src="item.avatar">
+        </div>
+      </div>
+      <div class="list-item-dm-middle">
+        <h4>{{item.nickname}}</h4>
+        <p>亲爱的 {{my_username}} 你好：你有{{item.uncheckedNums}}条私信未查看</p>
+      </div>
+    </div>
+  </template> -->
 </body>
 
 
@@ -238,7 +284,9 @@
 <template id="list-item-answer">
   <div class="list-item-answer">
     <div class="list-item-answer-top">
-      <h2 class="list-item-title">{{item.title}}</h2>
+      <a @click="toQuestion(item.id)" :title="item.title" href="../html/question.html">
+        <h2 class="list-item-title">{{item.title}}</h2>
+      </a>
     </div>
     <div class="list-item-answer-middle">
       <div>
@@ -279,12 +327,49 @@
 <template id="list-item-ask">
   <div class="list-item-ask list-item">
     <div class="list-item-ask-top">
-      <h2 class="list-item-title">{{item.title}}</h2>
+      <a @click="toQuestion(item.id)" :title="item.title" href="../html/question.html">
+        <h2 class="list-item-title">{{item.title}}</h2>
+      </a>
     </div>
     <div class="list-item-ask-bottom">
       <span>{{item.time}} ·</span>
       <span>&nbsp;{{item.answersCount}} 个回答</span>
     </div>
+  </div>
+</template>
+
+<template id="list-item-dm">
+  <div class="list-item-dm">
+    <div class="list-item-dm-inner" @click="openDmDialog(item.senderId)">
+      <div class="list-item-dm-left">
+        <div>
+          <img :src="item.avatar">
+        </div>
+      </div>
+      <div class="list-item-dm-middle">
+        <h4>{{item.nickname}}</h4>
+        <p>亲爱的 {{my_username}} 你好：你有{{item.uncheckedNums}}条私信未查看</p>
+      </div>
+    </div>
+    <el-dialog :title="item.nickname" :visible.sync="isShowDmDialog" :append-to-body="true">
+      <div v-for="message in messages">
+        <time>{{message.datetime}}</time>
+        <div :class="[message.me===1?'me-message':'the-other-message','message-box']">
+          <img :src="theOther.avatar" v-if="message.me===0">
+          <img :src="me.avatar" v-if="message.me===1">
+          <p>{{message.content}}</p>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-form :model="form">
+          <el-form-item>
+            <el-input type="textarea" :rows="3" v-model="form.content" resize="none" autocomplete="off">
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <el-button type="primary" @click="sendDm(item.senderId)">发送</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <!-- 引入组件库 -->

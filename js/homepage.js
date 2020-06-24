@@ -12,6 +12,7 @@ const vm = new Vue({
       myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
       activeName: "activity",
       username: userInfo.nickname,
+      myUsername: myUserInfo.nickname,
       userIndustry: userInfo.profession,
       isMe: userId === myUserId ? true : false,
       voteNum: 133,
@@ -26,11 +27,25 @@ const vm = new Vue({
       },
       formLabelWidth: "120px",
       following: userInfo.followings,
-      PageSize: 1,
+      PageSize: 2,
       fanCurrentPage: 1,
       fans: [],
       followCurrentPage: 1,
       followings: [],
+      dmList: [
+        {
+          senderId: 18,
+          nickname: "bb",
+          avatar: "../img/avatar.jpg",
+          uncheckedNums: 4,
+        },
+        {
+          senderId: 17,
+          nickname: "搬砖",
+          avatar: "../img/avatar.jpg",
+          uncheckedNums: 1,
+        },
+      ],
     };
   },
   mounted: function () {
@@ -56,7 +71,6 @@ const vm = new Vue({
         }
       },
     });
-    // this.fans = this.getFan(this.fanCurrentPage, this.PageSize);
     $.ajax({
       type: "GET",
       async: false,
@@ -76,6 +90,20 @@ const vm = new Vue({
           console.log(result.data);
         } else if (result.code == 10501) {
           alert("userId非法！");
+        }
+      },
+    });
+    $.ajax({
+      type: "GET",
+      async: false,
+      url: "http://localhost/message/unchecked",
+      headers: {
+        //请求头
+        Authorization: token, //登录获取的token (String)
+      },
+      success: function (result) {
+        if (result.code == 00000) {
+          _self.dmList = result.data;
         }
       },
     });
@@ -229,6 +257,66 @@ const vm = new Vue({
       this.followCurrentPage = val;
       this.followings = this.getFollowings(val, this.PageSize);
     },
+    getDmList() {
+      dmList = [];
+      $.ajax({
+        type: "GET",
+        async: false,
+        url: "http://localhost/message/unchecked",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            dmList = result.data;
+          } else if (result.code == 10501) {
+            alert("userId非法！");
+          }
+        },
+      });
+      return dmList;
+    },
+    defriend() {
+      $.ajax({
+        type: "POST",
+        url: "http://localhost/defriend",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        data: {
+          userId: userId,
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            alert("拉黑成功");
+          } else if (result.code == 10501) {
+            alert("userId非法！");
+          }
+        },
+      });
+    },
+    cancleDefriend() {
+      $.ajax({
+        type: "DELETE",
+        url: "http://localhost/defriend",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        data: {
+          userId: userId,
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            alert("取消拉黑成功");
+          } else if (result.code == 10501) {
+            alert("userId非法！");
+          }
+        },
+      });
+    },
   },
   components: {
     "list-item-follow": {
@@ -250,6 +338,7 @@ const vm = new Vue({
             success: function (result) {
               if (result.code == 00000) {
                 alert("关注成功");
+                // item.following = true;
                 window.location.reload();
               } else if (result.code == 10501) {
                 alert("用户id非法");
@@ -269,6 +358,7 @@ const vm = new Vue({
             success: function (result) {
               if (result.code == 00000) {
                 alert("取消关注成功");
+                // item.following = false;
                 window.location.reload();
               } else if (result.code == 10501) {
                 alert("用户id非法");
@@ -287,7 +377,11 @@ const vm = new Vue({
       data() {
         return {};
       },
-      methods: {},
+      methods: {
+        toQuestion(id) {
+          window.localStorage.setItem("questionId", id);
+        },
+      },
     },
     "list-item-answer": {
       props: ["item"],
@@ -295,83 +389,91 @@ const vm = new Vue({
       data() {
         return {};
       },
-      methods: {},
+      methods: {
+        toQuestion(id) {
+          window.localStorage.setItem("questionId", id);
+        },
+      },
+    },
+    "list-item-dm": {
+      props: ["item", "my_username"],
+      template: "#list-item-dm",
+      data() {
+        return {
+          isShowDmDialog: false,
+          messages: [],
+          form: {
+            content: "",
+          },
+          theOther: {},
+          me: {},
+        };
+      },
+      methods: {
+        openDmDialog(id) {
+          let _self = this;
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: "http://localhost:80/chat/" + id,
+            headers: {
+              //请求头
+              Authorization: token, //登录获取的token (String)
+            },
+            success: function (result) {
+              if (result.code == 00000) {
+                _self.messages = result.data.messages;
+                _self.theOther = result.data.theOther;
+                _self.me = result.data.me;
+              }
+            },
+          });
+          this.isShowDmDialog = true;
+        },
+        sendDm(id) {
+          let _self = this;
+          $.ajax({
+            type: "POST",
+            async: false,
+            url: "http://localhost/message",
+            headers: {
+              //请求头
+              Authorization: token, //登录获取的token (String)
+            },
+            data: {
+              receiverId: id,
+              content: _self.form.content,
+            },
+            success: function (result) {
+              if (result.code == 00000) {
+                _self.messages.push(result.data.messages);
+                _self.form.content = "";
+              }
+            },
+          });
+        },
+      },
     },
   },
   computed: {
-    // followings() {
-    //   let followings = [
-    //     {
-    //       id: 22,
-    //       nickname: "dd",
-    //       brief: "ss",
-    //       answersCount: 2,
-    //       followersCount: 3,
-    //       avatar: "../img/avatar.jpg",
-    //       isFollowing: true,
-    //       isFollowed: true,
-    //     },
-    //   ];
-    //   $.ajax({
-    //     type: "GET",
-    //     async: false,
-    //     url: "http://47.100.62.222:80/user/" + userId + "/followings",
-    //     // url: "http://127.0.0.1/user/" + userId + "/followings",
-    //     headers: {
-    //       //请求头
-    //       Authorization: token, //登录获取的token (String)
-    //     },
-    //     data: {
-    //       offset: 0,
-    //       limit: 5,
-    //     },
-    //     success: function (result) {
-    //       if (result.code == 00000) {
-    //         followings = result.data.followings;
-    //         console.log(followings);
-    //       } else if (result.code == 10501) {
-    //         alert("userId非法！");
-    //       }
-    //     },
-    //   });
-    //   return followings;
-    // },
-    // fans() {
-    //   let fans = [
-    //     {
-    //       id: 22,
-    //       nickname: "dd",
-    //       brief: "ss",
-    //       answersCount: 2,
-    //       followersCount: 3,
-    //       avatar: "../img/avatar.jpg",
-    //       isFollowing: true,
-    //       isFollowed: true,
-    //     },
-    //   ];
-    //   $.ajax({
-    //     type: "GET",
-    //     async: false,
-    //     url: "http://47.100.62.222:80/user/" + userId + "/followers",
-    //     headers: {
-    //       //请求头
-    //       Authorization: token, //登录获取的token (String)
-    //     },
-    //     data: {
-    //       offset: 0,
-    //       limit: 5,
-    //     },
-    //     success: function (result) {
-    //       if (result.code == 00000) {
-    //         console.log(fans);
-    //         fans = result.data.followers;
-    //       } else if (result.code == 10501) {
-    //         alert("userId非法！");
-    //       }
-    //     },
-    //   });
-    //   return fans;
-    // },
+    uncheckedNums() {
+      let uncheckedNums = 1;
+      $.ajax({
+        type: "GET",
+        async: false,
+        url: "http://localhost/message/uncheckedNums",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            uncheckedNums = result.data.uncheckedNums;
+          }
+        },
+      });
+      return uncheckedNums;
+    },
     asks() {
       let asks = [
         {

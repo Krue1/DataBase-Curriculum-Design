@@ -250,9 +250,6 @@
   margin-right: 20px;
 }
 
-.list-item-content {
-}
-
 .list-item-answer-bottom {
   margin-top: 5px;
 }
@@ -291,4 +288,35 @@
   margin-top: 5px;
   color: #8590a6;
   font-size: 14px;
+}
+
+.Footer > div:first-child {
+  width: 100%;
+  font-size: 14px;
+  line-height: 1.8;
+  text-align: left;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 10px;
+}
+
+#homepage .Footer > div:first-child > button {
+  color: #8590a6;
+  height: auto;
+  padding: 0;
+  line-height: inherit;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+#homepage .Footer > div:first-child > button:hover {
+  background: none;
+  border-color: transparent;
+  color: inherit;
+}
+
+#homepage .Footer > div:first-child .el-button.is-disabled.is-plain {
+  background: none;
+  border-color: transparent;
+  color: inherit;
 }
