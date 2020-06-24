@@ -18,6 +18,17 @@ main {
   padding: 16px 150px;
 }
 
+.QuestionHeader-footer {
+  margin-top: 5px;
+}
+
+.QuestionHeader-footer > span {
+  font-size: 14px;
+  color: #8590a6;
+  position: relative;
+  left: 18%;
+}
+
 .QuestionMain {
   display: flex;
   justify-content: space-between;

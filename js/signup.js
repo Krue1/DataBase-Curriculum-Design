@@ -36,7 +36,8 @@ $("#signup-form").on("submit", function (e) {
   $.ajax({
     type: "GET",
     dataType: "json",
-    url: "http://47.100.62.222:80/RSAPublicKey/" + userName,
+    // url: "http://47.100.62.222:80/RSAPublicKey/" + userName,
+    url: "http://localhost/RSAPublicKey/" + userName,
     success: function (result) {
       console.log("加密返回码 :" + result.code);
       if (result.code == 00000) {
@@ -48,7 +49,8 @@ $("#signup-form").on("submit", function (e) {
         $.ajax({
           type: "POST",
           dataType: "json",
-          url: "http://47.100.62.222:80/register",
+          // url: "http://47.100.62.222:80/register",
+          url: "http://localhost/register",
           contentType: "application/json",
           data: JSON.stringify({
             username: userName,

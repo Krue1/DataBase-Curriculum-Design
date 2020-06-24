@@ -37,6 +37,8 @@ const vm = new Vue({
       isShowAsk: false,
       question: questionInfo.title,
       description: questionInfo.description,
+      questionLikeNumber: questionInfo.likeNumber,
+      questionDatetime: questionInfo.datetime,
       form: {
         question: "",
         description: "",
@@ -57,7 +59,7 @@ const vm = new Vue({
         like(item) {
           $.ajax({
             type: "POST",
-            url: "http://47.100.62.222:80/user/" + item.id + "/followers",
+            url: "http://localhost/user/" + item.id + "/followers",
             headers: {
               //请求头
               Authorization: token, //登录获取的token (String)
@@ -74,7 +76,7 @@ const vm = new Vue({
         dislike(item) {
           $.ajax({
             type: "POST",
-            url: "http://47.100.62.222:80/user/" + item.id + "/followers",
+            url: "http://localhost/user/" + item.id + "/followers",
             headers: {
               //请求头
               Authorization: token, //登录获取的token (String)
@@ -97,8 +99,8 @@ const vm = new Vue({
         return {};
       },
       methods: {
-        toQuestion() {
-          window.localStorage.setItem("questionId", item.id);
+        toQuestion(id) {
+          window.localStorage.setItem("questionId", id);
         },
       },
     },
@@ -162,6 +164,7 @@ const vm = new Vue({
         success: function (result) {
           if (result.code == 00000) {
             alert("点赞成功");
+            window.location.reload();
           } else if (result.code == 10501) {
             alert("用户id非法");
           }

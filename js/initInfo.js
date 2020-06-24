@@ -5,7 +5,8 @@ function initInfo(userId) {
     type: "GET",
     dataType: "json",
     async: false,
-    url: "http://47.100.62.222:80/user/" + userId,
+    // url: "http://47.100.62.222:80/user/" + userId,
+    url: "http://localhost/user/" + userId,
     headers: {
       //请求头
       Authorization: token, //登录获取的token (String)

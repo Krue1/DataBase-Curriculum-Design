@@ -38,8 +38,8 @@ const vm = new Vue({
     $.ajax({
       type: "GET",
       async: false,
-      url: "http://47.100.62.222:80/user/" + userId + "/followers",
-      // url: "http://localhost/user/" + userId + "/followers",
+      // url: "http://47.100.62.222:80/user/" + userId + "/followers",
+      url: "http://localhost/user/" + userId + "/followers",
       headers: {
         //请求头
         Authorization: token, //登录获取的token (String)
@@ -60,8 +60,8 @@ const vm = new Vue({
     $.ajax({
       type: "GET",
       async: false,
-      url: "http://47.100.62.222:80/user/" + userId + "/followings",
-      // url: "http://127.0.0.1/user/" + userId + "/followings",
+      // url: "http://47.100.62.222:80/user/" + userId + "/followings",
+      url: "http://127.0.0.1/user/" + userId + "/followings",
       headers: {
         //请求头
         Authorization: token, //登录获取的token (String)
@@ -72,7 +72,8 @@ const vm = new Vue({
       },
       success: function (result) {
         if (result.code == 00000) {
-          _self.followings = result.data.followers;
+          _self.followings = result.data.followings;
+          console.log(result.data);
         } else if (result.code == 10501) {
           alert("userId非法！");
         }
@@ -133,7 +134,8 @@ const vm = new Vue({
     follow() {
       $.ajax({
         type: "POST",
-        url: "http://47.100.62.222:80/user/" + userId + "/followers",
+        // url: "http://47.100.62.222:80/user/" + userId + "/followers",
+        url: "http://localhost/user/" + userId + "/followers",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -151,7 +153,8 @@ const vm = new Vue({
     cancleFollow() {
       $.ajax({
         type: "DELETE",
-        url: "http://47.100.62.222:80/user/" + userId + "/followers",
+        // url: "http://47.100.62.222:80/user/" + userId + "/followers",
+        url: "http://localhost/user/" + userId + "/followers",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -167,22 +170,12 @@ const vm = new Vue({
       });
     },
     getFan(currentPage, pageSize) {
-      fans = [
-        {
-          id: 22,
-          nickname: "dd",
-          brief: "ss",
-          answersCount: 2,
-          followersCount: 3,
-          avatar: "../img/avatar.jpg",
-          isFollowing: true,
-          isFollowed: true,
-        },
-      ];
+      fans = [];
       $.ajax({
         type: "GET",
         async: false,
-        url: "http://47.100.62.222:80/user/" + userId + "/followers",
+        // url: "http://47.100.62.222:80/user/" + userId + "/followers",
+        url: "http://localhost/user/" + userId + "/followers",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -193,7 +186,7 @@ const vm = new Vue({
         },
         success: function (result) {
           if (result.code == 00000) {
-            vm.fans = result.data.followers;
+            fans = result.data.followers;
           } else if (result.code == 10501) {
             alert("userId非法！");
           }
@@ -203,25 +196,15 @@ const vm = new Vue({
     },
     fanHandleCurrentChange(val) {
       this.fanCurrentPage = val;
-      fans = this.getFan(val, this.PageSize);
+      this.fans = this.getFan(val, this.PageSize);
     },
     getFollowings(currentPage, pageSize) {
-      followings = [
-        {
-          id: 22,
-          nickname: "dd",
-          brief: "ss",
-          answersCount: 2,
-          followersCount: 3,
-          avatar: "../img/avatar.jpg",
-          isFollowing: true,
-          isFollowed: true,
-        },
-      ];
+      followings = [];
       $.ajax({
         type: "GET",
         async: false,
-        url: "http://47.100.62.222:80/user/" + userId + "/followers",
+        // url: "http://47.100.62.222:80/user/" + userId + "/followings",
+        url: "http://localhost/user/" + userId + "/followings",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -232,7 +215,9 @@ const vm = new Vue({
         },
         success: function (result) {
           if (result.code == 00000) {
-            vm.followings = result.data.followers;
+            // vm.followings = result.data.followings;
+            followings = result.data.followings;
+            return result.data.followings;
           } else if (result.code == 10501) {
             alert("userId非法！");
           }
@@ -242,7 +227,7 @@ const vm = new Vue({
     },
     followHandleCurrentChange(val) {
       this.followCurrentPage = val;
-      followings = this.getFollowings(val, this.PageSize);
+      this.followings = this.getFollowings(val, this.PageSize);
     },
   },
   components: {
@@ -256,7 +241,8 @@ const vm = new Vue({
         follow(item) {
           $.ajax({
             type: "POST",
-            url: "http://47.100.62.222:80/user/" + item.id + "/followers",
+            // url: "http://47.100.62.222:80/user/" + item.id + "/followers",
+            url: "http://localhost/user/" + item.id + "/followers",
             headers: {
               //请求头
               Authorization: token, //登录获取的token (String)
@@ -274,7 +260,8 @@ const vm = new Vue({
         cancleFollow(item) {
           $.ajax({
             type: "DELETE",
-            url: "http://47.100.62.222:80/user/" + item.id + "/followers",
+            // url: "http://47.100.62.222:80/user/" + item.id + "/followers",
+            url: "http://localhost/user/" + item.id + "/followers",
             headers: {
               //请求头
               Authorization: token, //登录获取的token (String)
@@ -467,7 +454,8 @@ const vm = new Vue({
 function follow(id) {
   $.ajax({
     type: "POST",
-    url: "http://47.100.62.222:80/user/" + id + "/followers",
+    // url: "http://47.100.62.222:80/user/" + id + "/followers",
+    url: "http://localhost/user/" + id + "/followers",
     headers: {
       //请求头
       Authorization: token, //登录获取的token (String)
@@ -485,7 +473,8 @@ function follow(id) {
 function cancleFollow(id) {
   $.ajax({
     type: "DELETE",
-    url: "http://47.100.62.222:80/user/" + id + "/followers",
+    // url: "http://47.100.62.222:80/user/" + id + "/followers",
+    url: "http://localhost/user/" + id + "/followers",
     headers: {
       //请求头
       Authorization: token, //登录获取的token (String)
@@ -499,5 +488,5 @@ function cancleFollow(id) {
     },
   });
 }
-
 // follow(10);
+// follow(18);

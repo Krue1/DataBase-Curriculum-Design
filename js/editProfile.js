@@ -87,7 +87,7 @@ const vm = new Vue({
       $.ajax({
         type: "POST",
         async: false,
-        url: "http://47.100.62.222:80/me/info",
+        url: "http://localhost/me/info",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -124,7 +124,7 @@ const vm = new Vue({
       $.ajax({
         type: "POST",
         async: false,
-        url: "http://47.100.62.222:80/me/info",
+        url: "http://localhost/me/info",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -161,7 +161,7 @@ const vm = new Vue({
       $.ajax({
         type: "POST",
         async: false,
-        url: "http://47.100.62.222:80/me/info",
+        url: "http://localhost/me/info",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -198,7 +198,7 @@ const vm = new Vue({
       $.ajax({
         type: "POST",
         async: false,
-        url: "http://47.100.62.222:80/me/info",
+        url: "http://localhost/me/info",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -235,7 +235,7 @@ const vm = new Vue({
       $.ajax({
         type: "POST",
         async: false,
-        url: "http://47.100.62.222:80/me/info",
+        url: "http://localhost/me/info",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -272,7 +272,7 @@ const vm = new Vue({
       $.ajax({
         type: "POST",
         async: false,
-        url: "http://47.100.62.222:80/me/info",
+        url: "http://localhost/me/info",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -309,7 +309,7 @@ const vm = new Vue({
       $.ajax({
         type: "POST",
         async: false,
-        url: "http://47.100.62.222:80/me/info",
+        url: "http://localhost/me/info",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -336,7 +336,7 @@ const vm = new Vue({
     submitQuestion() {
       $.ajax({
         type: "POST",
-        // url: "http://47.100.62.222:80/question/add",
+        // url: "http://localhost/question/add",
         url: "http://127.0.0.1/question/add",
         contentType: "application/json",
         data: JSON.stringify({

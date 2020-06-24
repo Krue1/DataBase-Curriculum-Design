@@ -81,7 +81,8 @@ const vm = new Vue({
         follow(item) {
           $.ajax({
             type: "POST",
-            url: "http://47.100.62.222:80/user/" + item.id + "/followers",
+            // url: "http://47.100.62.222:80/user/" + item.id + "/followers",
+            url: "http://localhost/user/" + item.id + "/followers",
             headers: {
               //请求头
               Authorization: token, //登录获取的token (String)
@@ -98,7 +99,8 @@ const vm = new Vue({
         cancleFollow(item) {
           $.ajax({
             type: "DELETE",
-            url: "http://47.100.62.222:80/user/" + item.id + "/followers",
+            // url: "http://47.100.62.222:80/user/" + item.id + "/followers",
+            url: "http://localhost/user/" + item.id + "/followers",
             headers: {
               //请求头
               Authorization: token, //登录获取的token (String)
@@ -122,6 +124,11 @@ const vm = new Vue({
       template: "#list-item-hot",
       data() {
         return {};
+      },
+      methods: {
+        toQuestion(id) {
+          window.localStorage.setItem("questionId", id);
+        },
       },
     },
     "list-item-recommend": {
@@ -149,7 +156,8 @@ const vm = new Vue({
       $.ajax({
         type: "GET",
         async: false,
-        url: "http://47.100.62.222:80/user/" + myUserId + "/followings",
+        // url: "http://47.100.62.222:80/user/" + myUserId + "/followings",
+        url: "http://localhost/user/" + myUserId + "/followings",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -185,7 +193,8 @@ const vm = new Vue({
       $.ajax({
         type: "GET",
         async: false,
-        url: "http://47.100.62.222:80/user/" + myUserId + "/followers",
+        // url: "http://47.100.62.222:80/user/" + myUserId + "/followers",
+        url: "http://localhost/user/" + myUserId + "/followers",
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
