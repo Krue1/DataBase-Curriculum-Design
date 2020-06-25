@@ -446,7 +446,9 @@ const vm = new Vue({
             },
             success: function (result) {
               if (result.code == 00000) {
-                _self.messages.push(result.data.messages);
+                result.data.messages[0].me = 1;
+                _self.messages.push(result.data.messages[0]);
+                console.log(_self.messages);
                 _self.form.content = "";
               }
             },

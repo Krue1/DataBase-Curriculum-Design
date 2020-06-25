@@ -48,6 +48,23 @@ const vm = new Vue({
       oldIntroduction: "",
     };
   },
+  mounted: function () {
+    let _self = this;
+    $.ajax({
+      type: "GET",
+      async: false,
+      url: "http://localhost/message/unchecked",
+      headers: {
+        //请求头
+        Authorization: token, //登录获取的token (String)
+      },
+      success: function (result) {
+        if (result.code == 00000) {
+          _self.dmList = result.data;
+        }
+      },
+    });
+  },
   components: {
     "edit-button": {
       template: "#editButton",
@@ -58,10 +75,91 @@ const vm = new Vue({
       },
       function: {},
     },
+    "list-item-dm": {
+      props: ["item", "my_username"],
+      template: "#list-item-dm",
+      data() {
+        return {
+          isShowDmDialog: false,
+          messages: [],
+          form: {
+            content: "",
+          },
+          theOther: {},
+          me: {},
+        };
+      },
+      methods: {
+        openDmDialog(id) {
+          let _self = this;
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: "http://localhost:80/chat/" + id,
+            headers: {
+              //请求头
+              Authorization: token, //登录获取的token (String)
+            },
+            success: function (result) {
+              if (result.code == 00000) {
+                _self.messages = result.data.messages;
+                _self.theOther = result.data.theOther;
+                _self.me = result.data.me;
+              }
+            },
+          });
+          this.isShowDmDialog = true;
+        },
+        sendDm(id) {
+          let _self = this;
+          $.ajax({
+            type: "POST",
+            async: false,
+            url: "http://localhost/message",
+            headers: {
+              //请求头
+              Authorization: token, //登录获取的token (String)
+            },
+            data: {
+              receiverId: id,
+              content: _self.form.content,
+            },
+            success: function (result) {
+              if (result.code == 00000) {
+                result.data.messages[0].me = 1;
+                _self.messages.push(result.data.messages[0]);
+                console.log(_self.messages);
+                _self.form.content = "";
+              }
+            },
+          });
+        },
+      },
+    },
   },
   methods: {
     handleClick(tab, event) {
       console.log(tab, event);
+    },
+    getDmList() {
+      dmList = [];
+      $.ajax({
+        type: "GET",
+        async: false,
+        url: "http://localhost/message/unchecked",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            dmList = result.data;
+          } else if (result.code == 10501) {
+            alert("userId非法！");
+          }
+        },
+      });
+      return dmList;
     },
     returnHomepage() {
       window.location.href = "homepage.html";
@@ -364,15 +462,24 @@ const vm = new Vue({
     },
   },
   computed: {
-    // genderShowed() {
-    //   if (userInfo.gender === -1) {
-    //     return "未知";
-    //   } else if (userInfo.gender === 0) {
-    //     return "女";
-    //   } else if (userInfo.gender === 1) {
-    //     return "男";
-    //   }
-    // },
+    uncheckedNums() {
+      let uncheckedNums = 1;
+      $.ajax({
+        type: "GET",
+        async: false,
+        url: "http://localhost/message/uncheckedNums",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            uncheckedNums = result.data.uncheckedNums;
+          }
+        },
+      });
+      return uncheckedNums;
+    },
   },
 });
 

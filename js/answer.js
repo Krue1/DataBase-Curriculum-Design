@@ -1,9 +1,26 @@
 let token = localStorage.getItem("token");
-let userId = window.localStorage.getItem("userId");
-let userInfo = initInfo(userId);
 let myUserId = window.localStorage.getItem("myUserId");
 let myUserInfo = initInfo(myUserId);
-
+let questionId = window.localStorage.getItem("questionId");
+let questionInfo = {};
+$.ajax({
+  type: "GET",
+  dataType: "json",
+  async: false,
+  url: "http://localhost/question/" + questionId,
+  headers: {
+    //请求头
+    Authorization: token, //登录获取的token (String)
+  },
+  success: function (result) {
+    if (result.code == 00000) {
+      questionInfo = result.data;
+    } else if (result.code == 10501) {
+      alert("questionId非法！");
+    }
+  },
+});
+let baseUrl = "http://localhost/";
 let testEditor;
 let testEditormdView;
 let submitAnswer;
@@ -27,18 +44,18 @@ $(function () {
     saveHTMLToTextarea: true,
     imageUpload: true,
     imageFormats: ["jpg", "jpeg", "png"],
-    //imageUploadURL: "http://localhost:80/uploadImg",
+    imageUploadURL: "http://localhost:80/uploadImg",
     toolbarIcons: function () {
       //自定义工具栏，后面有详细介绍
       return editormd.toolbarModes["full"]; // full, simple, mini
     },
   });
-  let baseUrl = "http://47.100.62.222:80/";
+  // let baseUrl = "http://47.100.62.222:80/";
   $("#submitButton").click(() => {
     let formData = new FormData();
     let content = $("#content").val();
     formData.append("content", content);
-    formData.append("questionId", 1);
+    formData.append("questionId", questionId);
 
     $.ajax({
       url: baseUrl + "answer/content",
@@ -65,33 +82,47 @@ $(function () {
         });
       },
     });
+    alert("答案提交成功！");
+    window.location.href = "../html/question.html";
   });
 });
 
 const vm = new Vue({
   el: "#answer",
-  mounted: function () {
-    // let E = window.wangEditor;
-    // let editor = new E("#editor");
-    // editor.customConfig.debug = true;
-    // editor.customConfig.zIndex = 10;
-    // editor.create();
-  },
   data() {
     return {
-      userAvatarURL: this.$baseurl + userInfo.avatar,
       myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
-      activeName: "activity",
       questionAsked: "",
       isShowAsk: false,
-      question: "dddd",
-      description: "333333",
+      question: questionInfo.title,
+      description: questionInfo.description,
+      questionLikeNumber: questionInfo.likeNumber,
+      questionDatetime: questionInfo.datetime,
+      isLikeQuestion: questionInfo.like,
       form: {
         question: "",
         description: "",
       },
       formLabelWidth: "120px",
+      dmList: [],
     };
+  },
+  mounted: function () {
+    let _self = this;
+    $.ajax({
+      type: "GET",
+      async: false,
+      url: "http://localhost/message/unchecked",
+      headers: {
+        //请求头
+        Authorization: token, //登录获取的token (String)
+      },
+      success: function (result) {
+        if (result.code == 00000) {
+          _self.dmList = result.data;
+        }
+      },
+    });
   },
   methods: {
     handleCommand(command) {
@@ -155,6 +186,186 @@ const vm = new Vue({
         },
       });
       isShowAsk = false;
+    },
+    getDmList() {
+      dmList = [];
+      $.ajax({
+        type: "GET",
+        async: false,
+        url: "http://localhost/message/unchecked",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            dmList = result.data;
+          } else if (result.code == 10501) {
+            alert("userId非法！");
+          }
+        },
+      });
+      return dmList;
+    },
+    likeQuestion() {
+      $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1/question/like",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(questionId),
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            alert("点赞成功");
+            window.location.reload();
+          }
+        },
+      });
+    },
+    cancleLikeQuestion() {
+      $.ajax({
+        type: "DELETE",
+        url: "http://127.0.0.1/question/like",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(questionId),
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            alert("取消点赞成功");
+            window.location.reload();
+          }
+        },
+      });
+    },
+  },
+  components: {
+    "list-item-dm": {
+      props: ["item", "my_username"],
+      template: "#list-item-dm",
+      data() {
+        return {
+          isShowDmDialog: false,
+          messages: [],
+          form: {
+            content: "",
+          },
+          theOther: {},
+          me: {},
+        };
+      },
+      methods: {
+        openDmDialog(id) {
+          let _self = this;
+          $.ajax({
+            type: "GET",
+            async: false,
+            url: "http://localhost:80/chat/" + id,
+            headers: {
+              //请求头
+              Authorization: token, //登录获取的token (String)
+            },
+            success: function (result) {
+              if (result.code == 00000) {
+                _self.messages = result.data.messages;
+                _self.theOther = result.data.theOther;
+                _self.me = result.data.me;
+              }
+            },
+          });
+          this.isShowDmDialog = true;
+        },
+        sendDm(id) {
+          let _self = this;
+          $.ajax({
+            type: "POST",
+            async: false,
+            url: "http://localhost/message",
+            headers: {
+              //请求头
+              Authorization: token, //登录获取的token (String)
+            },
+            data: {
+              receiverId: id,
+              content: _self.form.content,
+            },
+            success: function (result) {
+              if (result.code == 00000) {
+                result.data.messages[0].me = 1;
+                _self.messages.push(result.data.messages[0]);
+                console.log(_self.messages);
+                _self.form.content = "";
+              }
+            },
+          });
+        },
+      },
+    },
+    "hot-question": {
+      props: ["item"],
+      template: "#hot-question",
+      data() {
+        return {};
+      },
+      methods: {
+        toQuestion(id) {
+          window.localStorage.setItem("questionId", id);
+        },
+      },
+    },
+  },
+  computed: {
+    uncheckedNums() {
+      let uncheckedNums = 1;
+      $.ajax({
+        type: "GET",
+        async: false,
+        url: "http://localhost/message/uncheckedNums",
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            uncheckedNums = result.data.uncheckedNums;
+          }
+        },
+      });
+      return uncheckedNums;
+    },
+    hots() {
+      let hots = [
+        {
+          id: 1,
+          title: "如何看待知乎",
+          description:
+            "知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎",
+          likeNumber: 11,
+          datetime: "2020-06-14",
+        },
+      ];
+      $.ajax({
+        type: "GET",
+        async: false,
+        // url: "http://47.100.62.222:80/hot",
+        url: "http://127.0.0.1/hot",
+        success: function (result) {
+          if (result.code == 00000) {
+            hots = result.data.hotQuestionList;
+            hots = hots.slice(0, 5);
+          } else {
+            alert("非法！");
+          }
+        },
+      });
+      return hots;
     },
   },
 });

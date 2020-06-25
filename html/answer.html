@@ -32,6 +32,33 @@
             </el-button>
           </li>
         </ul>
+        <div class="dmDiv">
+          <el-dropdown trigger="click">
+            <button class="dmButton" aria-haspopup="true" aria-expanded="false" aria-owns="dmButton-content"
+              type="button">
+              <el-badge :value="uncheckedNums" class="item" :hidden="uncheckedNums===0">
+                <span style="display: inline-flex; align-items: center;">​
+                  <svg fill="currentColor" viewBox="0 0 24 24" width="22" height="22">
+                    <path d="M11 2c5.571 0 9 4.335 9 8 0 6-6.475 9.764-11.481 8.022-.315-.07-.379-.124-.78.078-1.455.54-2.413.921-3.525
+                1.122-.483.087-.916-.25-.588-.581 0 0 .677-.417.842-1.904.064-.351-.14-.879-.454-1.171A8.833 8.833
+                0 0 1 2 10c0-3.87 3.394-8 9-8zm10.14 9.628c.758.988.86 2.009.86 3.15 0 1.195-.619 3.11-1.368
+                3.938-.209.23-.354.467-.308.722.12 1.073.614 1.501.614
+                1.501.237.239-.188.562-.537.5-.803-.146-1.495-.42-2.546-.811-.29-.146-.336-.106-.563-.057-2.043.711-4.398.475-6.083-.927
+                 5.965-.524 8.727-3.03 9.93-8.016z" fill-rule="evenodd">
+                    </path>
+                  </svg>
+                </span>
+              </el-badge>
+            </button>
+            <el-dropdown-menu slot="dropdown" class="dm-menu" style="padding: 0">
+              <div class="dm-header" role="tablist">
+                <button type="button" class="dm-header-button">我的私信</button>
+              </div>
+              <list-item-dm v-for="item in dmList" :item="item" :my_username="myUsername" :key="item.nickname">
+              </list-item-dm>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
         <el-dropdown @command="handleCommand">
           <div class="el-dropdown-link AppHeader-inner-avatar">
             <img :src="myUserAvatarURL" />
@@ -52,7 +79,7 @@
         <div class="QuestionHeader-footer">
           <el-button type="primary" size="medium">关注问题</el-button>
           <el-button type="primary" size="medium" plain @click="toAnswer">写回答</el-button>
-          <el-button type="text" style="color: #8590a6;" @click="likeQuestion">
+          <el-button type="text" style="color: #8590a6;" @click="likeQuestion" v-show="!isLikeQuestion">
             <span style="display: inline-flex; align-items: center;">​<svg fill="currentColor" viewBox="0 0 24 24"
                 width="1.2em" height="1.2em">
                 <path d="M14.445 9h5.387s2.997.154 1.95 3.669c-.168.51-2.346 6.911-2.346 6.911s-.763
@@ -61,7 +88,18 @@
                   7.397 14.445 9 14.445 9zM3 9h2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V10a1 1
                   0 0 1 1-1z" fill-rule="evenodd"></path>
               </svg></span>
-            好问题
+            好问题 {{questionLikeNumber}}
+          </el-button>
+          <el-button type="text" style="color: #0084ff;" @click="cancleLikeQuestion" v-show="isLikeQuestion">
+            <span style="display: inline-flex; align-items: center;">​<svg fill="currentColor" viewBox="0 0 24 24"
+                width="1.2em" height="1.2em">
+                <path d="M14.445 9h5.387s2.997.154 1.95 3.669c-.168.51-2.346 6.911-2.346 6.911s-.763
+                  1.416-2.86 1.416H8.989c-1.498 0-2.005-.896-1.989-2v-7.998c0-.987.336-2.032
+                  1.114-2.639 4.45-3.773 3.436-4.597 4.45-5.83.985-1.13 3.2-.5 3.037 2.362C15.201
+                  7.397 14.445 9 14.445 9zM3 9h2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V10a1 1
+                  0 0 1 1-1z" fill-rule="evenodd"></path>
+              </svg></span>
+            好问题 {{questionLikeNumber}}
           </el-button>
         </div>
       </div>
@@ -87,28 +125,9 @@
           <div>
             <el-card class="box-card">
               <div slot="header" class="clearfix" style="text-align: left;">
-                <span>相关问题</span>
+                <span>热门问题</span>
               </div>
-              <div class="box-card-child">
-                <svg fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em">
-                  <path d="M14.445 9h5.387s2.997.154 1.95 3.669c-.168.51-2.346 6.911-2.346 6.911s-.763
-                    1.416-2.86 1.416H8.989c-1.498 0-2.005-.896-1.989-2v-7.998c0-.987.336-2.032 1.114-2.639
-                    4.45-3.773 3.436-4.597 4.45-5.83.985-1.13 3.2-.5 3.037 2.362C15.201 7.397 14.445 9
-                    14.445 9zM3 9h2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V10a1 1 0 0 1 1-1z"
-                    fill-rule="evenodd"></path>
-                </svg>
-                <span>获得22次赞同</span>
-              </div>
-              <div class="box-card-child">
-                <svg fill="currentColor" viewBox="0 0 24 24" width="1.2em" height="1.2em">
-                  <path
-                    d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10
-                        10zm4.043-15.524a.745.745 0 0 0-1.053.017l-6.857 7.071 2.237 2.17 6.857-7.071a.743.743 0
-                        0 0-.016-1.052l-1.168-1.135zm-9.028 9.476l-.348 1.381 1.37-.39 1.274-.36-1.973-1.916-.323 1.285z"
-                    fill-rule="evenodd"></path>
-                </svg>
-                <span>提出3个问题</span>
-              </div>
+              <hot-question v-for="item in hots" :item="item"></hot-question>
             </el-card>
           </div>
           <div class="footer">
@@ -149,6 +168,47 @@
     </el-dialog>
   </div>
 </body>
+
+<template id="list-item-dm">
+  <div class="list-item-dm">
+    <div class="list-item-dm-inner" @click="openDmDialog(item.senderId)">
+      <div class="list-item-dm-left">
+        <div>
+          <img :src="item.avatar">
+        </div>
+      </div>
+      <div class="list-item-dm-middle">
+        <h4>{{item.nickname}}</h4>
+        <p>亲爱的 {{my_username}} 你好：你有{{item.uncheckedNums}}条私信未查看</p>
+      </div>
+    </div>
+    <el-dialog :title="item.nickname" :visible.sync="isShowDmDialog" :append-to-body="true">
+      <div v-for="message in messages">
+        <time>{{message.datetime}}</time>
+        <div :class="[message.me===1?'me-message':'the-other-message','message-box']">
+          <img :src="theOther.avatar" v-if="message.me===0">
+          <img :src="me.avatar" v-if="message.me===1">
+          <p>{{message.content}}</p>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-form :model="form">
+          <el-form-item>
+            <el-input type="textarea" :rows="3" v-model="form.content" resize="none" autocomplete="off">
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <el-button type="primary" @click="sendDm(item.senderId)">发送</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<template id="hot-question">
+  <div class="hot-question">
+    <a @click="toQuestion(item.id)" href="../html/question.html">{{item.title}}</a>
+  </div>
+</template>
 
 <!-- 引入组件库 -->
 <script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>

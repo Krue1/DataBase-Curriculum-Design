@@ -272,9 +272,9 @@
   position: absolute;
   width: 8px;
   height: 8px;
-  left: -4px;
+  right: -4px;
   top: 14px;
   background: #f6f6f6;
-  -webkit-transform: rotate(225deg);
-  transform: rotate(225deg);
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
 }

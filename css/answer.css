@@ -79,3 +79,17 @@ main {
   line-height: 1.2;
   margin-left: 12px;
 }
+
+.hot-question:not(:first-child) {
+  margin-top: 10px;
+}
+
+.hot-question a {
+  word-break: break-word;
+  display: inline;
+  color: #175199;
+}
+
+.hot-question a:hover {
+  border-bottom: 1px solid #175199;
+}
