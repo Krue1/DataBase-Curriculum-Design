@@ -108,6 +108,9 @@ const vm = new Vue({
             },
           });
         },
+        toUserHomepage(id) {
+          window.localStorage.setItem("userId", id);
+        },
       },
     },
     "hot-question": {
@@ -290,46 +293,83 @@ const vm = new Vue({
     answers() {
       let answers = [
         {
-          title: "如何看待知裕？",
-          nickname: "BB",
-          brief: "专业搬砖",
-          content: "rrrrrdd发发发发",
-          avatar: "../img/avatar.jpg",
-          likeNumber: 44,
-          commentNum: 2,
-          isLike: true,
+          id: 16,
+          content: "有zhiyu_5678这个人吗？",
+          datetime: "2020-06-25 10:53:05",
+          author: {
+            id: 10,
+            nickname: "Newgate",
+            gender: 1,
+            avatar: "/img/avatar/default_avatar.png",
+            brief: "22255566",
+            introduction: "5555",
+            habitation: "222",
+            profession: "搬砖",
+            education: "3",
+            account: {
+              id: 15,
+              username: "abc124",
+              password: "abc124",
+            },
+          },
+          question: null,
+          like: true,
+          likeNumber: 41,
         },
         {
-          title: "如何看待知裕？",
-          nickname: "BB",
-          brief: "专业搬砖",
-          content: "rrrrrdd发发发发",
-          avatar: "../img/avatar.jpg",
-          likeNumber: 44,
-          commentNum: 2,
-          isLike: false,
+          id: 17,
+          content:
+            "![](http://t8.baidu.com/it/u=2247852322,986532796&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1593659788&t=30cb2fbdb1e77a81aa45f95c7a25a80b)",
+          datetime: "2020-06-25 11:16:54",
+          author: {
+            id: 19,
+            nickname: "zhiyu_掌门人",
+            gender: 0,
+            avatar: "/img/avatar/default_avatar.jpg",
+            brief: "知裕从哪里来，到哪里去",
+            introduction: "",
+            habitation: "",
+            profession: "知裕业",
+            education: "",
+            account: {
+              id: 25,
+              username: "abc127",
+              password: "abc127",
+            },
+          },
+          question: null,
+          like: false,
+          likeNumber: 2,
         },
       ];
-      // $.ajax({
-      //   type: "GET",
-      //   async: false,
-      //   url: "http://47.100.62.222:80/user/" + userId + "/followers",
-      //   headers: {
-      //     //请求头
-      //     Authorization: token, //登录获取的token (String)
-      //   },
-      //   data: {
-      //     offset: 0,
-      //     limit: 5,
-      //   },
-      //   success: function (result) {
-      //     if (result.code == 00000) {
-      //       answers = result.data.followers;
-      //       console.log(answers);
-      //     } else if (result.code == 10501) {
-      //       alert("userId非法！");
-      //     }
-      //   },
+      $.ajax({
+        type: "GET",
+        async: false,
+        url: "http://localhost/answer/" + questionId,
+        headers: {
+          //请求头
+          Authorization: token, //登录获取的token (String)
+        },
+        success: function (result) {
+          if (result.code == 00000) {
+            answers = result.data.answerInfoDTOList;
+            console.log(answers);
+          } else if (result.code == 10501) {
+            alert("参数非法！");
+          }
+        },
+      });
+      // $(".list-item-content").html(
+      //   '<textarea class="append-test" style="display:none;"></textarea>'
+      // );
+      // $(".append-test").val(res.data.content);
+      // editormd.markdownToHTML("QuestionMain-Inner-Content", {
+      //   htmlDecode: "style,script,iframe", //可以过滤标签解码
+      //   emoji: true,
+      //   taskList: true,
+      //   tex: true, // 默认不解析
+      //   flowChart: true, // 默认不解析
+      //   sequenceDiagram: true, // 默认不解析
       // });
       return answers;
     },

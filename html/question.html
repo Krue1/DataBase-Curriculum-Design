@@ -108,10 +108,10 @@
       <div class="QuestionMain">
         <div class="QuestionMain-Inner">
           <div class="QuestionMain-Inner-List-Header">
-            <h4>{{answerNum}} 个回答</h4>
+            <h4>{{answers.length}} 个回答</h4>
             <p>默认排序</p>
           </div>
-          <div class="QuestionMain-Inner-Content">
+          <div class="QuestionMain-Inner-Content" id="QuestionMain-Inner-Content">
             <list-item-answer v-for="item in answers" :item="item">
             </list-item-answer>
           </div>
@@ -174,16 +174,21 @@
   <div class="list-item-answer">
     <div class="list-item-answer-middle">
       <div>
-        <img :src="item.avatar">
+        <a @click="toUserHomepage(item.author.id)" href="../html/homepage.html">
+          <img :src="item.author.avatar">
+        </a>
         <div>
-          <h4>{{item.nickname}}</h4>
-          <p>{{item.brief}}</p>
+          <a @click="toUserHomepage(item.author.id)" href="../html/homepage.html">
+            <h4>{{item.author.nickname}}</h4>
+          </a>
+          <p>{{item.author.brief}}</p>
         </div>
       </div>
       <div>{{item.likeNumber}}人也赞同了该回答</div>
       <div>
         <p class="list-item-content">{{item.content}}</p>
       </div>
+      <time>{{item.datetime}}</time>
     </div>
     <div class="list-item-answer-bottom">
       <el-button type="primary" v-if="item.isLike" @click="dislike(item)" size="medium" class="Vote-Button">
@@ -256,6 +261,16 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </script>
 <script src="http://passport.cnblogs.com/scripts/jsencrypt.min.js"></script>
+<script src="https://apps.bdimg.com/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script src="../editor.md-master/lib/marked.min.js"> </script>
+<script src="../editor.md-master/lib/prettify.min.js"></script>
+<script src="../editor.md-master/lib/raphael.min.js"></script>
+<script src="../editor.md-master/lib/underscore.min.js"></script>
+<script src="../editor.md-master/lib/sequence-diagram.min.js"></script>
+<script src="../editor.md-master/lib/flowchart.min.js"></script>
+<script src="../editor.md-master/lib/jquery.flowchart.min.js"></script>
+<script src="../editor.md-master/editormd.min.js"></script>
 <script src="../js/common.js"></script>
 <script src="../js/initInfo.js"></script>
 <script src="../js/question.js"></script>

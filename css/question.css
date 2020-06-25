@@ -158,6 +158,12 @@ main {
   color: #8590a6;
 }
 
+.list-item-answer-middle time {
+  font-size: 14px;
+  color: #8590a6;
+  line-height: 1.67;
+}
+
 .list-item-answer img {
   width: 42px;
   height: 42px;
@@ -167,6 +173,18 @@ main {
 }
 
 .list-item-content {
+  padding-right: 10px;
+  max-width: 100%;
+  line-height: 1.67;
+  font-size: 15px;
+  color: #1a1a1a;
+  -webkit-tap-highlight-color: rgba(26, 26, 26, 0);
+  overflow: hidden;
+  white-space: normal;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 10;
+  -webkit-box-orient: vertical;
 }
 
 .list-item-answer-bottom {
