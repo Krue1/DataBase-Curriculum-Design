@@ -3,7 +3,6 @@ let myUserId = window.localStorage.getItem("myUserId");
 let myUserInfo = initInfo(myUserId);
 let userId = window.localStorage.getItem("userId");
 let userInfo = initInfo(userId);
-console.log(userInfo);
 const vm = new Vue({
   el: "#homepage",
   data() {
@@ -87,7 +86,6 @@ const vm = new Vue({
       success: function (result) {
         if (result.code == 00000) {
           _self.followings = result.data.followings;
-          console.log(result.data);
         } else if (result.code == 10501) {
           alert("userId非法！");
         }
@@ -323,10 +321,14 @@ const vm = new Vue({
       props: ["item"],
       template: "#list-item-follow",
       data() {
-        return {};
+        return {
+          refresh: true,
+          stateChange: 0,
+        };
       },
       methods: {
         follow(item) {
+          let _self = this;
           $.ajax({
             type: "POST",
             // url: "http://47.100.62.222:80/user/" + item.id + "/followers",
@@ -338,8 +340,9 @@ const vm = new Vue({
             success: function (result) {
               if (result.code == 00000) {
                 alert("关注成功");
-                // item.following = true;
-                window.location.reload();
+                _self.item.following = true;
+                _self.stateChange++;
+                // window.location.reload();
               } else if (result.code == 10501) {
                 alert("用户id非法");
               }
@@ -347,6 +350,7 @@ const vm = new Vue({
           });
         },
         cancleFollow(item) {
+          let _self = this;
           $.ajax({
             type: "DELETE",
             // url: "http://47.100.62.222:80/user/" + item.id + "/followers",
@@ -358,8 +362,9 @@ const vm = new Vue({
             success: function (result) {
               if (result.code == 00000) {
                 alert("取消关注成功");
-                // item.following = false;
-                window.location.reload();
+                _self.item.following = false;
+                _self.stateChange++;
+                // window.location.reload();
               } else if (result.code == 10501) {
                 alert("用户id非法");
               }
@@ -368,6 +373,14 @@ const vm = new Vue({
         },
         toUserHomepage(item) {
           window.localStorage.setItem("userId", item.id);
+        },
+      },
+      watch: {
+        stateChange() {
+          this.refresh = false;
+          this.$nextTick(() => {
+            this.refresh = true;
+          });
         },
       },
     },

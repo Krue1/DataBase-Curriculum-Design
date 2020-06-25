@@ -32,6 +32,7 @@ const vm = new Vue({
   data() {
     return {
       myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
+      myUsername: myUserInfo.nickname,
       questionAsked: "",
       isShowAsk: false,
       question: questionInfo.title,
@@ -71,19 +72,28 @@ const vm = new Vue({
       props: ["item"],
       template: "#list-item-answer",
       data() {
-        return {};
+        return {
+          refresh: true,
+          stateChange: 0,
+        };
       },
       methods: {
-        like(item) {
+        like(id) {
+          let _self = this;
           $.ajax({
             type: "POST",
-            url: "http://localhost/user/" + item.id + "/followers",
+            url: "http://localhost/answer/like",
+            contentType: "application/json",
+            data: JSON.stringify(id),
             headers: {
               //请求头
               Authorization: token, //登录获取的token (String)
             },
             success: function (result) {
               if (result.code == 00000) {
+                _self.item.like = true;
+                _self.item.likeNumber++;
+                _self.stateChange++;
                 alert("点赞成功");
               } else if (result.code == 10501) {
                 alert("回答id非法");
@@ -91,16 +101,22 @@ const vm = new Vue({
             },
           });
         },
-        dislike(item) {
+        dislike(id) {
+          let _self = this;
           $.ajax({
-            type: "POST",
-            url: "http://localhost/user/" + item.id + "/followers",
+            type: "DELETE",
+            url: "http://localhost/answer/like",
+            contentType: "application/json",
+            data: JSON.stringify(id),
             headers: {
               //请求头
               Authorization: token, //登录获取的token (String)
             },
             success: function (result) {
               if (result.code == 00000) {
+                _self.item.like = false;
+                _self.item.likeNumber--;
+                _self.stateChange++;
                 alert("取消点赞成功");
               } else if (result.code == 10501) {
                 alert("回答id非法");
@@ -110,6 +126,14 @@ const vm = new Vue({
         },
         toUserHomepage(id) {
           window.localStorage.setItem("userId", id);
+        },
+      },
+      watch: {
+        stateChange() {
+          this.refresh = false;
+          this.$nextTick(() => {
+            this.refresh = true;
+          });
         },
       },
     },

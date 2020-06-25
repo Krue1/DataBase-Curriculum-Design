@@ -6,6 +6,7 @@ const vm = new Vue({
   data() {
     return {
       myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
+      myUsername: myUserInfo.nickname,
       activeName: "recommend",
       voteNum: 133,
       questionNum: 22,

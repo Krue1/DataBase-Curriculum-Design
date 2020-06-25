@@ -171,7 +171,7 @@
 </template>
 
 <template id="list-item-answer">
-  <div class="list-item-answer">
+  <div class="list-item-answer" v-if="refresh">
     <div class="list-item-answer-middle">
       <div>
         <a @click="toUserHomepage(item.author.id)" href="../html/homepage.html">
@@ -191,7 +191,7 @@
       <time>{{item.datetime}}</time>
     </div>
     <div class="list-item-answer-bottom">
-      <el-button type="primary" v-if="item.isLike" @click="dislike(item)" size="medium" class="Vote-Button">
+      <el-button type="primary" v-if="item.like" @click="dislike(item.id)" size="medium" class="Vote-Button">
         <span style="display: inline-flex; align-items: center;">​<svg style="margin-right: 5px;" fill="currentColor"
             viewBox="0 0 24 24" width="10" height="10">
             <path
@@ -200,7 +200,7 @@
           </svg></span>
         已赞同 {{item.likeNumber}}
       </el-button>
-      <el-button type="primary" v-if="!item.isLike" @click="like(item)" size="medium" class="Vote-Button" plain>
+      <el-button type="primary" v-if="!item.like" @click="like(item.id)" size="medium" class="Vote-Button" plain>
         <span style="display: inline-flex; align-items: center;">​<svg style="margin-right: 5px;" fill="currentColor"
             viewBox="0 0 24 24" width="10" height="10">
             <path

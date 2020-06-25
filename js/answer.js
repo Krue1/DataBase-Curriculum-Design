@@ -92,6 +92,7 @@ const vm = new Vue({
   data() {
     return {
       myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
+      myUsername: myUserInfo.nickname,
       questionAsked: "",
       isShowAsk: false,
       question: questionInfo.title,
