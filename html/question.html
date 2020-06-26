@@ -185,8 +185,8 @@
         </div>
       </div>
       <div>{{item.likeNumber}}人也赞同了该回答</div>
-      <div>
-        <p class="list-item-content">{{item.content}}</p>
+      <div :id="item.id">
+        <textarea>{{item.content}}</textarea>
       </div>
       <time>{{item.datetime}}</time>
     </div>

@@ -45,8 +45,6 @@ const vm = new Vue({
         description: "",
       },
       formLabelWidth: "120px",
-      // answerNum: questionInfo.answerNum,
-      answerNum: 2,
       dmList: [],
     };
   },
@@ -73,8 +71,12 @@ const vm = new Vue({
       template: "#list-item-answer",
       data() {
         return {
+          //利用组件的v-if="refresh"来控制其重新渲染，
+          //watch监视stateChange的变化来改变refresh=false,next-tick=true使其重新渲染
+          //changedId记录需要重新组件的id，然后用updated钩子让markdown再转html
           refresh: true,
           stateChange: 0,
+          changedId: 1,
         };
       },
       methods: {
@@ -94,7 +96,7 @@ const vm = new Vue({
                 _self.item.like = true;
                 _self.item.likeNumber++;
                 _self.stateChange++;
-                alert("点赞成功");
+                _self.changedId = id;
               } else if (result.code == 10501) {
                 alert("回答id非法");
               }
@@ -117,7 +119,7 @@ const vm = new Vue({
                 _self.item.like = false;
                 _self.item.likeNumber--;
                 _self.stateChange++;
-                alert("取消点赞成功");
+                _self.changedId = id;
               } else if (result.code == 10501) {
                 alert("回答id非法");
               }
@@ -135,6 +137,12 @@ const vm = new Vue({
             this.refresh = true;
           });
         },
+      },
+      mounted: function () {
+        md2html(this.item.id);
+      },
+      updated: function () {
+        md2html(this.changedId);
       },
     },
     "hot-question": {
@@ -202,7 +210,6 @@ const vm = new Vue({
               if (result.code == 00000) {
                 result.data.messages[0].me = 1;
                 _self.messages.push(result.data.messages[0]);
-                console.log(_self.messages);
                 _self.form.content = "";
               }
             },
@@ -369,7 +376,7 @@ const vm = new Vue({
       $.ajax({
         type: "GET",
         async: false,
-        url: "http://localhost/answer/" + questionId,
+        url: "http://localhost/answer/from_question/" + questionId,
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)
@@ -383,18 +390,6 @@ const vm = new Vue({
           }
         },
       });
-      // $(".list-item-content").html(
-      //   '<textarea class="append-test" style="display:none;"></textarea>'
-      // );
-      // $(".append-test").val(res.data.content);
-      // editormd.markdownToHTML("QuestionMain-Inner-Content", {
-      //   htmlDecode: "style,script,iframe", //可以过滤标签解码
-      //   emoji: true,
-      //   taskList: true,
-      //   tex: true, // 默认不解析
-      //   flowChart: true, // 默认不解析
-      //   sequenceDiagram: true, // 默认不解析
-      // });
       return answers;
     },
     hots() {
@@ -444,3 +439,14 @@ const vm = new Vue({
     },
   },
 });
+
+function md2html(id) {
+  editormd.markdownToHTML(id, {
+    htmlDecode: "style,script,iframe", //可以过滤标签解码
+    emoji: true,
+    taskList: true,
+    tex: true, // 默认不解析
+    flowChart: true, // 默认不解析
+    sequenceDiagram: true, // 默认不解析
+  });
+}
