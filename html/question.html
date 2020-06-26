@@ -249,8 +249,8 @@
                 </span>
                 查看回复
               </el-button>
-              <el-button type="text" style="color: #8590a6;" class="replyButton" @click="isShowReplyInput=true"
-                v-show="!isShowReplyInput">
+              <el-button type="text" style="color: #8590a6;" class="replyButton" @click="showReplyInput(comment.id)"
+                v-show="!isShowReplyInput || showedReplyId !== comment.id">
                 <span style="display: inline-flex; align-items: center;">
                   ​<svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="margin-right: 5px;">
                     <path d="M22.959 17.22c-1.686-3.552-5.128-8.062-11.636-8.65-.539-.053-1.376-.436-1.376-1.561V4.678c0-.521-.635-.915-1.116-.521L1.469
@@ -263,7 +263,7 @@
                 回复
               </el-button>
               <el-button type="text" style="color: #8590a6;" class="replyButton" @click="isShowReplyInput=false"
-                v-show="isShowReplyInput">
+                v-show="isShowReplyInput && showedReplyId === comment.id">
                 <span style="display: inline-flex; align-items: center;">
                   ​<svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="margin-right: 5px;">
                     <path d="M22.959 17.22c-1.686-3.552-5.128-8.062-11.636-8.65-.539-.053-1.376-.436-1.376-1.561V4.678c0-.521-.635-.915-1.116-.521L1.469
@@ -276,7 +276,7 @@
                 取消回复
               </el-button>
             </div>
-            <div class="reply-input" v-show="isShowReplyInput">
+            <div class="reply-input" v-show="isShowReplyInput && showedReplyId === comment.id">
               <el-input type="textarea" :rows="1" v-model="replyContent" resize="none" :autosize="true"
                 autocomplete="off" :autofocus="true" :placeholder="'回复'+comment.user.nickname"></el-input>
               <el-button type="primary" @click="sendReply(comment.id,comment.id)">发布</el-button>

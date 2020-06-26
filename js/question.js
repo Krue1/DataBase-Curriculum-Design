@@ -79,145 +79,19 @@ const vm = new Vue({
           changedId: 1,
 
           isShowCommentDialog: false,
-          commentList: [
-            {
-              id: 1,
-              content: "答得好！点赞了",
-              datetime: "2020-06-26 09:02:25",
-              user: {
-                id: 10,
-                nickname: "Newgate",
-                gender: 1,
-                avatar: "/img/avatar/default_avatar.png",
-                brief: "22255566",
-                introduction: "5555",
-                habitation: "222",
-                profession: "搬砖",
-                education: "3",
-                account: {
-                  id: 15,
-                  username: "abc124",
-                  password: "abc124",
-                },
-              },
-              commentReplyList: [
-                {
-                  id: 11,
-                  content: "你的牌打得忒好了",
-                  datetime: "2020-06-26 12:44:06",
-                  user: {
-                    id: 19,
-                    nickname: "zhiyu_掌门人",
-                    gender: 0,
-                    avatar: "/img/avatar/default_avatar.jpg",
-                    brief: "知裕从哪里来，到哪里去",
-                    introduction: "",
-                    habitation: "",
-                    profession: "知裕业",
-                    education: "",
-                    account: {
-                      id: 25,
-                      username: "abc127",
-                      password: "abc127",
-                    },
-                  },
-                  repliedId: 1,
-                },
-                {
-                  id: 12,
-                  content: "我的牌确实打得好",
-                  datetime: "2020-06-26 13:16:24",
-                  user: {
-                    id: 17,
-                    nickname: "abc125 Id=17",
-                    gender: 1,
-                    avatar: "/img/avatar/default_avatar.png",
-                    brief: "专注睡觉50年",
-                    introduction: "",
-                    habitation: "",
-                    profession: "睡觉大业",
-                    education: "",
-                    account: {
-                      id: 23,
-                      username: "abc125",
-                      password: "abc125",
-                    },
-                  },
-                  repliedId: 11,
-                },
-              ],
-            },
-            {
-              id: 3,
-              content: "答主这么强",
-              datetime: "2020-06-26 10:26:21",
-              user: {
-                id: 10,
-                nickname: "Newgate",
-                gender: 1,
-                avatar: "/img/avatar/default_avatar.png",
-                brief: "22255566",
-                introduction: "5555",
-                habitation: "222",
-                profession: "搬砖",
-                education: "3",
-                account: {
-                  id: 15,
-                  username: "abc124",
-                  password: "abc124",
-                },
-              },
-              commentReplyList: [],
-            },
-            {
-              id: 5,
-              content: "我愿称你为最强！",
-              datetime: "2020-06-26 11:23:20",
-              user: {
-                id: 10,
-                nickname: "Newgate",
-                gender: 1,
-                avatar: "/img/avatar/default_avatar.png",
-                brief: "22255566",
-                introduction: "5555",
-                habitation: "222",
-                profession: "搬砖",
-                education: "3",
-                account: {
-                  id: 15,
-                  username: "abc124",
-                  password: "abc124",
-                },
-              },
-              commentReplyList: [],
-            },
-            {
-              id: 6,
-              content: "我是id===19",
-              datetime: "2020-06-26 11:40:42",
-              user: {
-                id: 19,
-                nickname: "zhiyu_掌门人",
-                gender: 0,
-                avatar: "/img/avatar/default_avatar.jpg",
-                brief: "知裕从哪里来，到哪里去",
-                introduction: "",
-                habitation: "",
-                profession: "知裕业",
-                education: "",
-                account: {
-                  id: 25,
-                  username: "abc127",
-                  password: "abc127",
-                },
-              },
-              commentReplyList: [],
-            },
-          ],
+          commentList: [],
           commentReplyList: [],
           isShowReplyInput: false,
           replyContent: "",
           commentContent: "",
+
+          //控制每个评论的回复输入栏显示与否
+          //当点击“回复”按钮，showedReplyId就为该评论的id，isShowReplyInput为true
+          //每个评论下面的回复输入栏v-show="isShowReplyInput && showedReplyId === comment.id"
+          //如此这样就能控制仅当前评论的回复输入栏显示，“取消回复”按钮亦然
+          //而“回复”按钮的v-show="!isShowReplyInput || showedReplyId !== comment.id"
+          //当我点开一个回复输入栏，而对应的评论id不是展开回复输入栏的评论的id，则依然显示“回复”按钮
+          showedReplyId: -1,
         };
       },
       methods: {
@@ -284,6 +158,10 @@ const vm = new Vue({
             },
           });
           this.isShowCommentDialog = true;
+        },
+        showReplyInput(id) {
+          this.showedReplyId = id;
+          this.isShowReplyInput = true;
         },
         showReplyDialog(id) {
           this.commentReplyList = [];
@@ -559,31 +437,6 @@ const vm = new Vue({
           like: true,
           likeNumber: 41,
         },
-        {
-          id: 17,
-          content:
-            "![](http://t8.baidu.com/it/u=2247852322,986532796&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1593659788&t=30cb2fbdb1e77a81aa45f95c7a25a80b)",
-          datetime: "2020-06-25 11:16:54",
-          author: {
-            id: 19,
-            nickname: "zhiyu_掌门人",
-            gender: 0,
-            avatar: "/img/avatar/default_avatar.jpg",
-            brief: "知裕从哪里来，到哪里去",
-            introduction: "",
-            habitation: "",
-            profession: "知裕业",
-            education: "",
-            account: {
-              id: 25,
-              username: "abc127",
-              password: "abc127",
-            },
-          },
-          question: null,
-          like: false,
-          likeNumber: 2,
-        },
       ];
       $.ajax({
         type: "GET",
@@ -596,7 +449,6 @@ const vm = new Vue({
         success: function (result) {
           if (result.code == 00000) {
             answers = result.data.answerInfoDTOList;
-            console.log(answers);
           } else if (result.code == 10501) {
             alert("参数非法！");
           }
@@ -605,20 +457,10 @@ const vm = new Vue({
       return answers;
     },
     hots() {
-      let hots = [
-        {
-          id: 1,
-          title: "如何看待知乎",
-          description:
-            "知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎",
-          likeNumber: 11,
-          datetime: "2020-06-14",
-        },
-      ];
+      let hots = [];
       $.ajax({
         type: "GET",
         async: false,
-        // url: "http://47.100.62.222:80/hot",
         url: "http://127.0.0.1/hot",
         success: function (result) {
           if (result.code == 00000) {
