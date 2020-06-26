@@ -18,6 +18,21 @@ main {
   padding: 16px 150px;
 }
 
+.QuestionHeader-content h1 {
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-size: 22px;
+  font-weight: 600;
+  font-synthesis: style;
+  line-height: 32px;
+  color: #1a1a1a;
+}
+
+.QuestionHeader-content p {
+  font-size: 15px;
+  color: #1a1a1a;
+}
+
 .QuestionHeader-footer {
   margin-top: 5px;
 }
@@ -194,4 +209,123 @@ main {
 .el-button--medium.Vote-Button {
   padding: 10px 12px;
   margin-right: 14px;
+}
+
+.comment-dialog {
+  text-align: left;
+}
+
+.comment-dialog > div:first-child {
+  max-height: 530px;
+}
+
+.comment-dialog > div:first-child::-webkit-scrollbar {
+  display: none;
+}
+
+.comment-dialog-inner {
+  max-height: 412px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.comment-dialog .el-dialog__title {
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 600;
+  font-synthesis: style;
+  color: #1a1a1a;
+}
+
+.comment-dialog .el-dialog__header {
+  padding: 12px 20px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.comment-dialog .el-dialog__headerbtn {
+  color: #fff;
+  font-size: 24px;
+  top: 15px;
+  right: -45px;
+}
+
+.comment-dialog .el-dialog__headerbtn .el-dialog__close {
+  color: #fff;
+}
+
+.comment-dialog .el-dialog__headerbtn:hover .el-dialog__close {
+  color: #fff;
+}
+
+.comment-dialog .el-dialog__body {
+  padding: 0;
+}
+
+.comment {
+  border-bottom: 1px solid #f6f6f6;
+  padding: 12px 20px 10px;
+  padding-bottom: 10px;
+}
+
+.comment-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.comment-top > div:first-child {
+  display: flex;
+  align-items: center;
+}
+
+.comment-top img {
+  width: 26px;
+  height: 26px;
+  border-radius: 2px;
+  margin-right: 8px;
+}
+
+.comment-top span {
+  font-size: 15px;
+  color: rgb(26, 26, 26);
+}
+
+.comment-middle {
+  margin: 8px 0;
+  padding-left: 33px;
+  color: rgb(26, 26, 26);
+  font-size: 15px;
+}
+
+.comment-bottom {
+  padding-left: 33px;
+}
+
+.comment-bottom .el-button {
+  padding: 0;
+}
+
+.reply-input {
+  padding-top: 10px;
+  padding-left: 33px;
+  display: flex;
+  align-items: center;
+}
+
+.reply-input .el-button {
+  padding: 0 16px;
+  border: none;
+  line-height: 33px;
+  margin-left: 20px;
+}
+
+.comment-input {
+  display: flex;
+  align-items: center;
+}
+
+.comment-input .el-button {
+  padding: 0 16px;
+  border: none;
+  line-height: 33px;
+  margin-left: 20px;
 }

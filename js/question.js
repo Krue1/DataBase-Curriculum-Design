@@ -77,6 +77,147 @@ const vm = new Vue({
           refresh: true,
           stateChange: 0,
           changedId: 1,
+
+          isShowCommentDialog: false,
+          commentList: [
+            {
+              id: 1,
+              content: "答得好！点赞了",
+              datetime: "2020-06-26 09:02:25",
+              user: {
+                id: 10,
+                nickname: "Newgate",
+                gender: 1,
+                avatar: "/img/avatar/default_avatar.png",
+                brief: "22255566",
+                introduction: "5555",
+                habitation: "222",
+                profession: "搬砖",
+                education: "3",
+                account: {
+                  id: 15,
+                  username: "abc124",
+                  password: "abc124",
+                },
+              },
+              commentReplyList: [
+                {
+                  id: 11,
+                  content: "你的牌打得忒好了",
+                  datetime: "2020-06-26 12:44:06",
+                  user: {
+                    id: 19,
+                    nickname: "zhiyu_掌门人",
+                    gender: 0,
+                    avatar: "/img/avatar/default_avatar.jpg",
+                    brief: "知裕从哪里来，到哪里去",
+                    introduction: "",
+                    habitation: "",
+                    profession: "知裕业",
+                    education: "",
+                    account: {
+                      id: 25,
+                      username: "abc127",
+                      password: "abc127",
+                    },
+                  },
+                  repliedId: 1,
+                },
+                {
+                  id: 12,
+                  content: "我的牌确实打得好",
+                  datetime: "2020-06-26 13:16:24",
+                  user: {
+                    id: 17,
+                    nickname: "abc125 Id=17",
+                    gender: 1,
+                    avatar: "/img/avatar/default_avatar.png",
+                    brief: "专注睡觉50年",
+                    introduction: "",
+                    habitation: "",
+                    profession: "睡觉大业",
+                    education: "",
+                    account: {
+                      id: 23,
+                      username: "abc125",
+                      password: "abc125",
+                    },
+                  },
+                  repliedId: 11,
+                },
+              ],
+            },
+            {
+              id: 3,
+              content: "答主这么强",
+              datetime: "2020-06-26 10:26:21",
+              user: {
+                id: 10,
+                nickname: "Newgate",
+                gender: 1,
+                avatar: "/img/avatar/default_avatar.png",
+                brief: "22255566",
+                introduction: "5555",
+                habitation: "222",
+                profession: "搬砖",
+                education: "3",
+                account: {
+                  id: 15,
+                  username: "abc124",
+                  password: "abc124",
+                },
+              },
+              commentReplyList: [],
+            },
+            {
+              id: 5,
+              content: "我愿称你为最强！",
+              datetime: "2020-06-26 11:23:20",
+              user: {
+                id: 10,
+                nickname: "Newgate",
+                gender: 1,
+                avatar: "/img/avatar/default_avatar.png",
+                brief: "22255566",
+                introduction: "5555",
+                habitation: "222",
+                profession: "搬砖",
+                education: "3",
+                account: {
+                  id: 15,
+                  username: "abc124",
+                  password: "abc124",
+                },
+              },
+              commentReplyList: [],
+            },
+            {
+              id: 6,
+              content: "我是id===19",
+              datetime: "2020-06-26 11:40:42",
+              user: {
+                id: 19,
+                nickname: "zhiyu_掌门人",
+                gender: 0,
+                avatar: "/img/avatar/default_avatar.jpg",
+                brief: "知裕从哪里来，到哪里去",
+                introduction: "",
+                habitation: "",
+                profession: "知裕业",
+                education: "",
+                account: {
+                  id: 25,
+                  username: "abc127",
+                  password: "abc127",
+                },
+              },
+              commentReplyList: [],
+            },
+          ],
+          commentReplyList: [],
+          isShowReplyInput: false,
+          replyContent: "",
+          commentContent: "",
         };
       },
       methods: {
@@ -128,6 +269,77 @@ const vm = new Vue({
         },
         toUserHomepage(id) {
           window.localStorage.setItem("userId", id);
+        },
+        openCommentDialog(id) {
+          let _self = this;
+          $.ajax({
+            type: "GET",
+            url: "http://localhost/comment/from_answer/" + id,
+            success: function (result) {
+              if (result.code == 00000) {
+                _self.commentList = result.data.commentList;
+              } else if (result.code == 10501) {
+                alert("回答id非法");
+              }
+            },
+          });
+          this.isShowCommentDialog = true;
+        },
+        showReplyDialog(id) {
+          this.commentReplyList = [];
+          for (let i = 0; i < this.commentList.length; i++) {
+            if (this.commentList[i].id === id) {
+              this.commentReplyList = this.commentList[i].commentReplyList;
+              break;
+            }
+          }
+          console.log(this.commentReplyList);
+          // this.isShowCommentDialog = true;
+        },
+        sendReply(commentId, repliedId) {
+          $.ajax({
+            type: "POST",
+            url: "http://localhost/comment/reply_to_comment",
+            headers: {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
+            data: JSON.stringify({
+              commentId: commentId,
+              repliedId: repliedId,
+              content: this.replyContent,
+            }),
+            success: function (result) {
+              if (result.code == 00000) {
+                alert("回复成功！");
+              } else if (result.code == 10501) {
+                alert("回答id非法");
+              }
+            },
+          });
+        },
+        sendComment(answerId) {
+          let _self = this;
+          $.ajax({
+            type: "POST",
+            url: "http://localhost/comment/add_to_answer",
+            headers: {
+              Authorization: token,
+              "Content-Type": "application/json",
+            },
+            data: JSON.stringify({
+              answerId: answerId,
+              content: this.commentContent,
+            }),
+            success: function (result) {
+              if (result.code == 00000) {
+                _self.commentList.push(result.data);
+                _self.commentContent = "";
+              } else if (result.code == 10501) {
+                alert("回答id非法");
+              }
+            },
+          });
         },
       },
       watch: {
