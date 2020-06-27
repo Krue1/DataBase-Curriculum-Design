@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <!-- 若安装了chrome frame则使用chrome内核渲染，否则使用IE的最高版本 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" charset="UTF-8" />
+  <title>搜索问题 - 知裕</title>
+  <link href="../css/common.css" rel="stylesheet" type="text/css" />
+  <link href="../css/header.css" rel="stylesheet" type="text/css" />
+  <link href="../css/question.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="../editor.md-master/css/editormd.css" />
+  <link rel="stylesheet" href="../css/index.css" />
+  <link rel="icon" type="image/x-icon" href="../img/icon.ico" />
+  <script src="../js/vue.js"></script>
+</head>
+
+<body>
+  <div id="search">
+    <header role="banner" class="AppHeader">
+      <div class="AppHeader-inner">
+        <a href="zhiyu.html"><img src="../img/logo.png" /></a>
+        <ul role="navigation" class="AppHeader-tabs">
+          <li><a href="zhiyu.html">首页</a></li>
+          <li><a href="#">发现</a></li>
+          <li><a href="#">等你来答</a></li>
+          <li>
+            <el-input v-model="questionAsked" placeholder="搜索你的问题" size="small" class="inlist-block"></el-input>
+          </li>
+          <li>
+            <el-button type="primary" class="inlist-block" size="small" @click="isShowAsk = true">
+              提问
+            </el-button>
+          </li>
+        </ul>
+        <div class="dmDiv">
+          <el-dropdown trigger="click">
+            <button class="dmButton" aria-haspopup="true" aria-expanded="false" aria-owns="dmButton-content"
+              type="button">
+              <el-badge :value="uncheckedNums" class="item" :hidden="uncheckedNums===0">
+                <span style="display: inline-flex; align-items: center;">​
+                  <svg fill="currentColor" viewBox="0 0 24 24" width="22" height="22">
+                    <path d="M11 2c5.571 0 9 4.335 9 8 0 6-6.475 9.764-11.481 8.022-.315-.07-.379-.124-.78.078-1.455.54-2.413.921-3.525
+                1.122-.483.087-.916-.25-.588-.581 0 0 .677-.417.842-1.904.064-.351-.14-.879-.454-1.171A8.833 8.833
+                0 0 1 2 10c0-3.87 3.394-8 9-8zm10.14 9.628c.758.988.86 2.009.86 3.15 0 1.195-.619 3.11-1.368
+                3.938-.209.23-.354.467-.308.722.12 1.073.614 1.501.614
+                1.501.237.239-.188.562-.537.5-.803-.146-1.495-.42-2.546-.811-.29-.146-.336-.106-.563-.057-2.043.711-4.398.475-6.083-.927
+                 5.965-.524 8.727-3.03 9.93-8.016z" fill-rule="evenodd">
+                    </path>
+                  </svg>
+                </span>
+              </el-badge>
+            </button>
+            <el-dropdown-menu slot="dropdown" class="dm-menu" style="padding: 0">
+              <div class="dm-header" role="tablist">
+                <button type="button" class="dm-header-button">我的私信</button>
+              </div>
+              <list-item-dm v-for="item in dmList" :item="item" :my_username="myUsername" :key="item.nickname">
+              </list-item-dm>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+        <el-dropdown @command="handleCommand">
+          <div class="el-dropdown-link AppHeader-inner-avatar">
+            <img :src="myUserAvatarURL" />
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="a">我的主页</el-dropdown-item>
+            <el-dropdown-item command="b">退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+    </header>
+    <main role="main" class="App-main">
+      <div class="QuestionHeader">
+        <div class="QuestionHeader-content">
+          <h1>{{question}}</h1>
+          <p>{{description}}</p>
+        </div>
+        <div class="QuestionHeader-footer">
+          <el-button type="primary" size="medium">关注问题</el-button>
+          <el-button type="primary" size="medium" plain @click="toAnswer">写回答</el-button>
+          <el-button type="text" style="color: #8590a6;" @click="likeQuestion" v-show="!isLikeQuestion">
+            <span style="display: inline-flex; align-items: center;">​<svg fill="currentColor" viewBox="0 0 24 24"
+                width="1.2em" height="1.2em">
+                <path d="M14.445 9h5.387s2.997.154 1.95 3.669c-.168.51-2.346 6.911-2.346 6.911s-.763
+                  1.416-2.86 1.416H8.989c-1.498 0-2.005-.896-1.989-2v-7.998c0-.987.336-2.032
+                  1.114-2.639 4.45-3.773 3.436-4.597 4.45-5.83.985-1.13 3.2-.5 3.037 2.362C15.201
+                  7.397 14.445 9 14.445 9zM3 9h2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V10a1 1
+                  0 0 1 1-1z" fill-rule="evenodd"></path>
+              </svg></span>
+            好问题 {{questionLikeNumber}}
+          </el-button>
+          <el-button type="text" style="color: #0084ff;" @click="cancleLikeQuestion" v-show="isLikeQuestion">
+            <span style="display: inline-flex; align-items: center;">​<svg fill="currentColor" viewBox="0 0 24 24"
+                width="1.2em" height="1.2em">
+                <path d="M14.445 9h5.387s2.997.154 1.95 3.669c-.168.51-2.346 6.911-2.346 6.911s-.763
+                  1.416-2.86 1.416H8.989c-1.498 0-2.005-.896-1.989-2v-7.998c0-.987.336-2.032
+                  1.114-2.639 4.45-3.773 3.436-4.597 4.45-5.83.985-1.13 3.2-.5 3.037 2.362C15.201
+                  7.397 14.445 9 14.445 9zM3 9h2a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V10a1 1
+                  0 0 1 1-1z" fill-rule="evenodd"></path>
+              </svg></span>
+            好问题 {{questionLikeNumber}}
+          </el-button>
+          <span>问题创建于 {{questionDatetime}}</span>
+        </div>
+      </div>
+
+      <div class="QuestionMain">
+        <div class="QuestionMain-Inner">
+          <div class="QuestionMain-Inner-List-Header">
+            <h4>{{answers.length}} 个回答</h4>
+            <p>默认排序</p>
+          </div>
+          <div class="QuestionMain-Inner-Content" id="QuestionMain-Inner-Content">
+            <list-item-answer v-for="item in answers" :item="item">
+            </list-item-answer>
+          </div>
+        </div>
+        <aside class="Aside">
+          <div>
+            <el-card class="box-card">
+              <div slot="header" class="clearfix" style="text-align: left;">
+                <span>热门问题</span>
+              </div>
+              <hot-question v-for="item in hots" :item="item"></hot-question>
+            </el-card>
+          </div>
+          <div class="footer">
+            <a class="Aside-item">刘看水</a><span class="Aside-dot"></span><a class="Aside-item">流星花园</a><span
+              class="Aside-dot"></span><a class="Aside-item">知裕协议</a><span class="Aside-dot"></span><a
+              class="Aside-item">知裕隐私保护指引</a><br /><a class="Aside-item">应用</a><span class="Aside-dot"></span><a
+              class="Aside-item">工作</a><span class="Aside-dot"></span><button type="button"
+              class="Button OrgCreateButton">
+              申请开通知裕机构号</button><br /><a class="Aside-item">侵权举报</a><span class="Aside-dot"></span><a
+              class="Aside-item">网上有害信息举报专区</a><br /><a class="Aside-item">粤 ABC 证 123456 号</a><br /><a
+              class="Aside-item">粤
+              ABC 备 123456 号 - 1</a><br /><a class="Aside-item"><img
+                src="https://pic3.zhimg.com/80/v2-d0289dc0a46fc5b15b3363ffa78cf6c7.png" />粤流星花园 12345678901
+              号</a><br /><span class="Aside-item">互联网药品信息服务资格证书<br />（粤）- 非经营性 - 2017 -
+              0067</span><span class="Aside-item">违法和不良信息举报：123-4567890</span><br /><a
+              class="Aside-item">信息举报专区</a><br /><a class="Aside-item">证照中心</a><br /><a
+              class="Aside-item">联系我们</a><span>
+              © 2020 知裕</span>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <el-dialog title="提问" :visible.sync="isShowAsk">
+      <el-form :model="form">
+        <el-form-item label="问题" :label-width="formLabelWidth">
+          <el-input v-model="form.question" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="描述" :label-width="formLabelWidth">
+          <el-input type="textarea" :rows="3" v-model="form.description" resize="none" autocomplete="off">
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="isShowAsk = false">取 消</el-button>
+        <el-button type="primary" @click="submitQuestion">确 定</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</body>
+
+<template id="hot-question">
+  <div class="hot-question">
+    <a @click="toQuestion(item.id)" href="../html/question.html">{{item.title}}</a>
+  </div>
+</template>
+
+<template id="list-item-answer">
+  <div class="list-item-answer" v-if="refresh">
+    <div class="list-item-answer-middle">
+      <div>
+        <a @click="toUserHomepage(item.author.id)" href="../html/homepage.html">
+          <img :src="item.author.avatar">
+        </a>
+        <div>
+          <a @click="toUserHomepage(item.author.id)" href="../html/homepage.html">
+            <h4>{{item.author.nickname}}</h4>
+          </a>
+          <p>{{item.author.brief}}</p>
+        </div>
+      </div>
+      <div>{{item.likeNumber}}人也赞同了该回答</div>
+      <div :id="item.id">
+        <textarea>{{item.content}}</textarea>
+      </div>
+      <time>{{item.datetime}}</time>
+    </div>
+    <div class="list-item-answer-bottom">
+      <el-button type="primary" v-if="item.like" @click="dislike(item.id)" size="medium" class="Vote-Button">
+        <span style="display: inline-flex; align-items: center;">​<svg style="margin-right: 5px;" fill="currentColor"
+            viewBox="0 0 24 24" width="10" height="10">
+            <path
+              d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z"
+              fill-rule="evenodd"></path>
+          </svg></span>
+        已赞同 {{item.likeNumber}}
+      </el-button>
+      <el-button type="primary" v-if="!item.like" @click="like(item.id)" size="medium" class="Vote-Button" plain>
+        <span style="display: inline-flex; align-items: center;">​<svg style="margin-right: 5px;" fill="currentColor"
+            viewBox="0 0 24 24" width="10" height="10">
+            <path
+              d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z"
+              fill-rule="evenodd"></path>
+          </svg></span>
+        赞同 {{item.likeNumber}}
+      </el-button>
+      <el-button type="text" style="color: #8590a6;" @click="openCommentDialog(item.id)">
+        <span style="display: inline-flex; align-items: center;">​<svg style="margin-right: 1px;" fill="currentColor"
+            viewBox="0 0 24 24" width="1.2em" height="1.2em">
+            <path
+              d="M10.241 19.313a.97.97 0 0 0-.77.2 7.908 7.908 0 0 1-3.772 1.482.409.409 0 0 1-.38-.637 5.825 5.825 0 0 0 1.11-2.237.605.605 0 0 0-.227-.59A7.935 7.935 0 0 1 3 11.25C3 6.7 7.03 3 12 3s9 3.7 9 8.25-4.373 9.108-10.759 8.063z"
+              fill-rule="evenodd"></path>
+          </svg></span>
+        {{item.commentNumber}}条评论
+      </el-button>
+    </div>
+    <el-dialog :title="item.commentNumber+' 条评论'" :visible.sync="isShowCommentDialog" :append-to-body="true"
+      :lock-scroll="true" class="comment-dialog">
+      <div class="comment-dialog-inner">
+        <div v-for="comment in commentList">
+          <div class="comment pureComment">
+            <div class="comment-top">
+              <div>
+                <img :src="comment.user.avatar">
+                <span>{{comment.user.nickname}}</span>
+              </div>
+              <time>{{comment.datetime}}</time>
+            </div>
+            <div class="comment-middle">{{comment.content}}</div>
+            <div class="comment-bottom">
+              <el-button type="text" style="color: #8590a6;" class="showReplyButton"
+                @click="showReplyDialog(comment.id)">
+                <span style="display: inline-flex; align-items: center;">​
+                  <svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="margin-right: 5px;">
+                    <path d="M11 2c5.571 0 9 4.335 9 8 0 6-6.475 9.764-11.481
+                    8.022-.315-.07-.379-.124-.78.078-1.455.54-2.413.921-3.525 1.122-.483.087-.916-.25-.588-.581
+                    0 0 .677-.417.842-1.904.064-.351-.14-.879-.454-1.171A8.833 8.833 0 0 1 2 10c0-3.87 3.394-8
+                    9-8zm10.14 9.628c.758.988.86 2.009.86 3.15 0 1.195-.619 3.11-1.368
+                    3.938-.209.23-.354.467-.308.722.12 1.073.614 1.501.614
+                    1.501.237.239-.188.562-.537.5-.803-.146-1.495-.42-2.546-.811-.29-.146-.336-.106-.563-.057-2.043.711-4.398.475-6.083-.927
+                    5.965-.524 8.727-3.03 9.93-8.016z" fill-rule="evenodd">
+                    </path>
+                  </svg>
+                </span>
+                查看回复
+              </el-button>
+              <el-button type="text" style="color: #8590a6;" class="replyButton" @click="showReplyInput(comment.id)"
+                v-show="!isShowReplyInput || showedReplyId !== comment.id">
+                <span style="display: inline-flex; align-items: center;">
+                  ​<svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="margin-right: 5px;">
+                    <path d="M22.959 17.22c-1.686-3.552-5.128-8.062-11.636-8.65-.539-.053-1.376-.436-1.376-1.561V4.678c0-.521-.635-.915-1.116-.521L1.469
+                    10.67a1.506 1.506 0 0 0-.1 2.08s6.99 6.818 7.443 7.114c.453.295 1.136.124 1.135-.501V17a1.525 1.525 0
+                    0 1 1.532-1.466c1.186-.139 7.597-.077 10.33 2.396 0 0 .396.257.536.257.892 0 .614-.967.614-.967z"
+                      fill-rule="evenodd">
+                    </path>
+                  </svg>
+                </span>
+                回复
+              </el-button>
+              <el-button type="text" style="color: #8590a6;" class="replyButton" @click="isShowReplyInput=false"
+                v-show="isShowReplyInput && showedReplyId === comment.id">
+                <span style="display: inline-flex; align-items: center;">
+                  ​<svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="margin-right: 5px;">
+                    <path d="M22.959 17.22c-1.686-3.552-5.128-8.062-11.636-8.65-.539-.053-1.376-.436-1.376-1.561V4.678c0-.521-.635-.915-1.116-.521L1.469
+                    10.67a1.506 1.506 0 0 0-.1 2.08s6.99 6.818 7.443 7.114c.453.295 1.136.124 1.135-.501V17a1.525 1.525 0
+                    0 1 1.532-1.466c1.186-.139 7.597-.077 10.33 2.396 0 0 .396.257.536.257.892 0 .614-.967.614-.967z"
+                      fill-rule="evenodd">
+                    </path>
+                  </svg>
+                </span>
+                取消回复
+              </el-button>
+            </div>
+            <div class="reply-input" v-show="isShowReplyInput && showedReplyId === comment.id">
+              <el-input type="textarea" :rows="1" v-model="replyContent" resize="none" :autosize="true"
+                autocomplete="off" :autofocus="true" :placeholder="'回复'+comment.user.nickname"></el-input>
+              <el-button type="primary" @click="sendReply(comment.id,comment.id)">发布</el-button>
+            </div>
+          </div>
+
+          <!-- 此处以下为嵌套的reply-dialog -->
+          <el-dialog :title="commentReplyList.length+' 条回复'" :visible.sync="isShowReplyDialog" :append-to-body="true"
+            :lock-scroll="true" class="comment-dialog" width="45%">
+            <div class="comment-dialog-inner">
+              <div v-for="reply in commentReplyList">
+                <div class="comment complexComment">
+                  <div class="comment-top">
+                    <div>
+                      <img :src="reply.user.avatar">
+                      <span>{{reply.user.nickname}}</span>
+                      <span style="color:#8590a6;">&nbsp;回复&nbsp;</span>
+                      <span>{{reply.repliedNickname}}</span>
+                    </div>
+                    <time>{{reply.datetime}}</time>
+                  </div>
+                  <div class="comment-middle">{{reply.content}}</div>
+                  <div class="comment-bottom">
+                    <el-button type="text" style="color: #8590a6;" class="showReplyButton"
+                      @click="showReplyDialog(reply.id)">
+                      <span style="display: inline-flex; align-items: center;">​
+                        <svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="margin-right: 5px;">
+                          <path d="M11 2c5.571 0 9 4.335 9 8 0 6-6.475 9.764-11.481
+                      8.022-.315-.07-.379-.124-.78.078-1.455.54-2.413.921-3.525 1.122-.483.087-.916-.25-.588-.581
+                      0 0 .677-.417.842-1.904.064-.351-.14-.879-.454-1.171A8.833 8.833 0 0 1 2 10c0-3.87 3.394-8
+                      9-8zm10.14 9.628c.758.988.86 2.009.86 3.15 0 1.195-.619 3.11-1.368
+                      3.938-.209.23-.354.467-.308.722.12 1.073.614 1.501.614
+                      1.501.237.239-.188.562-.537.5-.803-.146-1.495-.42-2.546-.811-.29-.146-.336-.106-.563-.057-2.043.711-4.398.475-6.083-.927
+                      5.965-.524 8.727-3.03 9.93-8.016z" fill-rule="evenodd">
+                          </path>
+                        </svg>
+                      </span>
+                      查看回复
+                    </el-button>
+                    <el-button type="text" style="color: #8590a6;" class="replyButton" @click="showReplyInput(reply.id)"
+                      v-show="!isShowReplyInput || showedReplyId !== reply.id">
+                      <span style="display: inline-flex; align-items: center;">
+                        ​<svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="margin-right: 5px;">
+                          <path d="M22.959 17.22c-1.686-3.552-5.128-8.062-11.636-8.65-.539-.053-1.376-.436-1.376-1.561V4.678c0-.521-.635-.915-1.116-.521L1.469
+                      10.67a1.506 1.506 0 0 0-.1 2.08s6.99 6.818 7.443 7.114c.453.295 1.136.124 1.135-.501V17a1.525 1.525 0
+                      0 1 1.532-1.466c1.186-.139 7.597-.077 10.33 2.396 0 0 .396.257.536.257.892 0 .614-.967.614-.967z"
+                            fill-rule="evenodd">
+                          </path>
+                        </svg>
+                      </span>
+                      回复
+                    </el-button>
+                    <el-button type="text" style="color: #8590a6;" class="replyButton" @click="isShowReplyInput=false"
+                      v-show="isShowReplyInput && showedReplyId === reply.id">
+                      <span style="display: inline-flex; align-items: center;">
+                        ​<svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="margin-right: 5px;">
+                          <path d="M22.959 17.22c-1.686-3.552-5.128-8.062-11.636-8.65-.539-.053-1.376-.436-1.376-1.561V4.678c0-.521-.635-.915-1.116-.521L1.469
+                      10.67a1.506 1.506 0 0 0-.1 2.08s6.99 6.818 7.443 7.114c.453.295 1.136.124 1.135-.501V17a1.525 1.525 0
+                      0 1 1.532-1.466c1.186-.139 7.597-.077 10.33 2.396 0 0 .396.257.536.257.892 0 .614-.967.614-.967z"
+                            fill-rule="evenodd">
+                          </path>
+                        </svg>
+                      </span>
+                      取消回复
+                    </el-button>
+                  </div>
+                  <div class="reply-input" v-show="isShowReplyInput && showedReplyId === reply.id">
+                    <el-input type="textarea" :rows="1" v-model="replyContent" resize="none" :autosize="true"
+                      autocomplete="off" :autofocus="true" :placeholder="'回复'+reply.user.nickname"></el-input>
+                    <el-button type="primary" @click="sendReply(comment.id,reply.id)">发布</el-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </el-dialog>
+
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer comment-input">
+        <el-input type="textarea" :rows="1" v-model="commentContent" resize="none" autocomplete="off" :autofocus="true"
+          placeholder="写下你的评论..."></el-input>
+        <el-button type="primary" @click="sendComment(item.id)">发布</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+
+<template id="list-item-dm">
+  <div class="list-item-dm">
+    <div class="list-item-dm-inner" @click="openDmDialog(item.senderId)">
+      <div class="list-item-dm-left">
+        <div>
+          <img :src="item.avatar">
+        </div>
+      </div>
+      <div class="list-item-dm-middle">
+        <h4>{{item.nickname}}</h4>
+        <p>亲爱的 {{my_username}} 你好：你有{{item.uncheckedNums}}条私信未查看</p>
+      </div>
+    </div>
+    <el-dialog :title="item.nickname" :visible.sync="isShowDmDialog" :append-to-body="true">
+      <div v-for="message in messages">
+        <time>{{message.datetime}}</time>
+        <div :class="[message.me===1?'me-message':'the-other-message','message-box']">
+          <img :src="theOther.avatar" v-if="message.me===0">
+          <img :src="me.avatar" v-if="message.me===1">
+          <p>{{message.content}}</p>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-form :model="form">
+          <el-form-item>
+            <el-input type="textarea" :rows="3" v-model="form.content" resize="none" autocomplete="off">
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <el-button type="primary" @click="sendDm(item.senderId)">发送</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui@2.13.2/lib/index.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</script>
+<script src="http://passport.cnblogs.com/scripts/jsencrypt.min.js"></script>
+<script src="https://apps.bdimg.com/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script src="../editor.md-master/lib/marked.min.js"> </script>
+<script src="../editor.md-master/lib/prettify.min.js"></script>
+<script src="../editor.md-master/lib/raphael.min.js"></script>
+<script src="../editor.md-master/lib/underscore.min.js"></script>
+<script src="../editor.md-master/lib/sequence-diagram.min.js"></script>
+<script src="../editor.md-master/lib/flowchart.min.js"></script>
+<script src="../editor.md-master/lib/jquery.flowchart.min.js"></script>
+<script src="../editor.md-master/editormd.min.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/initInfo.js"></script>
+<script src="../js/question.js"></script>
+
+</html>

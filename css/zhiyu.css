@@ -1,12 +1,10 @@
 #zhiyu {
-  height: 1200px;
   background-color: #eee;
 }
 
 .App-main {
   position: relative;
   width: 1000px;
-  height: 132px;
   margin: 0 auto;
 }
 
