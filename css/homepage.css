@@ -1,12 +1,13 @@
 #homepage {
-  height: 1200px;
+  /* height: 1200px; */
   background-color: #eee;
+  padding-bottom: 20px;
 }
 
 .App-main {
   position: relative;
   width: 1000px;
-  height: 132px;
+  /* height: 132px; */
   margin: 0 auto;
 }
 
@@ -319,4 +320,13 @@
   background: none;
   border-color: transparent;
   color: inherit;
+}
+
+.list-item-answer-top {
+  margin-bottom: 10px;
+}
+
+.list-item-answer-top a:hover .list-item-title,
+.list-item-ask-top a:hover .list-item-title {
+  color: #175199;
 }

@@ -282,9 +282,77 @@
               <el-button type="primary" @click="sendReply(comment.id,comment.id)">发布</el-button>
             </div>
           </div>
-          <!-- <div class="comment complexComment">
-            <time>{{comment.datetime}}</time>
-          </div> -->
+
+          <!-- 此处以下为嵌套的reply-dialog -->
+          <el-dialog :title="commentReplyList.length+' 条回复'" :visible.sync="isShowReplyDialog" :append-to-body="true"
+            :lock-scroll="true" class="comment-dialog" width="45%">
+            <div class="comment-dialog-inner">
+              <div v-for="reply in commentReplyList">
+                <div class="comment complexComment">
+                  <div class="comment-top">
+                    <div>
+                      <img :src="reply.user.avatar">
+                      <span>{{reply.user.nickname}}</span>
+                      <span style="color:#8590a6;">&nbsp;回复&nbsp;</span>
+                      <span>{{reply.repliedNickname}}</span>
+                    </div>
+                    <time>{{reply.datetime}}</time>
+                  </div>
+                  <div class="comment-middle">{{reply.content}}</div>
+                  <div class="comment-bottom">
+                    <el-button type="text" style="color: #8590a6;" class="showReplyButton"
+                      @click="showReplyDialog(reply.id)">
+                      <span style="display: inline-flex; align-items: center;">​
+                        <svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="margin-right: 5px;">
+                          <path d="M11 2c5.571 0 9 4.335 9 8 0 6-6.475 9.764-11.481
+                      8.022-.315-.07-.379-.124-.78.078-1.455.54-2.413.921-3.525 1.122-.483.087-.916-.25-.588-.581
+                      0 0 .677-.417.842-1.904.064-.351-.14-.879-.454-1.171A8.833 8.833 0 0 1 2 10c0-3.87 3.394-8
+                      9-8zm10.14 9.628c.758.988.86 2.009.86 3.15 0 1.195-.619 3.11-1.368
+                      3.938-.209.23-.354.467-.308.722.12 1.073.614 1.501.614
+                      1.501.237.239-.188.562-.537.5-.803-.146-1.495-.42-2.546-.811-.29-.146-.336-.106-.563-.057-2.043.711-4.398.475-6.083-.927
+                      5.965-.524 8.727-3.03 9.93-8.016z" fill-rule="evenodd">
+                          </path>
+                        </svg>
+                      </span>
+                      查看回复
+                    </el-button>
+                    <el-button type="text" style="color: #8590a6;" class="replyButton" @click="showReplyInput(reply.id)"
+                      v-show="!isShowReplyInput || showedReplyId !== reply.id">
+                      <span style="display: inline-flex; align-items: center;">
+                        ​<svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="margin-right: 5px;">
+                          <path d="M22.959 17.22c-1.686-3.552-5.128-8.062-11.636-8.65-.539-.053-1.376-.436-1.376-1.561V4.678c0-.521-.635-.915-1.116-.521L1.469
+                      10.67a1.506 1.506 0 0 0-.1 2.08s6.99 6.818 7.443 7.114c.453.295 1.136.124 1.135-.501V17a1.525 1.525 0
+                      0 1 1.532-1.466c1.186-.139 7.597-.077 10.33 2.396 0 0 .396.257.536.257.892 0 .614-.967.614-.967z"
+                            fill-rule="evenodd">
+                          </path>
+                        </svg>
+                      </span>
+                      回复
+                    </el-button>
+                    <el-button type="text" style="color: #8590a6;" class="replyButton" @click="isShowReplyInput=false"
+                      v-show="isShowReplyInput && showedReplyId === reply.id">
+                      <span style="display: inline-flex; align-items: center;">
+                        ​<svg fill="currentColor" viewBox="0 0 24 24" width="16" height="16" style="margin-right: 5px;">
+                          <path d="M22.959 17.22c-1.686-3.552-5.128-8.062-11.636-8.65-.539-.053-1.376-.436-1.376-1.561V4.678c0-.521-.635-.915-1.116-.521L1.469
+                      10.67a1.506 1.506 0 0 0-.1 2.08s6.99 6.818 7.443 7.114c.453.295 1.136.124 1.135-.501V17a1.525 1.525 0
+                      0 1 1.532-1.466c1.186-.139 7.597-.077 10.33 2.396 0 0 .396.257.536.257.892 0 .614-.967.614-.967z"
+                            fill-rule="evenodd">
+                          </path>
+                        </svg>
+                      </span>
+                      取消回复
+                    </el-button>
+                  </div>
+                  <div class="reply-input" v-show="isShowReplyInput && showedReplyId === reply.id">
+                    <el-input type="textarea" :rows="1" v-model="replyContent" resize="none" :autosize="true"
+                      autocomplete="off" :autofocus="true" :placeholder="'回复'+reply.user.nickname"></el-input>
+                    <el-button type="primary" @click="sendReply(comment.id,reply.id)">发布</el-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </el-dialog>
+
         </div>
       </div>
       <div slot="footer" class="dialog-footer comment-input">

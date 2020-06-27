@@ -79,6 +79,7 @@ const vm = new Vue({
           changedId: 1,
 
           isShowCommentDialog: false,
+          isShowReplyDialog: false,
           commentList: [],
           commentReplyList: [],
           isShowReplyInput: false,
@@ -165,16 +166,43 @@ const vm = new Vue({
         },
         showReplyDialog(id) {
           this.commentReplyList = [];
+          let tempId = 0;
+          //找到回复列表对应的评论
           for (let i = 0; i < this.commentList.length; i++) {
             if (this.commentList[i].id === id) {
               this.commentReplyList = this.commentList[i].commentReplyList;
+              tempId = i;
               break;
             }
           }
-          console.log(this.commentReplyList);
-          // this.isShowCommentDialog = true;
+          //在该评论的回复列表中查找，每个回复对应的被回复人的名字
+          //首先看是不是针对评论发起的回复
+          //如果不是，再查repliedId对应哪个回复，从而查询到被回复人的名字
+          for (let i = 0; i < this.commentReplyList.length; i++) {
+            if (
+              this.commentReplyList[i].repliedId === this.commentList[tempId].id
+            ) {
+              this.commentReplyList[i].repliedNickname = this.commentList[
+                tempId
+              ].user.nickname;
+              continue;
+            }
+            for (let j = 0; j < this.commentReplyList.length; j++) {
+              if (
+                this.commentReplyList[i].repliedId ===
+                this.commentReplyList[j].id
+              ) {
+                this.commentReplyList[i].repliedNickname = this.commentList[
+                  j
+                ].user.nickname;
+                break;
+              }
+            }
+          }
+          this.isShowReplyDialog = true;
         },
         sendReply(commentId, repliedId) {
+          let _self = this;
           $.ajax({
             type: "POST",
             url: "http://localhost/comment/reply_to_comment",
@@ -189,7 +217,18 @@ const vm = new Vue({
             }),
             success: function (result) {
               if (result.code == 00000) {
-                alert("回复成功！");
+                for (let i = 0; i < _self.commentReplyList.length; i++) {
+                  if (result.data.repliedId === _self.commentReplyList[i].id) {
+                    result.data.repliedNickname =
+                      _self.commentReplyList[i].user.nickname;
+                  }
+                }
+                _self.commentReplyList.push(result.data);
+                //强制commentList进行响应式更新
+                _self.commentList.push({});
+                _self.commentList.pop();
+                _self.replyContent = "";
+                _self.isShowReplyInput = false;
               } else if (result.code == 10501) {
                 alert("回答id非法");
               }
