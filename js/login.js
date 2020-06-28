@@ -1,5 +1,9 @@
 let account = document.querySelector("#account");
 let password = document.querySelector("#password");
+let signupBtn = document.querySelector("#signup-button");
+signupBtn.addEventListener("click", function () {
+  window.location.href = "../html/signup.html";
+});
 
 function checkAccount() {
   if (account.validity.patternMismatch) {
@@ -61,16 +65,4 @@ $("#login-form").on("submit", function (e) {
       }
     },
   });
-});
-
-const vm = new Vue({
-  el: "#login-page",
-  data() {
-    return {};
-  },
-  methods: {
-    toSignup() {
-      window.location.href = "../html/signup.html";
-    },
-  },
 });

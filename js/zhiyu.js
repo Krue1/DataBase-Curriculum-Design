@@ -240,7 +240,6 @@ const vm = new Vue({
               if (result.code == 00000) {
                 result.data.messages[0].me = 1;
                 _self.messages.push(result.data.messages[0]);
-                console.log(_self.messages);
                 _self.form.content = "";
               }
             },
@@ -279,7 +278,6 @@ const vm = new Vue({
         success: function (result) {
           if (result.code == 00000) {
             followings = result.data.followings;
-            console.log(followings);
           } else if (result.code == 10501) {
             alert("userId非法！");
           }
@@ -316,7 +314,6 @@ const vm = new Vue({
         success: function (result) {
           if (result.code == 00000) {
             fans = result.data.followers;
-            console.log(fans);
           } else if (result.code == 10501) {
             alert("userId非法！");
           }
@@ -378,7 +375,6 @@ const vm = new Vue({
         success: function (result) {
           if (result.code == 00000) {
             hots = result.data.hotQuestionList;
-            console.log(hots);
           } else {
             alert("非法！");
           }
