@@ -9,23 +9,39 @@ let questionInfo = {
   datetime: "2020-06-23 15:39:19",
   likeNumber: 0,
 };
-$.ajax({
-  type: "GET",
-  dataType: "json",
-  async: false,
-  url: "http://localhost/question/" + questionId,
-  headers: {
-    //请求头
-    Authorization: token, //登录获取的token (String)
-  },
-  success: function (result) {
-    if (result.code == 00000) {
-      questionInfo = result.data;
-    } else if (result.code == 10501) {
-      alert("questionId非法！");
-    }
-  },
-});
+if (token) {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    async: false,
+    url: "http://localhost/question/" + questionId,
+    headers: {
+      //请求头
+      Authorization: token, //登录获取的token (String)
+    },
+    success: function (result) {
+      if (result.code == 00000) {
+        questionInfo = result.data;
+      } else if (result.code == 10501) {
+        alert("questionId非法！");
+      }
+    },
+  });
+} else {
+  $.ajax({
+    type: "GET",
+    dataType: "json",
+    async: false,
+    url: "http://localhost/question/" + questionId,
+    success: function (result) {
+      if (result.code == 00000) {
+        questionInfo = result.data;
+      } else if (result.code == 10501) {
+        alert("questionId非法！");
+      }
+    },
+  });
+}
 
 const vm = new Vue({
   el: "#question",
@@ -481,22 +497,38 @@ const vm = new Vue({
           likeNumber: 41,
         },
       ];
-      $.ajax({
-        type: "GET",
-        async: false,
-        url: "http://localhost/answer/from_question/" + questionId,
-        headers: {
-          //请求头
-          Authorization: token, //登录获取的token (String)
-        },
-        success: function (result) {
-          if (result.code == 00000) {
-            answers = result.data.answerInfoDTOList;
-          } else if (result.code == 10501) {
-            alert("参数非法！");
-          }
-        },
-      });
+      if (token) {
+        $.ajax({
+          type: "GET",
+          async: false,
+          url: "http://localhost/answer/from_question/" + questionId,
+          headers: {
+            //请求头
+            Authorization: token, //登录获取的token (String)
+          },
+          success: function (result) {
+            if (result.code == 00000) {
+              answers = result.data.answerInfoDTOList;
+            } else if (result.code == 10501) {
+              alert("参数非法！");
+            }
+          },
+        });
+      } else {
+        $.ajax({
+          type: "GET",
+          async: false,
+          url: "http://localhost/answer/from_question/" + questionId,
+          success: function (result) {
+            if (result.code == 00000) {
+              answers = result.data.answerInfoDTOList;
+            } else if (result.code == 10501) {
+              alert("参数非法！");
+            }
+          },
+        });
+      }
+
       return answers;
     },
     hots() {
