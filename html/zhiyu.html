@@ -109,10 +109,10 @@
           </div>
           <div id="zhiyuMain1-main">
             <list-item-recommend v-for="item in recommends" :item="item" v-show="activeName==='recommend'"
-              :key="item.title">
+              :key="item.id">
             </list-item-recommend>
             <list-item-hot v-for="(item,index) in hots" :item="item" :index="index" v-show="activeName==='hot'"
-              :key="item.title">
+              :key="item.id">
             </list-item-hot>
             <list-item-follow v-for="item in followings" :item="item" v-show="activeName==='follow'"
               :key="item.nickname">
