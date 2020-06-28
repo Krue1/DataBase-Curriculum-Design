@@ -1,8 +1,8 @@
 /*
  * Editor.md
  *
- * @file        editormd.preview.css 
- * @version     v1.5.0 
+ * @file        editormd.preview.css
+ * @version     v1.5.0
  * @description Open source online markdown editor.
  * @license     MIT License
  * @author      Pandao
@@ -19,9 +19,15 @@
 /* FONT PATH
  * -------------------------- */
 @font-face {
-  font-family: 'FontAwesome';
+  font-family: "FontAwesome";
   src: url("../fonts/fontawesome-webfont.eot?v=4.3.0");
-  src: url("../fonts/fontawesome-webfont.eot?#iefix&v=4.3.0") format("embedded-opentype"), url("../fonts/fontawesome-webfont.woff2?v=4.3.0") format("woff2"), url("../fonts/fontawesome-webfont.woff?v=4.3.0") format("woff"), url("../fonts/fontawesome-webfont.ttf?v=4.3.0") format("truetype"), url("../fonts/fontawesome-webfont.svg?v=4.3.0#fontawesomeregular") format("svg");
+  src: url("../fonts/fontawesome-webfont.eot?#iefix&v=4.3.0")
+      format("embedded-opentype"),
+    url("../fonts/fontawesome-webfont.woff2?v=4.3.0") format("woff2"),
+    url("../fonts/fontawesome-webfont.woff?v=4.3.0") format("woff"),
+    url("../fonts/fontawesome-webfont.ttf?v=4.3.0") format("truetype"),
+    url("../fonts/fontawesome-webfont.svg?v=4.3.0#fontawesomeregular")
+      format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -86,9 +92,9 @@
 }
 
 .fa-border {
-  padding: .2em .25em .15em;
+  padding: 0.2em 0.25em 0.15em;
   border: solid 0.08em #eeeeee;
-  border-radius: .1em;
+  border-radius: 0.1em;
 }
 
 .pull-right {
@@ -100,11 +106,11 @@
 }
 
 .fa.pull-left {
-  margin-right: .3em;
+  margin-right: 0.3em;
 }
 
 .fa.pull-right {
-  margin-left: .3em;
+  margin-left: 0.3em;
 }
 
 .fa-spin {
@@ -2363,9 +2369,13 @@
 
 /*! prefixes.scss v0.1.0 | Author: Pandao | https://github.com/pandao/prefixes.scss | MIT license | Copyright (c) 2015 */
 @font-face {
-  font-family: 'editormd-logo';
+  font-family: "editormd-logo";
   src: url("../fonts/editormd-logo.eot?-5y8q6h");
-  src: url(".../fonts/editormd-logo.eot?#iefix-5y8q6h") format("embedded-opentype"), url("../fonts/editormd-logo.woff?-5y8q6h") format("woff"), url("../fonts/editormd-logo.ttf?-5y8q6h") format("truetype"), url("../fonts/editormd-logo.svg?-5y8q6h#icomoon") format("svg");
+  src: url(".../fonts/editormd-logo.eot?#iefix-5y8q6h")
+      format("embedded-opentype"),
+    url("../fonts/editormd-logo.woff?-5y8q6h") format("woff"),
+    url("../fonts/editormd-logo.ttf?-5y8q6h") format("truetype"),
+    url("../fonts/editormd-logo.svg?-5y8q6h#icomoon") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -2378,7 +2388,7 @@
 .editormd-logo-6x,
 .editormd-logo-7x,
 .editormd-logo-8x {
-  font-family: 'editormd-logo';
+  font-family: "editormd-logo";
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -2402,8 +2412,8 @@
 .editormd-logo-7x:before,
 .editormd-logo-8x:before {
   content: "\e1987";
-  /* 
-  HTML Entity &#xe1987; 
+  /*
+  HTML Entity &#xe1987;
   example: <span class="editormd-logo">&#xe1987;</span>
   */
 }
@@ -2445,20 +2455,24 @@
 }
 
 .editormd-logo-color {
-  color: #2196F3;
+  color: #2196f3;
 }
 
 /*! github-markdown-css | The MIT License (MIT) | Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com) | https://github.com/sindresorhus/github-markdown-css */
 @font-face {
   font-family: octicons-anchor;
-  src: url(data:font/woff;charset=utf-8;base64,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) format("woff");
+  src: url(data:font/woff;charset=utf-8;base64,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)
+    format("woff");
 }
 .markdown-body {
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
   color: #333;
   overflow: hidden;
-  font-family: "Microsoft YaHei", Helvetica, "Meiryo UI", "Malgun Gothic", "Segoe UI", "Trebuchet MS", "Monaco", monospace, Tahoma, STXihei, "华文细黑", STHeiti, "Helvetica Neue", "Droid Sans", "wenquanyi micro hei", FreeSans, Arimo, Arial, SimSun, "宋体", Heiti, "黑体", sans-serif;
+  font-family: "Microsoft YaHei", Helvetica, "Meiryo UI", "Malgun Gothic",
+    "Segoe UI", "Trebuchet MS", "Monaco", monospace, Tahoma, STXihei, "华文细黑",
+    STHeiti, "Helvetica Neue", "Droid Sans", "wenquanyi micro hei", FreeSans,
+    Arimo, Arial, SimSun, "宋体", Heiti, "黑体", sans-serif;
   font-size: 16px;
   line-height: 1.6;
   word-wrap: break-word;
@@ -2499,7 +2513,8 @@
 .markdown-body code,
 .markdown-body kbd,
 .markdown-body pre {
-  font-family: "Meiryo UI", "YaHei Consolas Hybrid", Consolas, "Malgun Gothic", "Segoe UI", "Trebuchet MS", Helvetica, monospace, monospace;
+  font-family: "Meiryo UI", "YaHei Consolas Hybrid", Consolas, "Malgun Gothic",
+    "Segoe UI", "Trebuchet MS", Helvetica, monospace, monospace;
   font-size: 1em;
 }
 
@@ -2539,7 +2554,8 @@
 }
 
 .markdown-body input {
-  font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+  font: 13px/1.4 Helvetica, arial, freesans, clean, sans-serif, "Segoe UI Emoji",
+    "Segoe UI Symbol";
 }
 
 .markdown-body a {
@@ -2659,7 +2675,7 @@
 }
 
 .markdown-body .octicon-link:before {
-  content: '\f05c';
+  content: "\f05c";
 }
 
 .markdown-body > *:first-child {
@@ -3110,16 +3126,18 @@
   border-color: #4183c4;
 }
 
-.editormd-preview-container, .editormd-html-preview {
+.editormd-preview-container,
+.editormd-html-preview {
   text-align: left;
   font-size: 14px;
   line-height: 1.6;
-  padding: 20px;
+  padding: 5px 0;
   overflow: auto;
   width: 100%;
   background-color: #fff;
 }
-.editormd-preview-container blockquote, .editormd-html-preview blockquote {
+.editormd-preview-container blockquote,
+.editormd-html-preview blockquote {
   color: #666;
   border-left: 4px solid #ddd;
   padding-left: 20px;
@@ -3127,27 +3145,32 @@
   font-size: 14px;
   font-style: italic;
 }
-.editormd-preview-container p code, .editormd-html-preview p code {
+.editormd-preview-container p code,
+.editormd-html-preview p code {
   margin-left: 5px;
   margin-right: 4px;
 }
-.editormd-preview-container abbr, .editormd-html-preview abbr {
+.editormd-preview-container abbr,
+.editormd-html-preview abbr {
   background: #ffffdd;
 }
-.editormd-preview-container hr, .editormd-html-preview hr {
+.editormd-preview-container hr,
+.editormd-html-preview hr {
   height: 1px;
   border: none;
   border-top: 1px solid #ddd;
   background: none;
 }
-.editormd-preview-container code, .editormd-html-preview code {
+.editormd-preview-container code,
+.editormd-html-preview code {
   border: 1px solid #ddd;
   background: #f6f6f6;
   padding: 3px;
   border-radius: 3px;
   font-size: 14px;
 }
-.editormd-preview-container pre, .editormd-html-preview pre {
+.editormd-preview-container pre,
+.editormd-html-preview pre {
   border: 1px solid #ddd;
   background: #f6f6f6;
   padding: 10px;
@@ -3157,38 +3180,60 @@
   -o-border-radius: 3px;
   border-radius: 3px;
 }
-.editormd-preview-container pre code, .editormd-html-preview pre code {
+.editormd-preview-container pre code,
+.editormd-html-preview pre code {
   padding: 0;
 }
-.editormd-preview-container pre, .editormd-preview-container code, .editormd-preview-container kbd, .editormd-html-preview pre, .editormd-html-preview code, .editormd-html-preview kbd {
-  font-family: "YaHei Consolas Hybrid", Consolas, "Meiryo UI", "Malgun Gothic", "Segoe UI", "Trebuchet MS", Helvetica, monospace, monospace;
+.editormd-preview-container pre,
+.editormd-preview-container code,
+.editormd-preview-container kbd,
+.editormd-html-preview pre,
+.editormd-html-preview code,
+.editormd-html-preview kbd {
+  font-family: "YaHei Consolas Hybrid", Consolas, "Meiryo UI", "Malgun Gothic",
+    "Segoe UI", "Trebuchet MS", Helvetica, monospace, monospace;
 }
-.editormd-preview-container table thead tr, .editormd-html-preview table thead tr {
-  background-color: #F8F8F8;
+.editormd-preview-container table thead tr,
+.editormd-html-preview table thead tr {
+  background-color: #f8f8f8;
 }
-.editormd-preview-container p.editormd-tex, .editormd-html-preview p.editormd-tex {
+.editormd-preview-container p.editormd-tex,
+.editormd-html-preview p.editormd-tex {
   text-align: center;
 }
-.editormd-preview-container span.editormd-tex, .editormd-html-preview span.editormd-tex {
+.editormd-preview-container span.editormd-tex,
+.editormd-html-preview span.editormd-tex {
   margin: 0 5px;
 }
-.editormd-preview-container .emoji, .editormd-html-preview .emoji {
+.editormd-preview-container .emoji,
+.editormd-html-preview .emoji {
   width: 24px;
   height: 24px;
 }
-.editormd-preview-container .katex, .editormd-html-preview .katex {
+.editormd-preview-container .katex,
+.editormd-html-preview .katex {
   font-size: 1.4em;
 }
-.editormd-preview-container .sequence-diagram, .editormd-preview-container .flowchart, .editormd-html-preview .sequence-diagram, .editormd-html-preview .flowchart {
+.editormd-preview-container .sequence-diagram,
+.editormd-preview-container .flowchart,
+.editormd-html-preview .sequence-diagram,
+.editormd-html-preview .flowchart {
   margin: 0 auto;
   text-align: center;
 }
-.editormd-preview-container .sequence-diagram svg, .editormd-preview-container .flowchart svg, .editormd-html-preview .sequence-diagram svg, .editormd-html-preview .flowchart svg {
+.editormd-preview-container .sequence-diagram svg,
+.editormd-preview-container .flowchart svg,
+.editormd-html-preview .sequence-diagram svg,
+.editormd-html-preview .flowchart svg {
   margin: 0 auto;
 }
-.editormd-preview-container .sequence-diagram text, .editormd-preview-container .flowchart text, .editormd-html-preview .sequence-diagram text, .editormd-html-preview .flowchart text {
+.editormd-preview-container .sequence-diagram text,
+.editormd-preview-container .flowchart text,
+.editormd-html-preview .sequence-diagram text,
+.editormd-html-preview .flowchart text {
   font-size: 15px !important;
-  font-family: "YaHei Consolas Hybrid", Consolas, "Microsoft YaHei", "Malgun Gothic", "Segoe UI", Helvetica, Arial !important;
+  font-family: "YaHei Consolas Hybrid", Consolas, "Microsoft YaHei",
+    "Malgun Gothic", "Segoe UI", Helvetica, Arial !important;
 }
 
 /*! Pretty printing styles. Used with prettify.js. */
@@ -3225,7 +3270,9 @@
 
   /* a literal value */
   /* punctuation, lisp open bracket, lisp close bracket */
-  .pun, .opn, .clo {
+  .pun,
+  .opn,
+  .clo {
     color: #660;
   }
 
@@ -3244,7 +3291,8 @@
   }
 
   /* a markup attribute value */
-  .dec, .var {
+  .dec,
+  .var {
     color: #606;
   }
 
@@ -3280,7 +3328,9 @@
     color: #044;
   }
 
-  .pun, .opn, .clo {
+  .pun,
+  .opn,
+  .clo {
     color: #440;
   }
 
@@ -3330,30 +3380,36 @@ li.L9 {
   background: #eee;
 }
 
-.editormd-preview-container pre.prettyprint, .editormd-html-preview pre.prettyprint {
+.editormd-preview-container pre.prettyprint,
+.editormd-html-preview pre.prettyprint {
   padding: 10px;
   border: 1px solid #ddd;
   white-space: pre-wrap;
   word-wrap: break-word;
 }
-.editormd-preview-container ol.linenums, .editormd-html-preview ol.linenums {
+.editormd-preview-container ol.linenums,
+.editormd-html-preview ol.linenums {
   color: #999;
   padding-left: 2.5em;
 }
-.editormd-preview-container ol.linenums li, .editormd-html-preview ol.linenums li {
+.editormd-preview-container ol.linenums li,
+.editormd-html-preview ol.linenums li {
   list-style-type: decimal;
 }
-.editormd-preview-container ol.linenums li code, .editormd-html-preview ol.linenums li code {
+.editormd-preview-container ol.linenums li code,
+.editormd-html-preview ol.linenums li code {
   border: none;
   background: none;
   padding: 0;
 }
 
-.editormd-preview-container .editormd-toc-menu, .editormd-html-preview .editormd-toc-menu {
+.editormd-preview-container .editormd-toc-menu,
+.editormd-html-preview .editormd-toc-menu {
   margin: 8px 0 12px 0;
   display: inline-block;
 }
-.editormd-preview-container .editormd-toc-menu > .markdown-toc, .editormd-html-preview .editormd-toc-menu > .markdown-toc {
+.editormd-preview-container .editormd-toc-menu > .markdown-toc,
+.editormd-html-preview .editormd-toc-menu > .markdown-toc {
   position: relative;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -3364,7 +3420,8 @@ li.L9 {
   display: inline-block;
   font-size: 1em;
 }
-.editormd-preview-container .editormd-toc-menu > .markdown-toc > ul, .editormd-html-preview .editormd-toc-menu > .markdown-toc > ul {
+.editormd-preview-container .editormd-toc-menu > .markdown-toc > ul,
+.editormd-html-preview .editormd-toc-menu > .markdown-toc > ul {
   width: 160%;
   min-width: 180px;
   position: absolute;
@@ -3391,7 +3448,8 @@ li.L9 {
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   /* IE9+, News */
 }
-.editormd-preview-container .editormd-toc-menu > .markdown-toc > ul > li ul, .editormd-html-preview .editormd-toc-menu > .markdown-toc > ul > li ul {
+.editormd-preview-container .editormd-toc-menu > .markdown-toc > ul > li ul,
+.editormd-html-preview .editormd-toc-menu > .markdown-toc > ul > li ul {
   width: 100%;
   min-width: 180px;
   border: 1px solid #ddd;
@@ -3403,7 +3461,8 @@ li.L9 {
   -o-border-radius: 4px;
   border-radius: 4px;
 }
-.editormd-preview-container .editormd-toc-menu > .markdown-toc > ul > li a, .editormd-html-preview .editormd-toc-menu > .markdown-toc > ul > li a {
+.editormd-preview-container .editormd-toc-menu > .markdown-toc > ul > li a,
+.editormd-html-preview .editormd-toc-menu > .markdown-toc > ul > li a {
   color: #666;
   padding: 6px 10px;
   display: block;
@@ -3414,13 +3473,21 @@ li.L9 {
   transition: background-color 500ms ease-out;
   /* IE >9, FF >15, Opera >12.0 */
 }
-.editormd-preview-container .editormd-toc-menu > .markdown-toc > ul > li a:hover, .editormd-html-preview .editormd-toc-menu > .markdown-toc > ul > li a:hover {
+.editormd-preview-container
+  .editormd-toc-menu
+  > .markdown-toc
+  > ul
+  > li
+  a:hover,
+.editormd-html-preview .editormd-toc-menu > .markdown-toc > ul > li a:hover {
   background-color: #f6f6f6;
 }
-.editormd-preview-container .editormd-toc-menu > .markdown-toc li, .editormd-html-preview .editormd-toc-menu > .markdown-toc li {
+.editormd-preview-container .editormd-toc-menu > .markdown-toc li,
+.editormd-html-preview .editormd-toc-menu > .markdown-toc li {
   position: relative;
 }
-.editormd-preview-container .editormd-toc-menu > .markdown-toc li > ul, .editormd-html-preview .editormd-toc-menu > .markdown-toc li > ul {
+.editormd-preview-container .editormd-toc-menu > .markdown-toc li > ul,
+.editormd-html-preview .editormd-toc-menu > .markdown-toc li > ul {
   position: absolute;
   top: 32px;
   left: 10%;
@@ -3436,7 +3503,10 @@ li.L9 {
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
   /* IE9+, News */
 }
-.editormd-preview-container .editormd-toc-menu > .markdown-toc li > ul:before, .editormd-preview-container .editormd-toc-menu > .markdown-toc li > ul:after, .editormd-html-preview .editormd-toc-menu > .markdown-toc li > ul:before, .editormd-html-preview .editormd-toc-menu > .markdown-toc li > ul:after {
+.editormd-preview-container .editormd-toc-menu > .markdown-toc li > ul:before,
+.editormd-preview-container .editormd-toc-menu > .markdown-toc li > ul:after,
+.editormd-html-preview .editormd-toc-menu > .markdown-toc li > ul:before,
+.editormd-html-preview .editormd-toc-menu > .markdown-toc li > ul:after {
   pointer-events: pointer-events;
   position: absolute;
   left: 15px;
@@ -3449,29 +3519,36 @@ li.L9 {
   border-width: 0 6px 6px;
   z-index: 10;
 }
-.editormd-preview-container .editormd-toc-menu > .markdown-toc li > ul:before, .editormd-html-preview .editormd-toc-menu > .markdown-toc li > ul:before {
+.editormd-preview-container .editormd-toc-menu > .markdown-toc li > ul:before,
+.editormd-html-preview .editormd-toc-menu > .markdown-toc li > ul:before {
   border-bottom-color: #ccc;
 }
-.editormd-preview-container .editormd-toc-menu > .markdown-toc li > ul:after, .editormd-html-preview .editormd-toc-menu > .markdown-toc li > ul:after {
+.editormd-preview-container .editormd-toc-menu > .markdown-toc li > ul:after,
+.editormd-html-preview .editormd-toc-menu > .markdown-toc li > ul:after {
   border-bottom-color: #ffffff;
   top: -5px;
 }
-.editormd-preview-container .editormd-toc-menu ul, .editormd-html-preview .editormd-toc-menu ul {
+.editormd-preview-container .editormd-toc-menu ul,
+.editormd-html-preview .editormd-toc-menu ul {
   list-style: none;
 }
-.editormd-preview-container .editormd-toc-menu a, .editormd-html-preview .editormd-toc-menu a {
+.editormd-preview-container .editormd-toc-menu a,
+.editormd-html-preview .editormd-toc-menu a {
   text-decoration: none;
 }
-.editormd-preview-container .editormd-toc-menu h1, .editormd-html-preview .editormd-toc-menu h1 {
+.editormd-preview-container .editormd-toc-menu h1,
+.editormd-html-preview .editormd-toc-menu h1 {
   font-size: 16px;
   padding: 5px 0 10px 10px;
   line-height: 1;
   border-bottom: 1px solid #eee;
 }
-.editormd-preview-container .editormd-toc-menu h1 .fa, .editormd-html-preview .editormd-toc-menu h1 .fa {
+.editormd-preview-container .editormd-toc-menu h1 .fa,
+.editormd-html-preview .editormd-toc-menu h1 .fa {
   padding-left: 10px;
 }
-.editormd-preview-container .editormd-toc-menu .toc-menu-btn, .editormd-html-preview .editormd-toc-menu .toc-menu-btn {
+.editormd-preview-container .editormd-toc-menu .toc-menu-btn,
+.editormd-html-preview .editormd-toc-menu .toc-menu-btn {
   color: #666;
   min-width: 180px;
   padding: 5px 10px;
@@ -3484,10 +3561,12 @@ li.L9 {
   transition: background-color 500ms ease-out;
   /* IE >9, FF >15, Opera >12.0 */
 }
-.editormd-preview-container .editormd-toc-menu .toc-menu-btn:hover, .editormd-html-preview .editormd-toc-menu .toc-menu-btn:hover {
+.editormd-preview-container .editormd-toc-menu .toc-menu-btn:hover,
+.editormd-html-preview .editormd-toc-menu .toc-menu-btn:hover {
   background-color: #f6f6f6;
 }
-.editormd-preview-container .editormd-toc-menu .toc-menu-btn .fa, .editormd-html-preview .editormd-toc-menu .toc-menu-btn .fa {
+.editormd-preview-container .editormd-toc-menu .toc-menu-btn .fa,
+.editormd-html-preview .editormd-toc-menu .toc-menu-btn .fa {
   float: right;
   padding: 3px 0 0 10px;
   font-size: 1.3em;
@@ -3496,7 +3575,8 @@ li.L9 {
 .markdown-body .editormd-toc-menu ul {
   padding-left: 0;
 }
-.markdown-body .highlight pre, .markdown-body pre {
+.markdown-body .highlight pre,
+.markdown-body pre {
   line-height: 1.6;
 }
 

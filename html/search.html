@@ -84,12 +84,11 @@
       <div class="SearchMain">
         <div class="SearchMain-Inner">
           <div class="SearchMain-Inner-List-Header">
-            <h4>{{answers.length}} 个回答</h4>
+            <h4>{{searchs.length}} 个结果</h4>
             <p>默认排序</p>
           </div>
-          <div class="SearchMain-Inner-Content infinite-list" id="SearchMain-Inner-Content" v-infinite-scroll="load"
-            style="overflow:auto">
-            <list-item-search class="infinite-list-item" v-for="item in answers" :item="item">
+          <div class="SearchMain-Inner-Content" id="SearchMain-Inner-Content">
+            <list-item-search v-for="item in searchs" :item="item">
             </list-item-search>
           </div>
         </div>
@@ -155,9 +154,14 @@
           <h2>{{item.title}}</h2>
         </a>
       </div>
-      <div class="list-item-search-middle">
+      <div class="list-item-search-middle" v-if="item.isHaveAnswer">
         <div>
-          <p>{{item.nickname}}: {{item.description}}</p>
+          <p>{{item.nickname}}: {{item.content}}</p>
+        </div>
+      </div>
+      <div class="list-item-search-middle" v-if="!item.isHaveAnswer">
+        <div>
+          <p>该问题暂无回答</p>
         </div>
       </div>
     </div>

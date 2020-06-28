@@ -17,6 +17,7 @@ const vm = new Vue({
       },
       formLabelWidth: "120px",
       dmList: [],
+      searchs: [],
     };
   },
   mounted: function () {
@@ -32,6 +33,33 @@ const vm = new Vue({
       success: function (result) {
         if (result.code == 00000) {
           _self.dmList = result.data;
+        }
+      },
+    });
+    //获取并整理得搜索列表
+    $.ajax({
+      type: "POST",
+      async: false,
+      url: "http://localhost/search",
+      data: {
+        keyword: questionAsked,
+      },
+      success: function (result) {
+        if (result.code == 00000) {
+          let questionAnswerList = result.data.questionAnswerList;
+          for (let i = 0; i < questionAnswerList.length; i++) {
+            let temp = {};
+            temp.id = questionAnswerList[i].first.id;
+            temp.title = questionAnswerList[i].first.title;
+            if (!questionAnswerList[i].second) {
+              temp.isHaveAnswer = false;
+            } else {
+              temp.isHaveAnswer = true;
+              temp.nickname = questionAnswerList[i].second.author.nickname;
+              temp.content = questionAnswerList[i].second.content;
+            }
+            _self.searchs.push(temp);
+          }
         }
       },
     });
@@ -189,53 +217,18 @@ const vm = new Vue({
       });
       return dmList;
     },
+    getSearchs() {
+      let temp = {
+        id: 5,
+        title: "如何看待知裕",
+        nickname: "搬砖工",
+        content: "少时诵诗书多付过过个个",
+      };
+      this.searchs.push(temp);
+      this.searchs.push(temp);
+    },
   },
   computed: {
-    answers() {
-      let answers = [
-        {
-          id: 16,
-          content: "有zhiyu_5678这个人吗？",
-          datetime: "2020-06-25 10:53:05",
-          author: {
-            id: 10,
-            nickname: "Newgate",
-            gender: 1,
-            avatar: "/img/avatar/default_avatar.png",
-            brief: "22255566",
-            introduction: "5555",
-            habitation: "222",
-            profession: "搬砖",
-            education: "3",
-            account: {
-              id: 15,
-              username: "abc124",
-              password: "abc124",
-            },
-          },
-          question: null,
-          like: true,
-          likeNumber: 41,
-        },
-      ];
-      $.ajax({
-        type: "GET",
-        async: false,
-        url: "http://localhost/answer/from_question/" + 11,
-        headers: {
-          //请求头
-          Authorization: token, //登录获取的token (String)
-        },
-        success: function (result) {
-          if (result.code == 00000) {
-            answers = result.data.answerInfoDTOList;
-          } else if (result.code == 10501) {
-            alert("参数非法！");
-          }
-        },
-      });
-      return answers;
-    },
     hots() {
       let hots = [];
       $.ajax({
@@ -248,6 +241,7 @@ const vm = new Vue({
             hots = hots.slice(0, 5);
           } else {
             alert("非法！");
+            window.history.go(-1);
           }
         },
       });

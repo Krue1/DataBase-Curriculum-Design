@@ -350,3 +350,7 @@ main {
   display: flex;
   align-items: center;
 }
+
+.list-item-search-top a:hover h2 {
+  color: #175199;
+}
