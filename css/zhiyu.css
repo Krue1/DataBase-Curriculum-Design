@@ -246,6 +246,10 @@
   align-items: center;
 }
 
+.list-item-recommend-top a:hover h2 {
+  color: #175199;
+}
+
 .el-button--medium.Vote-Button {
   padding: 10px 12px;
   margin-right: 14px;

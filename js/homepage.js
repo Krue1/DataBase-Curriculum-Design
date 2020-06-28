@@ -16,8 +16,8 @@ const vm = new Vue({
       myUsername: myUserInfo.nickname,
       userIndustry: userInfo.profession,
       isMe: userId === myUserId ? true : false,
-      voteNum: 133,
-      questionNum: 22,
+      voteNum: 0,
+      questionNum: 0,
       follows: userInfo.followingsCount,
       followers: userInfo.followersCount,
       questionAsked: "",
@@ -772,6 +772,9 @@ const vm = new Vue({
           }
         },
       });
+      for (let i = 0; i < answers.length; i++) {
+        this.voteNum += answers[i].likeNumber;
+      }
       return answers;
     },
   },

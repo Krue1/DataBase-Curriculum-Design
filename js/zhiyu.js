@@ -5,6 +5,7 @@ const vm = new Vue({
   el: "#zhiyu",
   data() {
     return {
+      myUserInfo: myUserInfo,
       myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
       myUsername: myUserInfo.nickname,
       activeName: "recommend",
@@ -180,6 +181,11 @@ const vm = new Vue({
       data() {
         return {};
       },
+      methods: {
+        toQuestion(id) {
+          window.localStorage.setItem("questionId", id);
+        },
+      },
     },
     "list-item-dm": {
       props: ["item", "my_username"],
@@ -319,50 +325,31 @@ const vm = new Vue({
       return fans;
     },
     recommends() {
-      let recommends = [
-        {
-          id: 1,
-          title: "如何看待知乎",
-          nickname: "汪汪汪",
-          description:
-            "知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎知裕知乎",
-          likeNumber: 11,
-          datetime: "2020-06-14",
-          commentNum: 45,
-          isLike: true,
+      let recommends = [];
+      //获取并整理得推荐列表
+      $.ajax({
+        type: "GET",
+        async: false,
+        url: "http://localhost/recommend",
+        success: function (result) {
+          if (result.code == 00000) {
+            let recommendList = result.data.recommendList;
+            for (let i = 0; i < recommendList.length; i++) {
+              let temp = {};
+              temp.id = recommendList[i].first.id;
+              temp.title = recommendList[i].first.title;
+              if (!recommendList[i].second) {
+                temp.isHaveAnswer = false;
+              } else {
+                temp.isHaveAnswer = true;
+                temp.nickname = recommendList[i].second.author.nickname;
+                temp.content = recommendList[i].second.content;
+              }
+              recommends.push(temp);
+            }
+          }
         },
-        {
-          id: 2,
-          title: "如何看待知乎?",
-          nickname: "搬砖工",
-          description: "知裕知乎知裕知乎",
-          likeNumber: 14,
-          datetime: "2020-06-14",
-          commentNum: 22,
-          isLike: false,
-        },
-      ];
-      // $.ajax({
-      //   type: "GET",
-      //   async: false,
-      //   url: "http://47.100.62.222:80/user/" + myUserId + "/followers",
-      //   headers: {
-      //     //请求头
-      //     Authorization: token, //登录获取的token (String)
-      //   },
-      //   data: {
-      //     offset: 0,
-      //     limit: 5,
-      //   },
-      //   success: function (result) {
-      //     if (result.code == 00000) {
-      //       fans = result.data.followers;
-      //       console.log(fans);
-      //     } else if (result.code == 10501) {
-      //       alert("userId非法！");
-      //     }
-      //   },
-      // });
+      });
       return recommends;
     },
     hots() {
