@@ -11,7 +11,7 @@ const vm = new Vue({
       userInfo: userInfo,
       userAvatarURL: this.$baseurl + userInfo.avatar,
       myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
-      activeName: "activity",
+      activeName: "answer",
       username: userInfo.nickname,
       myUsername: myUserInfo.nickname,
       userIndustry: userInfo.profession,
@@ -120,6 +120,10 @@ const vm = new Vue({
         window.localStorage.clear();
         window.location.href = "../html/login.html";
       }
+    },
+    searchQuestion() {
+      window.localStorage.setItem("questionAsked", this.questionAsked);
+      window.location.href = "../html/search.html";
     },
     editProfile() {
       window.location.href = "editProfile.html";

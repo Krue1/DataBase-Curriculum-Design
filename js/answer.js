@@ -139,6 +139,10 @@ const vm = new Vue({
       // window.location.href = "../html/answer.html";
       console.log("page to answer");
     },
+    searchQuestion() {
+      window.localStorage.setItem("questionAsked", this.questionAsked);
+      window.location.href = "../html/search.html";
+    },
     likeQuestion() {
       questionId = 2;
       $.ajax({

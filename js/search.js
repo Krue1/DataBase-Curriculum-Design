@@ -1,32 +1,7 @@
 let token = localStorage.getItem("token");
 let myUserId = window.localStorage.getItem("myUserId");
 let myUserInfo = initInfo(myUserId);
-let questionId = window.localStorage.getItem("questionId");
 let questionAsked = window.localStorage.getItem("questionAsked");
-let questionInfo = {
-  id: 11,
-  title: "如何看待zhiyu_5678其人？",
-  description: "如何看待zhiyu_5678其人，何许人也",
-  datetime: "2020-06-23 15:39:19",
-  likeNumber: 0,
-};
-$.ajax({
-  type: "GET",
-  dataType: "json",
-  async: false,
-  url: "http://localhost/question/" + questionId,
-  headers: {
-    //请求头
-    Authorization: token, //登录获取的token (String)
-  },
-  success: function (result) {
-    if (result.code == 00000) {
-      questionInfo = result.data;
-    } else if (result.code == 10501) {
-      alert("questionId非法！");
-    }
-  },
-});
 
 const vm = new Vue({
   el: "#search",
@@ -34,13 +9,8 @@ const vm = new Vue({
     return {
       myUserAvatarURL: this.$baseurl + myUserInfo.avatar,
       myUsername: myUserInfo.nickname,
-      questionAsked: "",
+      questionAsked: questionAsked,
       isShowAsk: false,
-      question: questionInfo.title,
-      description: questionInfo.description,
-      questionLikeNumber: questionInfo.likeNumber,
-      questionDatetime: questionInfo.datetime,
-      isLikeQuestion: questionInfo.like,
       form: {
         question: "",
         description: "",
@@ -67,212 +37,16 @@ const vm = new Vue({
     });
   },
   components: {
-    "list-item-answer": {
+    "list-item-search": {
       props: ["item"],
-      template: "#list-item-answer",
+      template: "#list-item-search",
       data() {
-        return {
-          //利用组件的v-if="refresh"来控制其重新渲染，
-          //watch监视stateChange的变化来改变refresh=false,next-tick=true使其重新渲染
-          //changedId记录需要重新组件的id，然后用updated钩子让markdown再转html
-          refresh: true,
-          stateChange: 0,
-          changedId: 1,
-
-          isShowCommentDialog: false,
-          isShowReplyDialog: false,
-          commentList: [],
-          commentReplyList: [],
-          isShowReplyInput: false,
-          replyContent: "",
-          commentContent: "",
-
-          //控制每个评论的回复输入栏显示与否
-          //当点击“回复”按钮，showedReplyId就为该评论的id，isShowReplyInput为true
-          //每个评论下面的回复输入栏v-show="isShowReplyInput && showedReplyId === comment.id"
-          //如此这样就能控制仅当前评论的回复输入栏显示，“取消回复”按钮亦然
-          //而“回复”按钮的v-show="!isShowReplyInput || showedReplyId !== comment.id"
-          //当我点开一个回复输入栏，而对应的评论id不是展开回复输入栏的评论的id，则依然显示“回复”按钮
-          showedReplyId: -1,
-        };
+        return {};
       },
       methods: {
-        like(id) {
-          let _self = this;
-          $.ajax({
-            type: "POST",
-            url: "http://localhost/answer/like",
-            contentType: "application/json",
-            data: JSON.stringify(id),
-            headers: {
-              //请求头
-              Authorization: token, //登录获取的token (String)
-            },
-            success: function (result) {
-              if (result.code == 00000) {
-                _self.item.like = true;
-                _self.item.likeNumber++;
-                _self.stateChange++;
-                _self.changedId = id;
-              } else if (result.code == 10501) {
-                alert("回答id非法");
-              }
-            },
-          });
+        toQuestion(id) {
+          window.localStorage.setItem("questionId", id);
         },
-        dislike(id) {
-          let _self = this;
-          $.ajax({
-            type: "DELETE",
-            url: "http://localhost/answer/like",
-            contentType: "application/json",
-            data: JSON.stringify(id),
-            headers: {
-              //请求头
-              Authorization: token, //登录获取的token (String)
-            },
-            success: function (result) {
-              if (result.code == 00000) {
-                _self.item.like = false;
-                _self.item.likeNumber--;
-                _self.stateChange++;
-                _self.changedId = id;
-              } else if (result.code == 10501) {
-                alert("回答id非法");
-              }
-            },
-          });
-        },
-        toUserHomepage(id) {
-          window.localStorage.setItem("userId", id);
-        },
-        openCommentDialog(id) {
-          let _self = this;
-          $.ajax({
-            type: "GET",
-            url: "http://localhost/comment/from_answer/" + id,
-            success: function (result) {
-              if (result.code == 00000) {
-                _self.commentList = result.data.commentList;
-              } else if (result.code == 10501) {
-                alert("回答id非法");
-              }
-            },
-          });
-          this.isShowCommentDialog = true;
-        },
-        showReplyInput(id) {
-          this.showedReplyId = id;
-          this.isShowReplyInput = true;
-        },
-        showReplyDialog(id) {
-          this.commentReplyList = [];
-          let tempId = 0;
-          //找到回复列表对应的评论
-          for (let i = 0; i < this.commentList.length; i++) {
-            if (this.commentList[i].id === id) {
-              this.commentReplyList = this.commentList[i].commentReplyList;
-              tempId = i;
-              break;
-            }
-          }
-          //在该评论的回复列表中查找，每个回复对应的被回复人的名字
-          //首先看是不是针对评论发起的回复
-          //如果不是，再查repliedId对应哪个回复，从而查询到被回复人的名字
-          for (let i = 0; i < this.commentReplyList.length; i++) {
-            if (
-              this.commentReplyList[i].repliedId === this.commentList[tempId].id
-            ) {
-              this.commentReplyList[i].repliedNickname = this.commentList[
-                tempId
-              ].user.nickname;
-              continue;
-            }
-            for (let j = 0; j < this.commentReplyList.length; j++) {
-              if (
-                this.commentReplyList[i].repliedId ===
-                this.commentReplyList[j].id
-              ) {
-                this.commentReplyList[i].repliedNickname = this.commentList[
-                  j
-                ].user.nickname;
-                break;
-              }
-            }
-          }
-          this.isShowReplyDialog = true;
-        },
-        sendReply(commentId, repliedId) {
-          let _self = this;
-          $.ajax({
-            type: "POST",
-            url: "http://localhost/comment/reply_to_comment",
-            headers: {
-              Authorization: token,
-              "Content-Type": "application/json",
-            },
-            data: JSON.stringify({
-              commentId: commentId,
-              repliedId: repliedId,
-              content: this.replyContent,
-            }),
-            success: function (result) {
-              if (result.code == 00000) {
-                for (let i = 0; i < _self.commentReplyList.length; i++) {
-                  if (result.data.repliedId === _self.commentReplyList[i].id) {
-                    result.data.repliedNickname =
-                      _self.commentReplyList[i].user.nickname;
-                  }
-                }
-                _self.commentReplyList.push(result.data);
-                //强制commentList进行响应式更新
-                _self.commentList.push({});
-                _self.commentList.pop();
-                _self.replyContent = "";
-                _self.isShowReplyInput = false;
-              } else if (result.code == 10501) {
-                alert("回答id非法");
-              }
-            },
-          });
-        },
-        sendComment(answerId) {
-          let _self = this;
-          $.ajax({
-            type: "POST",
-            url: "http://localhost/comment/add_to_answer",
-            headers: {
-              Authorization: token,
-              "Content-Type": "application/json",
-            },
-            data: JSON.stringify({
-              answerId: answerId,
-              content: this.commentContent,
-            }),
-            success: function (result) {
-              if (result.code == 00000) {
-                _self.commentList.push(result.data);
-                _self.commentContent = "";
-              } else if (result.code == 10501) {
-                alert("回答id非法");
-              }
-            },
-          });
-        },
-      },
-      watch: {
-        stateChange() {
-          this.refresh = false;
-          this.$nextTick(() => {
-            this.refresh = true;
-          });
-        },
-      },
-      mounted: function () {
-        md2html(this.item.id);
-      },
-      updated: function () {
-        md2html(this.changedId);
       },
     },
     "hot-question": {
@@ -388,46 +162,12 @@ const vm = new Vue({
       });
       isShowAsk = false;
     },
+    searchQuestion() {
+      window.localStorage.setItem("questionAsked", this.questionAsked);
+      window.location.href = "../html/search.html";
+    },
     toAnswer() {
       window.location.href = "../html/answer.html";
-    },
-    likeQuestion() {
-      $.ajax({
-        type: "POST",
-        url: "http://127.0.0.1/question/like",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify(questionId),
-        headers: {
-          //请求头
-          Authorization: token, //登录获取的token (String)
-        },
-        success: function (result) {
-          if (result.code == 00000) {
-            alert("点赞成功");
-            window.location.reload();
-          }
-        },
-      });
-    },
-    cancleLikeQuestion() {
-      $.ajax({
-        type: "DELETE",
-        url: "http://127.0.0.1/question/like",
-        dataType: "json",
-        contentType: "application/json",
-        data: JSON.stringify(questionId),
-        headers: {
-          //请求头
-          Authorization: token, //登录获取的token (String)
-        },
-        success: function (result) {
-          if (result.code == 00000) {
-            alert("取消点赞成功");
-            window.location.reload();
-          }
-        },
-      });
     },
     getDmList() {
       dmList = [];
@@ -481,7 +221,7 @@ const vm = new Vue({
       $.ajax({
         type: "GET",
         async: false,
-        url: "http://localhost/answer/from_question/" + questionId,
+        url: "http://localhost/answer/from_question/" + 11,
         headers: {
           //请求头
           Authorization: token, //登录获取的token (String)

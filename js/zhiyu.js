@@ -89,7 +89,7 @@ const vm = new Vue({
       isShowAsk = false;
     },
     searchQuestion() {
-      window.localStorage.setItem("questionAsked", questionAsked);
+      window.localStorage.setItem("questionAsked", this.questionAsked);
       window.location.href = "../html/search.html";
     },
     getDmList() {

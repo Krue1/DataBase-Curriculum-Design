@@ -357,6 +357,10 @@ const vm = new Vue({
         window.location.href = "../html/login.html";
       }
     },
+    searchQuestion() {
+      window.localStorage.setItem("questionAsked", this.questionAsked);
+      window.location.href = "../html/search.html";
+    },
     submitQuestion() {
       $.ajax({
         type: "POST",

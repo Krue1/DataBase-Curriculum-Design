@@ -141,6 +141,10 @@ const vm = new Vue({
     handleClick(tab, event) {
       console.log(tab, event);
     },
+    searchQuestion() {
+      window.localStorage.setItem("questionAsked", this.questionAsked);
+      window.location.href = "../html/search.html";
+    },
     getDmList() {
       dmList = [];
       $.ajax({

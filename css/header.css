@@ -289,9 +289,6 @@
   margin-left: 12px;
   padding: 0 12px;
   background: transparent;
-  border-color: transparent;
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
   display: inline-block;
   padding: 0 16px;
   font-size: 14px;
@@ -299,7 +296,8 @@
   color: #8590a6;
   text-align: center;
   cursor: pointer;
-  background: none;
-  border: 1px solid;
-  border-radius: 3px;
+  border: none;
+  position: absolute;
+  left: 555px;
+  top: 10px;
 }
