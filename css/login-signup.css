@@ -52,3 +52,21 @@
   align-self: flex-start;
   margin-left: 55px;
 }
+
+.login-signup-container .text-button {
+  border: none;
+  width: auto;
+  height: auto;
+}
+
+#login-page .text-button {
+  position: relative;
+  left: -30%;
+  bottom: 140px;
+}
+
+#signup-page .text-button {
+  position: relative;
+  left: -29%;
+  bottom: 100px;
+}

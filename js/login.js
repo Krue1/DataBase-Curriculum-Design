@@ -62,3 +62,15 @@ $("#login-form").on("submit", function (e) {
     },
   });
 });
+
+const vm = new Vue({
+  el: "#login-page",
+  data() {
+    return {};
+  },
+  methods: {
+    toSignup() {
+      window.location.href = "../html/signup.html";
+    },
+  },
+});
